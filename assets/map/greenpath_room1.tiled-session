@@ -1,0 +1,217 @@
+{
+    "activeFile": "Greenpath-room2.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "Greenpath-room1.tmx": {
+            "expandedObjectLayers": [
+                13
+            ],
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 501,
+                "y": 143.5
+            }
+        },
+        "Greenpath-room2.tmx": {
+            "expandedObjectLayers": [
+                12
+            ],
+            "scale": 0.5,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 1212,
+                "y": 591
+            }
+        },
+        "Slug_Shrine_0003_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 0.75
+        },
+        "adawda.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "air_ground_room1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "anim_eye.tsx": {
+            "scaleInDock": 0.25,
+            "scaleInEditor": 0.5
+        },
+        "animation_eye.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "black_grass20004.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bush4.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bush5.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bushes.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bushes2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bushes3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "cave.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "eye_animation3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "eye_in_cave_anim.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "eyes_animation.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "eyes_animation2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fung_new_0070_Layer-278 #13622.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fung_new_0084_c.tsx": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "fung_new_0120_Layer-246.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fungd_spikes_05.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fungd_spikes_06.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fungd_spikes_07.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fungd_spikes_0_0001_d.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fungd_vine_02.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "fungd_vine_03.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "glow.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "grass_01_idle0023.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ground_room1.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "hunter_scenery_0001_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "lights.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "main_background.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ropes.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ropes2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "slug_floor.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "spikes1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "wall_room1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "frame.defaultDuration": 5,
+    "last.externalTilesetPath": "C:/Projects/HollowKnight/assets/map",
+    "last.imagePath": "C:/Projects/HollowKnight/assets/map_images/Greenpath",
+    "map.height": 150,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "map.width": 300,
+    "openFiles": [
+        "Greenpath-room1.tmx",
+        "Greenpath-room2.tmx"
+    ],
+    "project": "greenpath_room1.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "Greenpath-room1.tmx",
+        "Greenpath-room2.tmx",
+        "lights.tsx",
+        "cave.tsx",
+        "eye_in_cave_anim.tsx",
+        "anim_eye.tsx",
+        "eye_animation3.tsx",
+        "animation_eye.tsx",
+        "eyes_animation2.tsx",
+        "eyes_animation.tsx",
+        "fungd_spikes_0_0001_d.tsx",
+        "glow.tsx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}
