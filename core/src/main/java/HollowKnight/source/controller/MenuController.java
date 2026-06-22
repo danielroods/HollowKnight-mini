@@ -2,6 +2,7 @@ package HollowKnight.source.controller;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.game_utils.AudioManager;
+import HollowKnight.source.view.GameScreen;
 import HollowKnight.source.view.menus.BaseMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -16,17 +17,24 @@ public class MenuController {
         AudioManager.getInstance().playMusic(menuBGM);
     }
 
-    public static void setScreen(BaseMenuScreen menuScreen) {
+    public static void setMenuScreen(BaseMenuScreen menuScreen) {
         if (currentMenuScreen != null) {
             currentMenuScreen.dispose();
         }
-
         currentMenuScreen = menuScreen;
         game.setScreen(menuScreen);
     }
 
-    public static void setGame(Main game) {
+    public static void setGameScreen() {
+        if (currentMenuScreen != null) {
+            currentMenuScreen.dispose();
+            currentMenuScreen = null;
+        }
+        game.setScreen(new GameScreen());
+    }
+
+    public static void setGame(Main g) {
         if (MenuController.game == null)
-            MenuController.game = game;
+            MenuController.game = g;
     }
 }

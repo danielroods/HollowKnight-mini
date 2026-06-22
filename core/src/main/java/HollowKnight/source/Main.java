@@ -25,7 +25,7 @@ public class Main extends Game {
         batch = new SpriteBatch();
         Assets.load();
         MenuController.setGame(this);
-        MenuController.setScreen(new MainMenuScreen());
+        MenuController.setMenuScreen(new MainMenuScreen());
         //MenuController.playMusic();
         BrightnessRenderer.init();
     }

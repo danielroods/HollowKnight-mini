@@ -17,28 +17,28 @@ public class MainMenuController {
         startGameBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setScreen(new StartMenuScreen());
+                MenuController.setMenuScreen(new StartMenuScreen());
             }
         });
 
         settingsBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setScreen(new SettingsMenuScreen());
+                MenuController.setMenuScreen(new SettingsMenuScreen());
             }
         });
 
         guideBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setScreen(new GuideMenuScreen());
+                MenuController.setMenuScreen(new GuideMenuScreen());
             }
         });
 
         achievementsBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setScreen(new AchievementsMenuScreen());
+                MenuController.setMenuScreen(new AchievementsMenuScreen());
             }
         });
 

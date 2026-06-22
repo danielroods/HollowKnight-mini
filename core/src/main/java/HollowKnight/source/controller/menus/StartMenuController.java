@@ -12,13 +12,13 @@ public class StartMenuController {
         backBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setScreen(new MainMenuScreen());
+                MenuController.setMenuScreen(new MainMenuScreen());
             }
         });
         newGameBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO
+                MenuController.setGameScreen();
             }
         });
     }

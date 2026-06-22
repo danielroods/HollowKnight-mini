@@ -58,7 +58,7 @@ public class SettingsMenuController {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setScreen(new MainMenuScreen());
+                MenuController.setMenuScreen(new MainMenuScreen());
             }
         });
     }
