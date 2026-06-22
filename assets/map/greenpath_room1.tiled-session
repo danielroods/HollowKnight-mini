@@ -6,22 +6,22 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "Greenpath-room1.tmx": {
-            "scale": 0.75,
+            "scale": 0.45,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1864.6666666666665,
-                "y": 320.66666666666674
+                "x": 1290,
+                "y": 490.00000000000006
             }
         },
         "Greenpath-room2.tmx": {
             "expandedObjectLayers": [
                 13
             ],
-            "scale": 11,
-            "selectedLayer": 13,
+            "scale": 1,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 1088.681818181818,
-                "y": 188.13636363636363
+                "x": 544.5,
+                "y": 371.5
             }
         },
         "Slug_Shrine_0003_a.tsx": {

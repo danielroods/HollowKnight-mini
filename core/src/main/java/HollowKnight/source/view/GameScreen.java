@@ -72,17 +72,35 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mapRenderer.setView(bgCamera);
-        mapRenderer.render(new int[]{0});
 
-        mapRenderer.setView(worldCamera);
-        mapRenderer.render(new int[]{1,2,3,4,5,6});
+        if (gameController.getCurrentMapIndex() == 0)
+        {
+            mapRenderer.render(new int[]{0});
 
-        batch.setProjectionMatrix(worldCamera.combined);
-        batch.begin();
-        playerRenderer.render(batch, player, delta);
-        batch.end();
+            mapRenderer.setView(worldCamera);
+            mapRenderer.render(new int[]{1,2,3,4,5,6});
 
-        mapRenderer.render(new int[]{7,8,9});
+            batch.setProjectionMatrix(worldCamera.combined);
+            batch.begin();
+            playerRenderer.render(batch, player, delta);
+            batch.end();
+
+            mapRenderer.render(new int[]{7,8,9});
+        }
+        else if (gameController.getCurrentMapIndex() == 1)
+        {
+            mapRenderer.render(new int[]{0});
+
+            mapRenderer.setView(worldCamera);
+            mapRenderer.render(new int[]{1,2,3,4,5,6,7,8});
+
+            batch.setProjectionMatrix(worldCamera.combined);
+            batch.begin();
+            playerRenderer.render(batch, player, delta);
+            batch.end();
+
+            mapRenderer.render(new int[]{9,10,11,12});
+        }
 
         //tempppppp
         shapeRenderer.setProjectionMatrix(worldCamera.combined);
@@ -147,13 +165,34 @@ public class GameScreen implements Screen {
         float halfW = worldViewport.getWorldWidth() / 2f;
         float halfH = worldViewport.getWorldHeight() / 2f;
 
-        worldCamera.position.x = MathUtils.clamp(worldCamera.position.x, halfW, mapPixelW - halfW);
-        worldCamera.position.y = MathUtils.clamp(worldCamera.position.y, halfH, mapPixelH - halfH);
+        if (mapPixelW <= worldViewport.getWorldWidth()) {
+            worldCamera.position.x = mapPixelW / 2f;
+        } else {
+            worldCamera.position.x = MathUtils.clamp(
+                worldCamera.position.x,
+                halfW,
+                mapPixelW - halfW
+            );
+        }
+        if (mapPixelH <= worldViewport.getWorldHeight()) {
+            worldCamera.position.y = mapPixelH / 2f;
+        } else {
+            worldCamera.position.y = MathUtils.clamp(
+                worldCamera.position.y,
+                halfH,
+                mapPixelH - halfH
+            );
+        }
 
         worldCamera.update();
 
-        bgCamera.position.x = worldCamera.position.x * 0.3f + 500f;
-        bgCamera.position.y = worldCamera.position.y * 0.7f + 260f;
+        if (gameController.getCurrentMapIndex() == 0) {
+            bgCamera.position.x = worldCamera.position.x * 0.3f + 500f;
+            bgCamera.position.y = worldCamera.position.y * 0.7f + 260f;
+        }
+        else if (gameController.getCurrentMapIndex() == 1){
+            bgCamera.position.set(worldCamera.position);
+        }
 
         bgCamera.update();
     }
