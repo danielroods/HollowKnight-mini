@@ -2,6 +2,8 @@ package HollowKnight.source.controller;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.game_utils.AudioManager;
+import HollowKnight.source.game_utils.MenuBackground;
+import HollowKnight.source.game_utils.MenuParticleLayer;
 import HollowKnight.source.view.GameScreen;
 import HollowKnight.source.view.menus.BaseMenuScreen;
 import com.badlogic.gdx.Game;
@@ -11,6 +13,17 @@ import com.badlogic.gdx.audio.Music;
 public class MenuController {
     private static Game game = Main.getGameInstance();
     private static BaseMenuScreen currentMenuScreen;
+    private static GameScreen gameScreen;
+    private static MenuBackground menuBackground;
+    private static MenuParticleLayer menuParticleLayer;
+
+    public static void setGame(Main game) {
+        if (MenuController.game == null)
+            MenuController.game = game;
+
+        menuBackground = new MenuBackground();
+        menuParticleLayer = new MenuParticleLayer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
 
     public static void playMusic() {
         Music menuBGM = Gdx.audio.newMusic(Gdx.files.internal("musics/MoogCity2.mp3"));
@@ -26,15 +39,26 @@ public class MenuController {
     }
 
     public static void setGameScreen() {
+        gameScreen = new GameScreen();
         if (currentMenuScreen != null) {
             currentMenuScreen.dispose();
             currentMenuScreen = null;
         }
-        game.setScreen(new GameScreen());
+        game.setScreen(gameScreen);
     }
 
-    public static void setGame(Main g) {
-        if (MenuController.game == null)
-            MenuController.game = g;
+    public static GameScreen getGameScreen() { return gameScreen;}
+    public static MenuParticleLayer getMenuParticleLayer() {
+        return menuParticleLayer;
+    }
+    public static MenuBackground getMenuBackground() {
+        return menuBackground;
+    }
+
+    public static void setMenuParticleLayer(MenuParticleLayer menuParticleLayer) {
+        MenuController.menuParticleLayer = menuParticleLayer;
+    }
+    public static void setMenuBackground(MenuBackground menuBackground) {
+        MenuController.menuBackground = menuBackground;
     }
 }

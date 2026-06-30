@@ -2,15 +2,15 @@ package HollowKnight.source.view.menus;
 
 import HollowKnight.source.game_utils.Assets;
 import HollowKnight.source.controller.menus.MainMenuController;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MainMenuScreen extends BaseMenuScreen {
     @Override
     public void show() {
-        rootTable.defaults()
-            .width(300)
-            .height(80)
-            .pad(10);
+        Image title = new Image(new Texture("menu/title.png"));
 
         TextButton startGameBtn = new TextButton("Start Game", Assets.getSkin());
         TextButton settingsBtn = new TextButton("Settings", Assets.getSkin());
@@ -18,14 +18,47 @@ public class MainMenuScreen extends BaseMenuScreen {
         TextButton achievementsBtn = new TextButton("Achievements", Assets.getSkin());
         TextButton quitGameBtn = new TextButton("Quit Game", Assets.getSkin());
 
-        MainMenuController.modifyComponents(startGameBtn, settingsBtn, guideBtn, achievementsBtn, quitGameBtn);
+        Image logos = new Image(new Texture("menu/Hidden_Dreams_Logo.png"));
+        Image teamCherry = new Image(new Texture("menu/team_cherry.png"));
+        teamCherry.setSize(85f,60f);
 
-        rootTable.add(startGameBtn).row();
-        rootTable.add(settingsBtn).row();
-        rootTable.add(guideBtn).row();
-        rootTable.add(achievementsBtn).row();
-        rootTable.add(quitGameBtn).row();
+        MainMenuController.modifyComponents(
+            startGameBtn,
+            settingsBtn,
+            guideBtn,
+            achievementsBtn,
+            quitGameBtn
+        );
 
-        stage.addActor(rootTable);
+        title.setPosition(Gdx.graphics.getWidth()/2f - title.getWidth() / 2f, 550f);
+
+        prepareButton(startGameBtn, 300f, 60);
+        prepareButton(settingsBtn, 300, 60);
+        prepareButton(guideBtn, 300, 60);
+        prepareButton(achievementsBtn, 300, 60);
+        prepareButton(quitGameBtn, 300, 60);
+
+        float centerX = Gdx.graphics.getWidth()/2f - 150;
+
+        startGameBtn.setPosition(centerX, 450);
+        settingsBtn.setPosition(centerX, 370);
+        guideBtn.setPosition(centerX, 290);
+        achievementsBtn.setPosition(centerX, 210);
+        quitGameBtn.setPosition(centerX, 130);
+
+        logos.setPosition(40, 40);
+
+        teamCherry.setPosition(Gdx.graphics.getWidth() - teamCherry.getWidth() - 40, 40);
+
+        stage.addActor(title);
+
+        stage.addActor(startGameBtn);
+        stage.addActor(settingsBtn);
+        stage.addActor(guideBtn);
+        stage.addActor(achievementsBtn);
+        stage.addActor(quitGameBtn);
+
+        stage.addActor(logos);
+        stage.addActor(teamCherry);
     }
 }

@@ -6,6 +6,7 @@ import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.game_utils.Assets;
 import HollowKnight.source.game_utils.BrightnessRenderer;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.player.PlayerConstants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,17 +22,19 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen implements Screen {
 
-    private GameController gameController;
-    private SpriteBatch batch;
-    private ShapeRenderer shapeRenderer;
-
     private static final float WORLD_W = 1280f;
     private static final float WORLD_H = 720f;
-    private static final float CAM_LERP = 0.10f;
+    private static final float CAM_LERP = 0.01f;
+
+    private GameController gameController;
+    private SpriteBatch batch;
 
     private OrthographicCamera worldCamera;
     private FitViewport worldViewport;
     private OrthographicCamera bgCamera;
+
+    private OrthographicCamera uiCamera;
+    private HUDRenderer hudRenderer;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private float mapPixelW, mapPixelH;
@@ -39,14 +42,24 @@ public class GameScreen implements Screen {
     private Player player;
     private PlayerRenderer playerRenderer;
 
+    //for debug
+    private ShapeRenderer shapeRenderer;
+
     @Override
     public void show() {
         batch = Main.getGameInstance().getBatch();
+
         worldCamera = new OrthographicCamera();
+        worldCamera.zoom = 0.95f;
         worldViewport = new FitViewport(WORLD_W, WORLD_H, worldCamera);
+
         bgCamera = new OrthographicCamera();
         bgCamera.viewportWidth = WORLD_W;
         bgCamera.viewportHeight = WORLD_H;
+
+        uiCamera = new OrthographicCamera();
+        uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
+        uiCamera.update();
 
         gameController = GameController.getInstance();
         gameController.setPlayer(Player.getInstance());
@@ -54,95 +67,86 @@ public class GameScreen implements Screen {
 
         loadMap(0);
 
-        Vector2 spawn = Assets.getSpawnPosition("game_start_spawn");
         player = Player.getInstance();
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());
+        hudRenderer = new HUDRenderer();
 
-        gameController.setTransitionListener((targetIndex, spawnName) -> switchMap(targetIndex, spawnName));
 
         shapeRenderer = new ShapeRenderer();
+
+
+        gameController.setTransitionListener((targetIndex, spawnName) -> switchMap(targetIndex, spawnName));
     }
 
     @Override
     public void render(float delta) {
         gameController.update(delta);
-        updateCamera();
+        hudRenderer.update(delta);
+        updateCamera(delta);
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mapRenderer.setView(bgCamera);
+        renderWorld(delta);
 
-        if (gameController.getCurrentMapIndex() == 0)
-        {
-            mapRenderer.render(new int[]{0});
-
-            mapRenderer.setView(worldCamera);
-            mapRenderer.render(new int[]{1,2,3,4,5,6});
-
-            batch.setProjectionMatrix(worldCamera.combined);
-            batch.begin();
-            playerRenderer.render(batch, player, delta);
-            batch.end();
-
-            mapRenderer.render(new int[]{7,8,9});
-        }
-        else if (gameController.getCurrentMapIndex() == 1)
-        {
-            mapRenderer.render(new int[]{0});
-
-            mapRenderer.setView(worldCamera);
-            mapRenderer.render(new int[]{1,2,3,4,5,6,7,8});
-
-            batch.setProjectionMatrix(worldCamera.combined);
-            batch.begin();
-            playerRenderer.render(batch, player, delta);
-            batch.end();
-
-            mapRenderer.render(new int[]{9,10,11,12});
-        }
-
-        //tempppppp
-        shapeRenderer.setProjectionMatrix(worldCamera.combined);
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-        shapeRenderer.rect(
-            player.getBounds().x,
-            player.getBounds().y,
-            player.getBounds().width,
-            player.getBounds().height
-        );
-
-        shapeRenderer.end();
+        renderHUD();
 
         BrightnessRenderer.render(batch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    @Override
-    public void resize(int width, int height) {
-        worldViewport.update(width, height);
+    private void renderWorld(float delta) {
+        if (gameController.getCurrentMapIndex() == 0) {
+            mapRenderer.setView(bgCamera);
+            mapRenderer.render(new int[]{0});
+
+            mapRenderer.setView(worldCamera);
+            mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6});
+
+            batch.setProjectionMatrix(worldCamera.combined);
+            batch.begin();
+            playerRenderer.render(batch, player, delta);
+            batch.end();
+
+            mapRenderer.render(new int[]{7, 8, 9});
+        }
+        else {
+            mapRenderer.setView(bgCamera);
+            mapRenderer.render(new int[]{0});
+
+            mapRenderer.setView(worldCamera);
+            mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7, 8});
+
+            batch.setProjectionMatrix(worldCamera.combined);
+            batch.begin();
+            playerRenderer.render(batch, player, delta);
+            batch.end();
+
+            mapRenderer.render(new int[]{9, 10, 11, 12, 13});
+        }
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
+    private void renderHUD() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-    @Override
-    public void dispose() {
-        if (mapRenderer != null) mapRenderer.dispose();
+        hudRenderer.render(batch, uiCamera, player);
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     private void loadMap(int index) {
-        if (mapRenderer != null) mapRenderer.dispose();
+        if (mapRenderer != null)
+            mapRenderer.dispose();
 
         gameController.setCurrentMap(Assets.getMap(index));
         gameController.setCurrentMapIndex(index);
         mapRenderer = new OrthogonalTiledMapRenderer(gameController.getCurrentMap());
 
-        TiledMapTileLayer ref = (TiledMapTileLayer) gameController.getCurrentMap().getLayers().get("main");
+        TiledMapTileLayer ref = (TiledMapTileLayer)
+            gameController.getCurrentMap().getLayers().get("main");
         if (ref == null)
-            ref = (TiledMapTileLayer) gameController.getCurrentMap().getLayers().get(0);
+            ref = (TiledMapTileLayer)
+                gameController.getCurrentMap().getLayers().get(0);
 
         mapPixelW = ref.getWidth() * ref.getTileWidth();
         mapPixelH = ref.getHeight() * ref.getTileHeight();
@@ -150,50 +154,63 @@ public class GameScreen implements Screen {
 
     private void switchMap(int targetIndex, String spawnPointName) {
         loadMap(targetIndex);
-
         Vector2 spawn = Assets.getSpawnPosition(spawnPointName);
-        player.setPosition(spawn.x, spawn.y);
-        player.setVelocityY(0f);
+        Player.getInstance().setPosition(spawn.x, spawn.y);
+        Player.getInstance().setVelocityY(0f);
+
+        float targetX = spawn.x + PlayerConstants.WIDTH / 2f;
+        float targetY = spawn.y + PlayerConstants.HEIGHT / 2f;
+
+        worldCamera.position.set(targetX, targetY, 0);
+        worldCamera.update();
     }
 
-    private void updateCamera() {
-        float targetX = player.getPosition().x + Player.WIDTH / 2f;
-        float targetY = player.getPosition().y + Player.HEIGHT / 2f;
+    @Override
+    public void resize(int width, int height) {
+        worldViewport.update(width, height);
+        uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
+        uiCamera.update();
+    }
+
+    private void updateCamera(float delta) {
+        float targetX = player.getPosition().x + PlayerConstants.WIDTH / 2f;
+        float targetY = player.getPosition().y + PlayerConstants.HEIGHT / 2f;
 
         worldCamera.position.lerp(new Vector3(targetX, targetY, 0f), CAM_LERP);
 
         float halfW = worldViewport.getWorldWidth() / 2f;
         float halfH = worldViewport.getWorldHeight() / 2f;
 
-        if (mapPixelW <= worldViewport.getWorldWidth()) {
-            worldCamera.position.x = mapPixelW / 2f;
-        } else {
-            worldCamera.position.x = MathUtils.clamp(
-                worldCamera.position.x,
-                halfW,
-                mapPixelW - halfW
-            );
+        worldCamera.position.x = (mapPixelW <= worldViewport.getWorldWidth()) ? mapPixelW / 2f : MathUtils.clamp(worldCamera.position.x, halfW, mapPixelW - halfW);
+
+        worldCamera.position.y = (mapPixelH <= worldViewport.getWorldHeight()) ? mapPixelH / 2f : MathUtils.clamp(worldCamera.position.y, halfH, mapPixelH - halfH);
+
+        if (player.isFocusing()) {
+            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.7f, delta);
         }
-        if (mapPixelH <= worldViewport.getWorldHeight()) {
-            worldCamera.position.y = mapPixelH / 2f;
-        } else {
-            worldCamera.position.y = MathUtils.clamp(
-                worldCamera.position.y,
-                halfH,
-                mapPixelH - halfH
-            );
+        else {
+            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 1f, 4f * delta);
         }
+
 
         worldCamera.update();
 
         if (gameController.getCurrentMapIndex() == 0) {
             bgCamera.position.x = worldCamera.position.x * 0.3f + 500f;
             bgCamera.position.y = worldCamera.position.y * 0.7f + 260f;
-        }
-        else if (gameController.getCurrentMapIndex() == 1){
+        } else {
             bgCamera.position.set(worldCamera.position);
         }
-
         bgCamera.update();
     }
+
+    @Override
+    public void dispose() {
+        if (mapRenderer != null) mapRenderer.dispose();
+        if (hudRenderer != null) hudRenderer.dispose();
+    }
+
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 }

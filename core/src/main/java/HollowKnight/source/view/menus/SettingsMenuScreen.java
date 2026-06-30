@@ -3,41 +3,62 @@ package HollowKnight.source.view.menus;
 import HollowKnight.source.controller.menus.SettingsMenuController;
 import HollowKnight.source.data.GameSettings;
 import HollowKnight.source.game_utils.Assets;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class SettingsMenuScreen extends BaseMenuScreen {
+
     @Override
     public void show() {
-        setBackground(Assets.getSettingsMenuBG());
-        rootTable.defaults().pad(15);
 
+        Label volumeLabel = new Label("Volume", Assets.getSkin());
         Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, Assets.getSkin());
         volumeSlider.setValue(GameSettings.getVolume());
 
-        CheckBox muteCheckBox = new CheckBox(" Mute Music", Assets.getSkin());
+        Label muteLabel = new Label("Mute", Assets.getSkin());
+        CheckBox muteCheckBox = new CheckBox("", Assets.getSkin());
         muteCheckBox.setChecked(GameSettings.isMuted());
 
+        Label brightnessLabel = new Label("Brightness", Assets.getSkin());
         Slider brightnessSlider = new Slider(0.2f, 1f, 0.1f, false, Assets.getSkin());
         brightnessSlider.setValue(GameSettings.getBrightness());
 
         TextButton backBtn = new TextButton("Back", Assets.getSkin());
 
-        SettingsMenuController.modifyComponents(this, volumeSlider, muteCheckBox, brightnessSlider, backBtn);
+        SettingsMenuController.modifyComponents(
+            volumeSlider,
+            muteCheckBox,
+            brightnessSlider,
+            backBtn
+        );
 
-        rootTable.add(new Label("Volume:", Assets.getSkin()));
-        rootTable.add(volumeSlider).width(350).row();
+        volumeLabel.setPosition(320, 470);
+        volumeSlider.setSize(450, 20);
+        volumeSlider.setPosition(500, 480);
 
-        rootTable.add(new Label("Mute:", Assets.getSkin()));
-        rootTable.add(muteCheckBox).row();
+        muteLabel.setPosition(320, 390);
+        muteCheckBox.setPosition(500, 385);
 
-        rootTable.add(new Label("Brightness:", Assets.getSkin()));
-        rootTable.add(brightnessSlider).width(350).row();
+        brightnessLabel.setPosition(320, 310);
+        brightnessSlider.setSize(450, 20);
+        brightnessSlider.setPosition(500, 320);
 
-        rootTable.add(backBtn).colspan(2).width(200).padTop(50);
+        prepareButton(backBtn, 300, 60);
 
-        stage.addActor(rootTable);
+        backBtn.setPosition(Gdx.graphics.getWidth() / 2f - 150, 120);
+
+        stage.addActor(volumeLabel);
+        stage.addActor(volumeSlider);
+
+        stage.addActor(muteLabel);
+        stage.addActor(muteCheckBox);
+
+        stage.addActor(brightnessLabel);
+        stage.addActor(brightnessSlider);
+
+        stage.addActor(backBtn);
     }
 }

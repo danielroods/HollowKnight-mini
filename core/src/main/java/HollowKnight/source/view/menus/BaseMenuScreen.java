@@ -1,35 +1,43 @@
 package HollowKnight.source.view.menus;
 
 import HollowKnight.source.Main;
+import HollowKnight.source.controller.MenuController;
 import HollowKnight.source.game_utils.BrightnessRenderer;
 import HollowKnight.source.game_utils.UIContext;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class BaseMenuScreen implements Screen {
+    private static Game game = Main.getGameInstance();
     private SpriteBatch batch;
     protected Viewport viewport;
     protected Stage stage;
-    protected Texture backgroundTexture;
-    protected Table rootTable;
 
     public BaseMenuScreen() {
         batch = Main.getGameInstance().getBatch();
         viewport = UIContext.getViewport();
         stage = new Stage(viewport, batch);
         Gdx.input.setInputProcessor(stage);
-        rootTable = new Table();
-        rootTable.setFillParent(true);
+
+        Pixmap cursorPixmap = new Pixmap(Gdx.files.internal("icons/Cursor.png"));
+
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(cursorPixmap, 0, 0));
+
+        cursorPixmap.dispose();
     }
 
-    public void setBackground(Texture backgroundTexture) {
-        this.backgroundTexture = backgroundTexture;
+    public static void prepareButton(TextButton button, float width, float height) {
+        button.setSize(width, height);
+        button.setTransform(true);
+        button.setOrigin(width / 2f, height / 2f);
     }
 
     @Override
@@ -42,17 +50,10 @@ public abstract class BaseMenuScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (backgroundTexture != null) {
-            batch.begin();
-            batch.draw(
-                backgroundTexture,
-                0,
-                0,
-                viewport.getWorldWidth(),
-                viewport.getWorldHeight()
-            );
-            batch.end();
-        }
+        batch.begin();
+        MenuController.getMenuBackground().updateAndRender(batch, delta, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        MenuController.getMenuParticleLayer().updateAndRender(batch, delta);
+        batch.end();
 
         stage.act(delta);
         stage.draw();

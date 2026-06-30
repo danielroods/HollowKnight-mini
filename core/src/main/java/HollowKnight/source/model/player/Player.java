@@ -7,36 +7,42 @@ import com.badlogic.gdx.math.Vector2;
 public class Player {
     private static Player instance;
 
-    public static final float WIDTH = 190f;
-    public static final float HEIGHT = 100f;
-    public static final float SPEED = 210f;
-    public static final float JUMP_FORCE = 520f;
-    public static final float GRAVITY = -950f;
-    public static final int MAX_HEALTH = 5;
-    public static final float ATTACK_DUR = 0.30f;
-    public static final float HURT_COOLDOWN = 1.0f;
-
     private final Vector2 position;
     private final Vector2 velocity;
     private final Rectangle bounds;
+    private final Vector2 lastSafePosition;
 
     private PlayerState state;
-
-    private int health;
-
     private boolean facingRight;
-    private boolean onGround;
+    private boolean isOnGround;
+
     private boolean isAttacking;
     private float attackTimer;
+    private float hurtTimer;
+
+    private int health;
+    private int soul;
+
+    private boolean isFocusing;
+    private float focusTimer;
+    private float healAnimTimer;
+    private float deathTimer;
+    private float knockbackTimer;
+
+    private boolean canDoubleJump = true;
+
+    private AttackDirection attackDirection = AttackDirection.RIGHT;
 
     private Player(float x, float y) {
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        bounds = new Rectangle(x + 85, y, WIDTH - 170, HEIGHT - 48);
+        bounds = new Rectangle(x + 85, y, PlayerConstants.WIDTH - 170, PlayerConstants.HEIGHT - 48);
+        lastSafePosition = new Vector2(x, y);
         state = PlayerState.IDLE;
         facingRight = true;
-        onGround = false;
-        health = MAX_HEALTH;
+        isOnGround = false;
+        health = PlayerConstants.MAX_HEALTH;
+        soul = 0;
     }
 
     public static Player getInstance() {
@@ -46,46 +52,82 @@ public class Player {
         return instance;
     }
 
-    public void update(float delta) {
-        velocity.y += GRAVITY * delta;
-
-        position.x += velocity.x * delta;
-        position.y += velocity.y * delta;
-
-        bounds.setPosition(position.x + 85, position.y);
-
-        if (!isAlive()) {
-            state = PlayerState.DEAD;
-        }
-        else if (isAttacking) {
-            state = PlayerState.ATTACK;
-            attackTimer -= delta;
-            if (attackTimer <= 0)
-                isAttacking = false;
-        }
-        else if (!onGround) {
-            state = velocity.y > 0 ? PlayerState.JUMP : PlayerState.FALL;
-        }
-        else if (Math.abs(velocity.x) > 0f) {
-            state = PlayerState.RUN;
-        }
-        else {
-            state = PlayerState.IDLE;
-        }
+    public void restoreFullHealth() {
+        health = PlayerConstants.MAX_HEALTH;
+        deathTimer = 0f;
+        isFocusing = false;
+        focusTimer = 0f;
+        hurtTimer = 0f;
+        healAnimTimer = 0f;
+        isAttacking = false;
+        knockbackTimer = 0f;
+        canDoubleJump = true;
     }
 
-    public void setVelocityX(float velocityX) { velocity.x = velocityX;}
-    public void setVelocityY(float velocityY) { velocity.y = velocityY;}
-    public void setFacingRight(boolean facingRight) { this.facingRight = facingRight;}
-    public void setHealth(int health) { this.health = health;}
-    public void setState(PlayerState state) { this.state = state;}
+    public void setVelocityX(float velocityX) {
+        velocity.x = velocityX;
+    }
+    public void setVelocityY(float velocityY) {
+        velocity.y = velocityY;
+    }
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
+    }
+    public void setHealth(int health) {
+        this.health = Math.max(0, Math.min(PlayerConstants.MAX_HEALTH, health));
+    }
+    public void setSoul(int soul) {
+        this.soul = Math.max(0, Math.min(PlayerConstants.MAX_SOUL, soul));
+    }
+    public void addSoul(int amount) {
+        soul = Math.min(PlayerConstants.MAX_SOUL, soul + amount);
+    }
+    public void setState(PlayerState state) {
+        this.state = state;
+    }
+    public void setHurtTimer(float timer) {
+        hurtTimer = timer;
+    }
     public void setOnGround(boolean onGround) {
-        this.onGround = onGround;
-        if (onGround) velocity.y = 0;
+        this.isOnGround = onGround;
+        if (onGround) {
+            velocity.y = 0;
+            canDoubleJump = true;
+        }
     }
     public void setPosition(float x, float y) {
         position.set(x, y);
         bounds.setPosition(x + 85, y);
+    }
+    public void consumeDoubleJump() {
+        canDoubleJump = false;
+    }
+    public void setFocusing(boolean focusing) {
+        isFocusing = focusing;
+    }
+    public void setFocusTimer(float focusTimer) {
+        this.focusTimer = focusTimer;
+    }
+    public void setKnockbackTimer(float knockbackTimer) {
+        this.knockbackTimer = knockbackTimer;
+    }
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
+    }
+    public void setAttackTimer(float attackTimer) {
+        this.attackTimer = attackTimer;
+    }
+    public void setHealAnimTimer(float healAnimTimer) {
+        this.healAnimTimer = healAnimTimer;
+    }
+    public void setDeathTimer(float deathTimer) {
+        this.deathTimer = deathTimer;
+    }
+    public void setCanDoubleJump(boolean canDoubleJump) {
+        this.canDoubleJump = canDoubleJump;
+    }
+    public void setAttackDirection(AttackDirection attackDirection) {
+        this.attackDirection = attackDirection;
     }
 
     public Vector2 getPosition() { return position; }
@@ -93,7 +135,22 @@ public class Player {
     public Rectangle getBounds() { return bounds; }
     public PlayerState getState() { return state; }
     public boolean isFacingRight() { return facingRight; }
-    public boolean isOnGround() { return onGround; }
+    public boolean isOnGround() { return isOnGround; }
     public int getHealth() { return health; }
+    public int getSoul() { return soul; }
     public boolean isAlive() { return health > 0; }
+    public boolean isInvincible() { return hurtTimer > 0; }
+    public float getHurtTimer() { return hurtTimer; }
+    public boolean isFocusing() { return isFocusing; }
+    public float getFocusTimer() { return focusTimer; }
+    public float getHealAnimTimer() { return healAnimTimer; }
+    public float getDeathTimer() { return deathTimer; }
+    public boolean isAttacking() { return isAttacking; }
+    public float getAttackTimer() { return attackTimer; }
+    public Vector2 getLastSafePosition() { return new Vector2(lastSafePosition); }
+    public boolean isKnockedBack() { return knockbackTimer > 0; }
+    public boolean canDoubleJump() { return canDoubleJump; }
+    public AttackDirection getAttackDirection() { return attackDirection; }
+    public float getKnockbackTimer() { return knockbackTimer; }
+    public boolean isCanDoubleJump() { return canDoubleJump; }
 }

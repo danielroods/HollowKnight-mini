@@ -4,58 +4,78 @@ import HollowKnight.source.controller.menus.AchievementsMenuController;
 import HollowKnight.source.game_utils.Assets;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class AchievementsMenuScreen extends BaseMenuScreen {
+
     @Override
     public void show() {
+        float panelWidth = 700;
+        float x = (Gdx.graphics.getWidth() - panelWidth) / 2f;
+        float y = 730;
+        float spacing = 95;
 
-        setBackground(Assets.getAchievementsMenuBG());
+        Label.LabelStyle titleStyle = new Label.LabelStyle();
+        titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
+        titleStyle.fontColor = Color.WHITE;
 
-        rootTable.defaults().pad(10);
+        Label.LabelStyle descStyle = new Label.LabelStyle();
+        descStyle.font = Assets.getSkin().getFont("AchievementDescFont");
+        descStyle.fontColor = Color.WHITE;
 
         for (AchievementType achievement : AchievementType.values()) {
+
             Image icon = new Image(Assets.getAchievementIcon(achievement));
 
-            Stack iconStack = new Stack();
+            Stack stack = new Stack();
 
             if (!AchievementManager.isUnlocked(achievement)) {
-                icon.setColor(0.3f, 0.3f, 0.3f, 0.6f);
+                icon.setColor(0.25f, 0.25f, 0.25f, 0.55f);
 
-                Image lockIcon = new Image(Assets.getLockIcon());
+                Image lock = new Image(Assets.getLockIcon());
 
-                iconStack.add(icon);
-                iconStack.add(lockIcon);
+                stack.add(icon);
+                stack.add(lock);
             } else {
-                iconStack.add(icon);
+                stack.add(icon);
             }
 
-            Label title = new Label(achievement.getTitle(), Assets.getSkin());
+            Label title = new Label(achievement.getTitle(), titleStyle);
 
-            Label description = new Label(achievement.getDescription(), Assets.getSkin());
+            title.setColor(0.95f, 0.92f, 0.78f, 1f);
 
-            rootTable.add(iconStack).size(64);
+            Label desc = new Label(achievement.getDescription(), descStyle);
+            desc.setColor(0.72f, 0.72f, 0.72f, 1f);
 
-            rootTable.add(title).left();
+            stack.setBounds(x, y - 6, 72, 72);
 
-            rootTable.add(description).left();
+            title.setPosition(x + 95, y + 20);
 
-            rootTable.row();
+            desc.setPosition(x + 95, y - 8);
+
+            stage.addActor(stack);
+            stage.addActor(title);
+            stage.addActor(desc);
+
+            y -= spacing;
         }
 
         TextButton backBtn = new TextButton("Back", Assets.getSkin());
 
         AchievementsMenuController.modifyComponents(backBtn);
 
-        rootTable.row();
+        prepareButton(backBtn, 300, 60);
 
-        rootTable.add(backBtn).colspan(3);
+        backBtn.setPosition(
+            Gdx.graphics.getWidth() / 2f - 150,
+            120
+        );
 
-        stage.addActor(rootTable);
+        stage.addActor(backBtn);
     }
 }

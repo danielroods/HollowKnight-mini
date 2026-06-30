@@ -14,5 +14,7 @@ public class GuideMenuController {
                 MenuController.setMenuScreen(new MainMenuScreen());
             }
         });
+
+        MenuHover.addHoverEffect(backBtn);
     }
 }

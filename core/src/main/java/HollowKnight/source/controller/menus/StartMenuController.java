@@ -9,17 +9,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class StartMenuController {
     public static void modifyComponents(TextButton backBtn,
                                         TextButton newGameBtn) {
-        backBtn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                MenuController.setMenuScreen(new MainMenuScreen());
-            }
-        });
         newGameBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MenuController.setGameScreen();
             }
         });
+        backBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MenuController.setMenuScreen(new MainMenuScreen());
+            }
+        });
+
+        MenuHover.addHoverEffect(newGameBtn);
+        MenuHover.addHoverEffect(backBtn);
     }
 }

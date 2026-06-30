@@ -1,16 +1,19 @@
 {
-    "activeFile": "Greenpath-room1.tmx",
+    "activeFile": "Greenpath-room2.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "Greenpath-room1.tmx": {
-            "scale": 0.45,
+            "expandedObjectLayers": [
+                12
+            ],
+            "scale": 2,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1290,
-                "y": 490.00000000000006
+                "x": 1196.5,
+                "y": 776.75
             }
         },
         "Greenpath-room2.tmx": {
@@ -18,18 +21,18 @@
                 13
             ],
             "scale": 1,
-            "selectedLayer": 12,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 544.5,
-                "y": 371.5
+                "x": 640.5,
+                "y": 325.5
             }
         },
         "Slug_Shrine_0003_a.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.0625,
             "scaleInEditor": 0.75
         },
         "adawda.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.8,
             "scaleInEditor": 1
         },
         "air_ground_room1.tsx": {
@@ -55,7 +58,7 @@
             "scaleInEditor": 1
         },
         "black_grass20004.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.8,
             "scaleInEditor": 1
         },
         "bush4.tsx": {
@@ -79,7 +82,7 @@
             "scaleInEditor": 1
         },
         "cave.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.8,
             "scaleInEditor": 1
         },
         "eye_animation3.tsx": {
@@ -123,7 +126,7 @@
             "scaleInEditor": 1
         },
         "fungd_spikes_0_0001_d.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.25,
             "scaleInEditor": 1
         },
         "fungd_vine_02.tsx": {
@@ -143,7 +146,7 @@
             "scaleInEditor": 1
         },
         "ground_room1.tsx": {
-            "scaleInDock": 0.75,
+            "scaleInDock": 0.8,
             "scaleInEditor": 1
         },
         "hunter_scenery_0001_a.tsx": {
@@ -194,8 +197,8 @@
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "Greenpath-room2.tmx",
         "Greenpath-room1.tmx",
+        "Greenpath-room2.tmx",
         "eye_in_cave_anim.tsx",
         "anim_eye.tsx",
         "lights.tsx",

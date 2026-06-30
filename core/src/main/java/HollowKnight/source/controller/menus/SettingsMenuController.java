@@ -15,8 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class SettingsMenuController {
 
-    public static void modifyComponents(SettingsMenuScreen view,
-                                        Slider volumeSlider,
+    public static void modifyComponents(Slider volumeSlider,
                                         CheckBox muteCheckBox,
                                         Slider brightnessSlider,
                                         TextButton backBtn) {
@@ -61,5 +60,8 @@ public class SettingsMenuController {
                 MenuController.setMenuScreen(new MainMenuScreen());
             }
         });
+
+
+        MenuHover.addHoverEffect(backBtn);
     }
 }

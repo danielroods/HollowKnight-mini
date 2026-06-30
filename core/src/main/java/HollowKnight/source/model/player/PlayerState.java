@@ -4,8 +4,11 @@ public enum PlayerState {
     IDLE,
     RUN,
     JUMP,
+    DOUBLE_JUMP,
     FALL,
     ATTACK,
     HURT,
+    FOCUS,
+    HEAL,
     DEAD
 }

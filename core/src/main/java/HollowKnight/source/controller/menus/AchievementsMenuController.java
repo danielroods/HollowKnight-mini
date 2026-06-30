@@ -14,5 +14,7 @@ public class AchievementsMenuController {
                 MenuController.setMenuScreen(new MainMenuScreen());
             }
         });
+
+        MenuHover.addHoverEffect(backBtn);
     }
 }

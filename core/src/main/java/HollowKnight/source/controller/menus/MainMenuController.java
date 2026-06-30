@@ -48,5 +48,11 @@ public class MainMenuController {
                 Gdx.app.exit();
             }
         });
+
+        MenuHover.addHoverEffect(startGameBtn);
+        MenuHover.addHoverEffect(settingsBtn);
+        MenuHover.addHoverEffect(guideBtn);
+        MenuHover.addHoverEffect(achievementsBtn);
+        MenuHover.addHoverEffect(quitGameBtn);
     }
 }

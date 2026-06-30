@@ -1,7 +1,9 @@
 package HollowKnight.source.controller;
 
 import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.player.PlayerConstants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.MapLayer;
@@ -12,12 +14,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameController {
     private static GameController instance;
 
     private Player player;
-
     private PlayerController playerController;
 
     private static final String[] MAP_IDS = {
@@ -42,7 +44,6 @@ public class GameController {
     public interface MapTransitionListener {
         void onTransition(int targetMapIndex, String spawnPointName);
     }
-
     private MapTransitionListener transitionListener;
 
     public void setTransitionListener(MapTransitionListener transitionListener) {
@@ -50,40 +51,89 @@ public class GameController {
     }
 
     public void update(float delta) {
-        if (playerController.hurtTimer > 0)
-            playerController.hurtTimer -= delta;
 
-        handleInput();
-        player.update(delta);
+        if (!player.isAlive()) {
+            playerController.update(delta);
+            if (player.getDeathTimer() >= PlayerConstants.DEATH_ANIM_DUR)
+                respawnPlayer();
+            return;
+        }
+
+        handleFocusInput(delta);
+
+        if (!player.isFocusing()) {
+            handleMovementInput();
+            handleAttackInput();
+        } else {
+            playerController.stopHorizontal();
+        }
+
+        playerController.update(delta);
         handleCollisions();
         handleSpikes();
         checkDoors();
 
-        if (player.getPosition().y < -300f) {
-            player.setPosition(200f, 300f);
-            player.setVelocityY(0f);
-        }
+        checkSwordHits();
+
+        if (player.getPosition().y < -300f)
+            respawnPlayer();
     }
 
-    private void handleInput() {
-        boolean left = Gdx.input.isKeyPressed(Keys.LEFT)
-            || Gdx.input.isKeyPressed(Keys.A);
+    private void handleMovementInput() {
+        if (player.isKnockedBack()) return;
 
-        boolean right = Gdx.input.isKeyPressed(Keys.RIGHT)
-            || Gdx.input.isKeyPressed(Keys.D);
+        boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
+        boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
+        boolean jump = Gdx.input.isKeyJustPressed(Keys.SPACE);
 
-        boolean jump = Gdx.input.isKeyJustPressed(Keys.SPACE)
-            || Gdx.input.isKeyJustPressed(Keys.W)
-            || Gdx.input.isKeyJustPressed(Keys.UP);
+        if (left && !right)
+            playerController.moveLeft();
+        else if (right && !left)
+            playerController.moveRight();
+        else
+            playerController.stopHorizontal();
 
-        boolean attack = Gdx.input.isKeyJustPressed(Keys.Z)
-            || Gdx.input.isKeyJustPressed(Keys.J);
+        if (jump)
+            playerController.jump();
+    }
 
-        if (left && !right) playerController.moveLeft();
-        else if (right && !left) playerController.moveRight();
-        else playerController.stopHorizontal();
+    private void handleAttackInput() {
+        if (!Gdx.input.isKeyJustPressed(Keys.X)) return;
 
-        if (jump) playerController.jump();
+        AttackDirection dir;
+        if (Gdx.input.isKeyPressed(Keys.UP)) {
+            dir = AttackDirection.UP;
+        }
+        else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+            dir = AttackDirection.DOWN;
+        }
+        else {
+            dir = player.isFacingRight() ? AttackDirection.RIGHT : AttackDirection.LEFT;
+        }
+
+        playerController.attack(dir);
+    }
+
+    private void handleFocusInput(float delta) {
+        boolean held = Gdx.input.isKeyPressed(Keys.A);
+        if (held && player.isOnGround() && !player.isInvincible())
+        {
+            if (!player.isFocusing()) {
+                playerController.startFocus();
+            }
+            playerController.updateFocus(delta);
+        }
+        else if (!held && player.isFocusing())
+            playerController.cancelFocus();
+    }
+
+    private void respawnPlayer() {
+        Vector2 spawn = Assets.getSpawnPosition("game_start_spawn");
+        player.setPosition(spawn.x, spawn.y);
+        player.setVelocityX(0f);
+        player.setVelocityY(0f);
+        player.restoreFullHealth();
+        playerController.updateLastSafePosition();
     }
 
     private void handleCollisions() {
@@ -98,7 +148,6 @@ public class GameController {
 
             Rectangle tile = ((RectangleMapObject) obj).getRectangle();
             Rectangle overlap = new Rectangle();
-
             if (!Intersector.intersectRectangles(playerRect, tile, overlap)) continue;
 
             if (overlap.width < overlap.height) {
@@ -106,7 +155,6 @@ public class GameController {
                     player.setPosition(player.getPosition().x - overlap.width, player.getPosition().y);
                 else
                     player.setPosition(player.getPosition().x + overlap.width, player.getPosition().y);
-
             }
             else {
                 float playerMidY = playerRect.y + playerRect.height / 2f;
@@ -123,60 +171,57 @@ public class GameController {
                     player.setVelocityY(0f);
                 }
             }
-
             playerRect.set(player.getBounds());
         }
 
         player.setOnGround(touchingGround);
+
+        if (touchingGround)
+            playerController.updateLastSafePosition();
     }
 
     private boolean isSolid(MapObject obj) {
         if (!(obj instanceof RectangleMapObject))
             return false;
-
         String name = obj.getName();
         if (name == null)
             return false;
-
         return name.equals("platform") || name.equals("wall") || name.equals("ceiling") || name.equals("spikes platform");
     }
 
     private void handleSpikes() {
-        if (playerController.hurtTimer > 0) return;
+        if (player.isInvincible() || !player.isAlive()) return;
 
         MapLayer layer = currentMap.getLayers().get("logic");
         if (layer == null) return;
 
         Rectangle playerRect = player.getBounds();
-
-        Polygon playerPoly = new Polygon(new float[]{
-            0, 0,
-            playerRect.width, 0,
-            playerRect.width, playerRect.height,
-            0, playerRect.height
-        });
-
+        Polygon playerPoly = new Polygon(new float[]{0, 0, playerRect.width, 0, playerRect.width, playerRect.height, 0, playerRect.height});
         playerPoly.setPosition(playerRect.x, playerRect.y);
 
         for (MapObject obj : layer.getObjects()) {
             if (!(obj instanceof PolygonMapObject)) continue;
-
             String name = obj.getName();
-            if (name == null) continue;
-            if (!name.equals("spikes")) continue;
+            if (name == null || !name.equals("spikes")) continue;
 
-            Polygon spikePoly = ((PolygonMapObject)obj).getPolygon();
+            Polygon spikePoly = ((PolygonMapObject) obj).getPolygon();
+            if (!Intersector.overlapConvexPolygons(playerPoly, spikePoly)) continue;
 
-            if (Intersector.overlapConvexPolygons(playerPoly, spikePoly)) {
-                System.out.println(player.getHealth());
-                playerController.takeDamage(1);
-                if (player.getHealth() <= 0) {
+            float spikeCX = spikePoly.getBoundingRectangle().x + spikePoly.getBoundingRectangle().width / 2f;
+            float playerCX = playerRect.x + playerRect.width / 2f;
+            float knockBackDirection = playerCX < spikeCX ? -1f : 1f;
 
-                }
-                playerController.hurtTimer = Player.HURT_COOLDOWN;
-                return;
-            }
+            playerController.takeDamage(1);
+            playerController.applyKnockback(knockBackDirection);
+            return;
         }
+    }
+
+    private void checkSwordHits() {
+        if (!player.isAttacking()) return;
+
+        Rectangle hitbox = playerController.getSwordHitbox();
+        if (hitbox == null) return;
     }
 
     private void checkDoors() {
@@ -203,22 +248,17 @@ public class GameController {
     }
 
     private int resolveMapIndex(String doorName) {
-        if (doorName.endsWith("room1")) return 0;
-        if (doorName.endsWith("room2")) return 1;
+        if (doorName.endsWith("greenpath_room1"))
+            return 0;
+        if (doorName.endsWith("greenpath_room2"))
+            return 1;
         return 0;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-    public void setPlayerController(PlayerController playerController) {
-        this.playerController = playerController;
-    }
-    public void setCurrentMap(TiledMap map) { currentMap = map;}
-    public void setCurrentMapIndex(int currentMapIndex) {
-        this.currentMapIndex = currentMapIndex;
-    }
-
-    public TiledMap getCurrentMap() { return currentMap;}
-    public int getCurrentMapIndex() { return currentMapIndex;}
+    public void setPlayer(Player p) { this.player = p; }
+    public void setPlayerController(PlayerController pc) { this.playerController = pc; }
+    public void setCurrentMap(TiledMap map) { currentMap = map; }
+    public void setCurrentMapIndex(int idx) { this.currentMapIndex = idx; }
+    public TiledMap getCurrentMap() { return currentMap; }
+    public int getCurrentMapIndex() { return currentMapIndex; }
 }
