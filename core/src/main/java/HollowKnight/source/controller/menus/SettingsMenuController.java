@@ -2,9 +2,8 @@ package HollowKnight.source.controller.menus;
 
 import HollowKnight.source.controller.MenuController;
 import HollowKnight.source.data.GameSettings;
-import HollowKnight.source.game_utils.AudioManager;
+import HollowKnight.source.controller.AudioController;
 import HollowKnight.source.view.menus.MainMenuScreen;
-import HollowKnight.source.view.menus.SettingsMenuScreen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -29,7 +28,7 @@ public class SettingsMenuController {
                 GameSettings.setVolume(volume);
 
                 if (!muteCheckBox.isChecked()) {
-                    AudioManager.getInstance().setMaxVolume(volume);
+                    AudioController.getInstance().setMaxVolume(volume);
                 }
             }
         });
@@ -40,9 +39,9 @@ public class SettingsMenuController {
                 GameSettings.setMuted(muteCheckBox.isChecked());
 
                 if (muteCheckBox.isChecked()) {
-                    AudioManager.getInstance().setMaxVolume(0f);
+                    AudioController.getInstance().setMaxVolume(0f);
                 } else {
-                    AudioManager.getInstance().setMaxVolume(GameSettings.getVolume());
+                    AudioController.getInstance().setMaxVolume(GameSettings.getVolume());
                 }
             }
         });
@@ -62,6 +61,6 @@ public class SettingsMenuController {
         });
 
 
-        MenuHover.addHoverEffect(backBtn);
+        MenuHoverController.addHoverEffect(backBtn);
     }
 }

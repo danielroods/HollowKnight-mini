@@ -1,6 +1,6 @@
 package HollowKnight.source.view.menus;
 
-import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.controller.menus.MainMenuController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

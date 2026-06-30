@@ -49,10 +49,10 @@ public class MainMenuController {
             }
         });
 
-        MenuHover.addHoverEffect(startGameBtn);
-        MenuHover.addHoverEffect(settingsBtn);
-        MenuHover.addHoverEffect(guideBtn);
-        MenuHover.addHoverEffect(achievementsBtn);
-        MenuHover.addHoverEffect(quitGameBtn);
+        MenuHoverController.addHoverEffect(startGameBtn);
+        MenuHoverController.addHoverEffect(settingsBtn);
+        MenuHoverController.addHoverEffect(guideBtn);
+        MenuHoverController.addHoverEffect(achievementsBtn);
+        MenuHoverController.addHoverEffect(quitGameBtn);
     }
 }

@@ -1,6 +1,6 @@
 package HollowKnight.source.model.player;
 
-import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.controller.GameController;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -46,7 +46,7 @@ public class Player {
     }
 
     public static Player getInstance() {
-        Vector2 startSpawn = Assets.getSpawnPosition("game_start_spawn");
+        Vector2 startSpawn = GameController.getSpawnPosition("game_start_spawn");
         if (instance == null)
             instance = new Player(startSpawn.x, startSpawn.y);
         return instance;

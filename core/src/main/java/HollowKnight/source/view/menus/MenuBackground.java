@@ -1,8 +1,9 @@
-package HollowKnight.source.game_utils;
+package HollowKnight.source.view.menus;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+//credit: Arvin Talebi
 public class MenuBackground {
 
     private final Texture[] backgrounds;

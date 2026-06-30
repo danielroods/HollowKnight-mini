@@ -1,7 +1,7 @@
 package HollowKnight.source.view.menus;
 
 import HollowKnight.source.controller.menus.AchievementsMenuController;
-import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
 import com.badlogic.gdx.Gdx;

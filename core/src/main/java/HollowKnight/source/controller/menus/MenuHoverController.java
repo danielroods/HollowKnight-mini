@@ -1,6 +1,6 @@
 package HollowKnight.source.controller.menus;
 
-import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.model.asset.Assets;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,26 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class MenuHover {
+public class MenuHoverController {
 
     public static void addHoverEffect(TextButton button) {
 
         button.setTransform(true);
 
-        BitmapFont normalFont =
-            Assets.getSkin().getFont("Hollowfont");
+        BitmapFont normalFont = Assets.getSkin().getFont("Hollowfont");
 
-        BitmapFont glowFont =
-            Assets.getSkin().getFont("HollowfontGlow");
+        BitmapFont glowFont = Assets.getSkin().getFont("HollowfontGlow");
 
-        TextButton.TextButtonStyle normalStyle =
-            new TextButton.TextButtonStyle(button.getStyle());
+        TextButton.TextButtonStyle normalStyle = new TextButton.TextButtonStyle(button.getStyle());
 
         normalStyle.font = normalFont;
         normalStyle.fontColor = new Color(0.95f, 0.95f, 0.95f, 1f);
 
-        TextButton.TextButtonStyle hoverStyle =
-            new TextButton.TextButtonStyle(button.getStyle());
+        TextButton.TextButtonStyle hoverStyle = new TextButton.TextButtonStyle(button.getStyle());
 
         hoverStyle.font = glowFont;
         hoverStyle.fontColor = Color.WHITE;

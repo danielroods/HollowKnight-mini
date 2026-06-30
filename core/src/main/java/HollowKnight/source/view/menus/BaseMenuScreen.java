@@ -2,7 +2,7 @@ package HollowKnight.source.view.menus;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.MenuController;
-import HollowKnight.source.game_utils.BrightnessRenderer;
+import HollowKnight.source.view.BrightnessRenderer;
 import HollowKnight.source.game_utils.UIContext;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 

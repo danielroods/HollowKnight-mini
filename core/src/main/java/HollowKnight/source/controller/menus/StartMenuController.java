@@ -22,7 +22,7 @@ public class StartMenuController {
             }
         });
 
-        MenuHover.addHoverEffect(newGameBtn);
-        MenuHover.addHoverEffect(backBtn);
+        MenuHoverController.addHoverEffect(newGameBtn);
+        MenuHoverController.addHoverEffect(backBtn);
     }
 }

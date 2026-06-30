@@ -1,9 +1,8 @@
 package HollowKnight.source.controller;
 
 import HollowKnight.source.Main;
-import HollowKnight.source.game_utils.AudioManager;
-import HollowKnight.source.game_utils.MenuBackground;
-import HollowKnight.source.game_utils.MenuParticleLayer;
+import HollowKnight.source.view.menus.MenuBackground;
+import HollowKnight.source.view.menus.MenuParticleLayer;
 import HollowKnight.source.view.GameScreen;
 import HollowKnight.source.view.menus.BaseMenuScreen;
 import com.badlogic.gdx.Game;
@@ -27,7 +26,7 @@ public class MenuController {
 
     public static void playMusic() {
         Music menuBGM = Gdx.audio.newMusic(Gdx.files.internal("musics/MoogCity2.mp3"));
-        AudioManager.getInstance().playMusic(menuBGM);
+        AudioController.getInstance().playMusic(menuBGM);
     }
 
     public static void setMenuScreen(BaseMenuScreen menuScreen) {

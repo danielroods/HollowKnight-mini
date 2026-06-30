@@ -1,6 +1,6 @@
 package HollowKnight.source.view;
 
-import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;

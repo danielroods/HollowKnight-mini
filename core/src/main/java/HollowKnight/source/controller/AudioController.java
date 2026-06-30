@@ -1,10 +1,10 @@
-package HollowKnight.source.game_utils;
+package HollowKnight.source.controller;
 
 import com.badlogic.gdx.audio.Music;
 
-public class AudioManager {
+public class AudioController {
 
-    private static AudioManager instance;
+    private static AudioController instance;
 
     private Music currentMusic;
     private Music nextMusic;
@@ -14,11 +14,11 @@ public class AudioManager {
     private float fadeDuration = 2.0f;
     private float maxVolume = 1.0f;
 
-    private AudioManager() {}
+    private AudioController() {}
 
-    public static AudioManager getInstance() {
+    public static AudioController getInstance() {
         if (instance == null) {
-            instance = new AudioManager();
+            instance = new AudioController();
         }
         return instance;
     }

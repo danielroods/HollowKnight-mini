@@ -1,9 +1,9 @@
 package HollowKnight.source;
 
 import HollowKnight.source.controller.MenuController;
-import HollowKnight.source.game_utils.Assets;
-import HollowKnight.source.game_utils.AudioManager;
-import HollowKnight.source.game_utils.BrightnessRenderer;
+import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.controller.AudioController;
+import HollowKnight.source.view.BrightnessRenderer;
 import HollowKnight.source.view.menus.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -33,7 +33,7 @@ public class Main extends Game {
     @Override
     public void render() {
         super.render();
-        AudioManager.getInstance().update(Gdx.graphics.getDeltaTime());
+        AudioController.getInstance().update(Gdx.graphics.getDeltaTime());
     }
 
     @Override

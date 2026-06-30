@@ -15,6 +15,6 @@ public class AchievementsMenuController {
             }
         });
 
-        MenuHover.addHoverEffect(backBtn);
+        MenuHoverController.addHoverEffect(backBtn);
     }
 }

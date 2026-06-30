@@ -1,6 +1,7 @@
 package HollowKnight.source.controller;
 
-import HollowKnight.source.game_utils.Assets;
+import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,12 +23,6 @@ public class GameController {
 
     private Player player;
     private PlayerController playerController;
-
-    private static final String[] MAP_IDS = {
-        "greenpath_room1",
-        "greenpath_room2"
-    };
-
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -71,7 +67,7 @@ public class GameController {
         playerController.update(delta);
         handleCollisions();
         handleSpikes();
-        checkDoors();
+        handleDoors();
 
         checkSwordHits();
 
@@ -114,6 +110,13 @@ public class GameController {
         playerController.attack(dir);
     }
 
+    private void checkSwordHits() {
+        if (!player.isAttacking()) return;
+
+        Rectangle hitbox = playerController.getSwordHitbox();
+        if (hitbox == null) return;
+    }
+
     private void handleFocusInput(float delta) {
         boolean held = Gdx.input.isKeyPressed(Keys.A);
         if (held && player.isOnGround() && !player.isInvincible())
@@ -125,15 +128,6 @@ public class GameController {
         }
         else if (!held && player.isFocusing())
             playerController.cancelFocus();
-    }
-
-    private void respawnPlayer() {
-        Vector2 spawn = Assets.getSpawnPosition("game_start_spawn");
-        player.setPosition(spawn.x, spawn.y);
-        player.setVelocityX(0f);
-        player.setVelocityY(0f);
-        player.restoreFullHealth();
-        playerController.updateLastSafePosition();
     }
 
     private void handleCollisions() {
@@ -217,14 +211,7 @@ public class GameController {
         }
     }
 
-    private void checkSwordHits() {
-        if (!player.isAttacking()) return;
-
-        Rectangle hitbox = playerController.getSwordHitbox();
-        if (hitbox == null) return;
-    }
-
-    private void checkDoors() {
+    private void handleDoors() {
         if (transitionListener == null) return;
 
         MapLayer layer = currentMap.getLayers().get("logic");
@@ -241,18 +228,63 @@ public class GameController {
             if (!Intersector.overlaps(playerRect, doorRect)) continue;
 
             int targetIndex = resolveMapIndex(name);
-            String spawnName = "spawn_from_" + MAP_IDS[currentMapIndex];
+            String spawnName = "spawn_from_" + resolveMapId(currentMapIndex);
             transitionListener.onTransition(targetIndex, spawnName);
             return;
         }
     }
 
+    private void respawnPlayer() {
+        Vector2 spawn = getSpawnPosition("game_start_spawn");
+        player.setPosition(spawn.x, spawn.y);
+        player.setVelocityX(0f);
+        player.setVelocityY(0f);
+        player.restoreFullHealth();
+        playerController.updateLastSafePosition();
+    }
+
+    public static Vector2 getSpawnPosition(String spawnName) {
+        MapLayer logicLayer = getInstance().getCurrentMap().getLayers().get("logic");
+        if (logicLayer == null)
+            return new Vector2(220f, 220f);
+
+        Vector2 pos = tryGetPoint(logicLayer, spawnName);
+        if (pos != null)
+            return pos;
+
+        pos = tryGetPoint(logicLayer, "game_start_spawn");
+        if (pos != null)
+            return pos;
+
+        return new Vector2(220f, 220f);
+    }
+
+    private static Vector2 tryGetPoint(MapLayer layer, String name) {
+        MapObject obj = layer.getObjects().get(name);
+        if (obj == null) return null;
+
+        if (obj instanceof PointMapObject) {
+            PointMapObject pt = (PointMapObject) obj;
+            return new Vector2(pt.getPoint().x - 100f, pt.getPoint().y - 20f);
+        }
+        return null;
+    }
+
     private int resolveMapIndex(String doorName) {
-        if (doorName.endsWith("greenpath_room1"))
+        if (doorName.endsWith(Maps.GREENPATH_ROOM_1.getId()))
             return 0;
-        if (doorName.endsWith("greenpath_room2"))
+        else if (doorName.endsWith(Maps.GREENPATH_ROOM_2.getId()))
             return 1;
+
         return 0;
+    }
+    private String resolveMapId(int index) {
+        if (index == 0)
+            return Maps.GREENPATH_ROOM_1.getId();
+        else if (index == 1)
+            return Maps.GREENPATH_ROOM_2.getId();
+
+        return Maps.GREENPATH_ROOM_1.getId();
     }
 
     public void setPlayer(Player p) { this.player = p; }

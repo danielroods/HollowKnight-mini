@@ -3,8 +3,7 @@ package HollowKnight.source.view;
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.GameController;
 import HollowKnight.source.controller.PlayerController;
-import HollowKnight.source.game_utils.Assets;
-import HollowKnight.source.game_utils.BrightnessRenderer;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import com.badlogic.gdx.Gdx;
@@ -154,7 +153,7 @@ public class GameScreen implements Screen {
 
     private void switchMap(int targetIndex, String spawnPointName) {
         loadMap(targetIndex);
-        Vector2 spawn = Assets.getSpawnPosition(spawnPointName);
+        Vector2 spawn = GameController.getSpawnPosition(spawnPointName);
         Player.getInstance().setPosition(spawn.x, spawn.y);
         Player.getInstance().setVelocityY(0f);
 

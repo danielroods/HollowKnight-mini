@@ -1,4 +1,4 @@
-package HollowKnight.source.game_utils;
+package HollowKnight.source.view;
 
 import HollowKnight.source.data.GameSettings;
 import com.badlogic.gdx.graphics.Color;
@@ -20,9 +20,7 @@ public class BrightnessRenderer {
         pixmap.dispose();
     }
 
-    public static void render(SpriteBatch batch,
-                              float width,
-                              float height) {
+    public static void render(SpriteBatch batch, float width, float height) {
 
         float darkness = 1f - GameSettings.getBrightness();
 
@@ -33,13 +31,7 @@ public class BrightnessRenderer {
 
         batch.setColor(0, 0, 0, darkness);
 
-        batch.draw(
-            overlay,
-            0,
-            0,
-            width,
-            height
-        );
+        batch.draw(overlay, 0, 0, width, height);
 
         batch.setColor(Color.WHITE);
 

@@ -1,4 +1,4 @@
-package HollowKnight.source.game_utils;
+package HollowKnight.source.view.menus;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
+//credit: Arvin Talebi
 public class MenuParticleLayer {
     private final Texture particleTexture;
     private final Array<Particle> particles;

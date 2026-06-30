@@ -15,6 +15,6 @@ public class GuideMenuController {
             }
         });
 
-        MenuHover.addHoverEffect(backBtn);
+        MenuHoverController.addHoverEffect(backBtn);
     }
 }
