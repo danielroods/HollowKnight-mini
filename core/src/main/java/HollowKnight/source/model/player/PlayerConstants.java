@@ -3,7 +3,7 @@ package HollowKnight.source.model.player;
 public class PlayerConstants {
     public static final float WIDTH = 190f;
     public static final float HEIGHT = 100f;
-    public static final float SPEED = 210f;
+    public static final float SPEED = 230f;
     public static final float JUMP_FORCE = 460f;
     public static final float GRAVITY= -950f;
     public static final float ATTACK_DUR    = 0.25f;

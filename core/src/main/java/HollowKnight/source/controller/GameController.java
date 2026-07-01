@@ -1,6 +1,8 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
@@ -18,11 +20,15 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameController {
     private static GameController instance;
 
     private Player player;
     private PlayerController playerController;
+    private MossflyController mossflyController;
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -41,7 +47,6 @@ public class GameController {
         void onTransition(int targetMapIndex, String spawnPointName);
     }
     private MapTransitionListener transitionListener;
-
     public void setTransitionListener(MapTransitionListener transitionListener) {
         this.transitionListener = transitionListener;
     }
@@ -56,23 +61,46 @@ public class GameController {
         }
 
         handleFocusInput(delta);
-
         if (!player.isFocusing()) {
             handleMovementInput();
             handleAttackInput();
-        } else {
+            playerController.checkSwordHits(mossflyController);
+        }
+        else {
             playerController.stopHorizontal();
         }
-
         playerController.update(delta);
+
         handleCollisions();
         handleSpikes();
         handleDoors();
 
-        checkSwordHits();
+        if (mossflyController != null) {
+            MapLayer logicLayer = currentMap.getLayers().get("logic");
+            mossflyController.update(delta, player, logicLayer);
+        }
 
         if (player.getPosition().y < -300f)
             respawnPlayer();
+    }
+
+    public void loadEnemiesBySpawnPoints() {
+        List<Mossfly> spawns = new ArrayList<>();
+
+        MapLayer layer = currentMap.getLayers().get("logic");
+        if (layer != null) {
+            for (MapObject obj : layer.getObjects()) {
+                if (!(obj instanceof PointMapObject)) continue;
+
+                String name = obj.getName();
+                if (name == null || !name.equals("mossfly_spawn")) continue;
+
+                PointMapObject pt = (PointMapObject) obj;
+                spawns.add(new Mossfly(pt.getPoint().x, pt.getPoint().y));
+            }
+        }
+
+        mossflyController = new MossflyController(spawns);
     }
 
     private void handleMovementInput() {
@@ -110,24 +138,17 @@ public class GameController {
         playerController.attack(dir);
     }
 
-    private void checkSwordHits() {
-        if (!player.isAttacking()) return;
-
-        Rectangle hitbox = playerController.getSwordHitbox();
-        if (hitbox == null) return;
-    }
-
     private void handleFocusInput(float delta) {
         boolean held = Gdx.input.isKeyPressed(Keys.A);
-        if (held && player.isOnGround() && !player.isInvincible())
-        {
+        if (held && player.isOnGround() && !player.isInvincible()) {
             if (!player.isFocusing()) {
                 playerController.startFocus();
             }
             playerController.updateFocus(delta);
         }
-        else if (!held && player.isFocusing())
+        else if (!held && player.isFocusing()) {
             playerController.cancelFocus();
+        }
     }
 
     private void handleCollisions() {
@@ -169,7 +190,6 @@ public class GameController {
         }
 
         player.setOnGround(touchingGround);
-
         if (touchingGround)
             playerController.updateLastSafePosition();
     }
@@ -180,7 +200,7 @@ public class GameController {
         String name = obj.getName();
         if (name == null)
             return false;
-        return name.equals("platform") || name.equals("wall") || name.equals("ceiling") || name.equals("spikes platform");
+        return name.equals("platform") || name.equals("wall") || name.equals("ceiling");
     }
 
     private void handleSpikes() {
@@ -278,6 +298,7 @@ public class GameController {
 
         return 0;
     }
+
     private String resolveMapId(int index) {
         if (index == 0)
             return Maps.GREENPATH_ROOM_1.getId();
@@ -287,10 +308,11 @@ public class GameController {
         return Maps.GREENPATH_ROOM_1.getId();
     }
 
-    public void setPlayer(Player p) { this.player = p; }
-    public void setPlayerController(PlayerController pc) { this.playerController = pc; }
+    public void setPlayer(Player player) { this.player = player; }
+    public void setPlayerController(PlayerController playerController) { this.playerController = playerController; }
     public void setCurrentMap(TiledMap map) { currentMap = map; }
     public void setCurrentMapIndex(int idx) { this.currentMapIndex = idx; }
     public TiledMap getCurrentMap() { return currentMap; }
     public int getCurrentMapIndex() { return currentMapIndex; }
+    public MossflyController getMossflyController() { return mossflyController; }
 }

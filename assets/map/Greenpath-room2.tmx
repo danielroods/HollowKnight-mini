@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="174" height="102" tilewidth="8" tileheight="8" infinite="0" nextlayerid="18" nextobjectid="77">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="174" height="102" tilewidth="8" tileheight="8" infinite="0" nextlayerid="18" nextobjectid="80">
  <tileset firstgid="1" source="ground_room1.tsx"/>
  <tileset firstgid="211" source="air_ground_room1.tsx"/>
  <tileset firstgid="391" source="bushes.tsx"/>
@@ -1510,8 +1510,8 @@
   <object id="12" name="spawn_from_greenpath_room1" x="117.667" y="291">
    <point/>
   </object>
-  <object id="18" name="platform" x="98" y="608" width="936" height="121"/>
-  <object id="20" name="platform" x="1035" y="304" width="259" height="426"/>
+  <object id="18" name="platform" x="3" y="608" width="1387" height="42"/>
+  <object id="20" name="platform" x="1035" y="304" width="354" height="304"/>
   <object id="29" name="platform" x="272" y="399.333" width="100" height="14">
    <capsule/>
   </object>
@@ -1545,6 +1545,12 @@
   <object id="73" name="spikes" x="508.5" y="333.75">
    <polygon points="-1.125,-0.875 -11.25,21.5 51.875,21.5 40.375,-0.875"/>
   </object>
-  <object id="76" name="wall" x="97.3333" y="343.333" width="42.6667" height="262.667"/>
+  <object id="76" name="wall" x="2.3333" y="343.333" width="137.667" height="262.667"/>
+  <object id="77" name="mossfly_spawn" x="652.068" y="422.977">
+   <point/>
+  </object>
+  <object id="79" name="mossfly_spawn" x="1051.68" y="301.795">
+   <point/>
+  </object>
  </objectgroup>
 </map>

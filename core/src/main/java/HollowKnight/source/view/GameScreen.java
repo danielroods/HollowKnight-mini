@@ -2,10 +2,12 @@ package HollowKnight.source.view;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.GameController;
+import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
+import HollowKnight.source.view.enemies.MossflyRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -41,7 +43,9 @@ public class GameScreen implements Screen {
     private Player player;
     private PlayerRenderer playerRenderer;
 
-    //for debug
+    private MossflyRenderer mossflyRenderer;
+
+    // for debug
     private ShapeRenderer shapeRenderer;
 
     @Override
@@ -69,10 +73,9 @@ public class GameScreen implements Screen {
         player = Player.getInstance();
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());
         hudRenderer = new HUDRenderer();
-
+        mossflyRenderer = new MossflyRenderer();
 
         shapeRenderer = new ShapeRenderer();
-
 
         gameController.setTransitionListener((targetIndex, spawnName) -> switchMap(targetIndex, spawnName));
     }
@@ -87,7 +90,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderWorld(delta);
-
         renderHUD();
 
         BrightnessRenderer.render(batch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -99,9 +101,16 @@ public class GameScreen implements Screen {
             mapRenderer.render(new int[]{0});
 
             mapRenderer.setView(worldCamera);
-            mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6});
+            mapRenderer.render(new int[]{1, 2, 3, 4, 5});
 
             batch.setProjectionMatrix(worldCamera.combined);
+
+            batch.begin();
+            renderEnemies();
+            batch.end();
+
+            mapRenderer.render(new int[]{6});
+
             batch.begin();
             playerRenderer.render(batch, player, delta);
             batch.end();
@@ -113,9 +122,16 @@ public class GameScreen implements Screen {
             mapRenderer.render(new int[]{0});
 
             mapRenderer.setView(worldCamera);
-            mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7, 8});
+            mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7});
 
             batch.setProjectionMatrix(worldCamera.combined);
+
+            batch.begin();
+            renderEnemies();
+            batch.end();
+
+            mapRenderer.render(new int[]{8});
+
             batch.begin();
             playerRenderer.render(batch, player, delta);
             batch.end();
@@ -124,12 +140,17 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void renderEnemies() {
+        MossflyController mossflyController = gameController.getMossflyController();
+        if (mossflyController != null) {
+            mossflyRenderer.render(batch, mossflyController.getMossflyList());
+        }
+    }
+
     private void renderHUD() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
         hudRenderer.render(batch, uiCamera, player);
-
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
@@ -149,6 +170,8 @@ public class GameScreen implements Screen {
 
         mapPixelW = ref.getWidth() * ref.getTileWidth();
         mapPixelH = ref.getHeight() * ref.getTileHeight();
+
+        gameController.loadEnemiesBySpawnPoints();
     }
 
     private void switchMap(int targetIndex, String spawnPointName) {
@@ -162,13 +185,6 @@ public class GameScreen implements Screen {
 
         worldCamera.position.set(targetX, targetY, 0);
         worldCamera.update();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        worldViewport.update(width, height);
-        uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
-        uiCamera.update();
     }
 
     private void updateCamera(float delta) {
@@ -191,7 +207,6 @@ public class GameScreen implements Screen {
             worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 1f, 4f * delta);
         }
 
-
         worldCamera.update();
 
         if (gameController.getCurrentMapIndex() == 0) {
@@ -203,8 +218,13 @@ public class GameScreen implements Screen {
         bgCamera.update();
     }
 
-    @Override
-    public void dispose() {
+    @Override public void resize(int width, int height) {
+        worldViewport.update(width, height);
+        uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
+        uiCamera.update();
+    }
+
+    @Override public void dispose() {
         if (mapRenderer != null) mapRenderer.dispose();
         if (hudRenderer != null) hudRenderer.dispose();
     }

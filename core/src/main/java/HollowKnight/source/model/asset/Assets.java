@@ -1,6 +1,7 @@
 package HollowKnight.source.model.asset;
 
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
@@ -42,11 +43,32 @@ public class Assets {
     private static Animation<TextureRegion> attackHorizontalAnim, attackUpAnim, attackDownAnim;
     private static EnumMap<PlayerState, Animation<TextureRegion>> playerAnimations;
 
+    private static Texture mossflyShakeSheet;
+    private static Texture mossflyAppearSheet;
+    private static Texture mossflyFlySheet;
+    private static Texture mossflyDeathSheet;
+
+    private static Animation<TextureRegion> mossflyShakeAnim;
+    private static Animation<TextureRegion> mossflyAppearAnim;
+    private static Animation<TextureRegion> mossflyFlyAnim;
+    private static Animation<TextureRegion> mossflyDeathAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
         lockIcon = new Texture("icons/lock_icon.png");
 
+        achievementIcons = new EnumMap<>(AchievementType.class);
+        for (AchievementType a : AchievementType.values())
+            achievementIcons.put(a, new Texture(a.getIconPath()));
+
+        loadPlayerAssets();
+        loadHUDAssets();
+        loadMossflyAssets();
+        loadMaps();
+    }
+
+    private static void loadPlayerAssets() {
         idleSheet = new Texture(Gdx.files.internal("player/Idle.png"));
         runSheet = new Texture(Gdx.files.internal("player/Run.png"));
         jumpSheet = new Texture(Gdx.files.internal("player/Jump.png"));
@@ -57,23 +79,11 @@ public class Assets {
         focusSheet = new Texture(Gdx.files.internal("player/Focus.png"));
         healSheet = new Texture(Gdx.files.internal("player/Heal.png"));
         attackSheet = new Texture(Gdx.files.internal("player/Slash.png"));
-
         attackHorizontalSheet = new Texture(Gdx.files.internal("player/effects/SlashEffect.png"));
         attackUpSheet = new Texture(Gdx.files.internal("player/effects/UpSlashEffect.png"));
         attackDownSheet = new Texture(Gdx.files.internal("player/effects/DownSlashEffect.png"));
 
-        achievementIcons = new EnumMap<>(AchievementType.class);
-        for (AchievementType a : AchievementType.values())
-            achievementIcons.put(a, new Texture(a.getIconPath()));
-
-        loadPlayerAnimations();
-        loadHUDAssets();
-        loadMaps();
-    }
-
-    private static void loadPlayerAnimations() {
         playerAnimations = new EnumMap<>(PlayerState.class);
-
         playerAnimations.put(PlayerState.IDLE, makeAnim(1f / AssetConstants.IDLE_FRAMES, idleSheet, AssetConstants.IDLE_FRAMES, Animation.PlayMode.LOOP));
         playerAnimations.put(PlayerState.RUN, makeAnim(1f / AssetConstants.RUN_FRAMES, runSheet, AssetConstants.RUN_FRAMES, Animation.PlayMode.LOOP));
         playerAnimations.put(PlayerState.JUMP, makeAnim(1f / AssetConstants.JUMP_FRAMES, jumpSheet, AssetConstants.JUMP_FRAMES, Animation.PlayMode.NORMAL));
@@ -81,7 +91,7 @@ public class Assets {
         playerAnimations.put(PlayerState.FALL, makeAnim(1f / AssetConstants.FALL_FRAMES, fallSheet, AssetConstants.FALL_FRAMES, Animation.PlayMode.LOOP));
         playerAnimations.put(PlayerState.DEAD, makeAnim(0.5f / AssetConstants.DEATH_FRAMES, deathSheet, AssetConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.HURT, makeAnim(1f / AssetConstants.HURT_FRAMES, hurtSheet, AssetConstants.HURT_FRAMES, Animation.PlayMode.NORMAL));
-        playerAnimations.put(PlayerState.FOCUS, makeAnim(PlayerConstants.FOCUS_DURATION / AssetConstants.FOCUS_FRAMES,focusSheet, AssetConstants.FOCUS_FRAMES, Animation.PlayMode.NORMAL));
+        playerAnimations.put(PlayerState.FOCUS, makeAnim(PlayerConstants.FOCUS_DURATION / AssetConstants.FOCUS_FRAMES, focusSheet, AssetConstants.FOCUS_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.HEAL, makeAnim(PlayerConstants.HEAL_ANIM_DUR / AssetConstants.HEAL_FRAMES, healSheet, AssetConstants.HEAL_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.ATTACK, makeAnim(PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_FRAMES, attackSheet, AssetConstants.ATTACK_FRAMES, Animation.PlayMode.NORMAL));
 
@@ -91,16 +101,16 @@ public class Assets {
         attackDownAnim = makeAnim(attackFrameDur, attackDownSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
     }
 
-    private static Animation<TextureRegion> makeAnim(float frameDur, Texture sheet, int frameCount, Animation.PlayMode mode) {
-        int tileW = sheet.getWidth() / frameCount;
-        int tileH = sheet.getHeight();
-        TextureRegion[][] grid = TextureRegion.split(sheet, tileW, tileH);
+    private static void loadMossflyAssets() {
+        mossflyShakeSheet = new Texture(Gdx.files.internal("enemies/mossfly/Shake.png"));
+        mossflyAppearSheet = new Texture(Gdx.files.internal("enemies/mossfly/Appear.png"));
+        mossflyFlySheet = new Texture(Gdx.files.internal("enemies/mossfly/Fly.png"));
+        mossflyDeathSheet = new Texture(Gdx.files.internal("enemies/mossfly/Death.png"));
 
-        Array<TextureRegion> frames = new Array<>();
-        for (int i = 0; i < Math.min(frameCount, grid[0].length); i++)
-            frames.add(grid[0][i]);
-
-        return new Animation<>(frameDur, frames, mode);
+        mossflyShakeAnim = makeAnim(MossflyConstants.SHAKE_FRAME_DUR, mossflyShakeSheet, MossflyConstants.SHAKE_FRAMES, Animation.PlayMode.LOOP);
+        mossflyAppearAnim = makeAnim(MossflyConstants.APPEAR_FRAME_DUR, mossflyAppearSheet, MossflyConstants.APPEAR_FRAMES, Animation.PlayMode.NORMAL);
+        mossflyFlyAnim = makeAnim(MossflyConstants.FLY_FRAME_DUR, mossflyFlySheet, MossflyConstants.FLY_FRAMES, Animation.PlayMode.LOOP);
+        mossflyDeathAnim = makeAnim(MossflyConstants.DEATH_FRAME_DUR, mossflyDeathSheet, MossflyConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
     }
 
     private static void loadHUDAssets() {
@@ -118,9 +128,8 @@ public class Assets {
         healthRefillAnim = makeAnim(0.07f, healthRefillSheet, AssetConstants.HEALTH_REFILL_FRAMES, Animation.PlayMode.NORMAL);
 
         soulOrbFrames = new Texture[AssetConstants.SOUL_ORB_FRAME_COUNT];
-        for (int i = 0; i < AssetConstants.SOUL_ORB_FRAME_COUNT; i++) {
+        for (int i = 0; i < AssetConstants.SOUL_ORB_FRAME_COUNT; i++)
             soulOrbFrames[i] = new Texture(Gdx.files.internal("hud/HUD Cln_" + i + ".png"));
-        }
 
         soulOrbEye = new Texture(Gdx.files.internal("hud/SoulOrb_Eye.png"));
     }
@@ -130,6 +139,18 @@ public class Assets {
         maps = new TiledMap[AssetConstants.MAP_COUNT];
         maps[0] = loader.load(Maps.GREENPATH_ROOM_1.getPath());
         maps[1] = loader.load(Maps.GREENPATH_ROOM_2.getPath());
+    }
+
+    private static Animation<TextureRegion> makeAnim(float frameDur, Texture sheet, int frameCount, Animation.PlayMode mode) {
+        int tileW = sheet.getWidth() / frameCount;
+        int tileH = sheet.getHeight();
+        TextureRegion[][] grid = TextureRegion.split(sheet, tileW, tileH);
+
+        Array<TextureRegion> frames = new Array<>();
+        for (int i = 0; i < Math.min(frameCount, grid[0].length); i++)
+            frames.add(grid[0][i]);
+
+        return new Animation<>(frameDur, frames, mode);
     }
 
     public static Skin getSkin() {
@@ -167,10 +188,9 @@ public class Assets {
         }
         return skin;
     }
+
     public static TiledMap getMap(int index) { return maps[index]; }
-    public static EnumMap<PlayerState, Animation<TextureRegion>> getPlayerAnimations() {
-        return playerAnimations;
-    }
+    public static EnumMap<PlayerState, Animation<TextureRegion>> getPlayerAnimations() { return playerAnimations; }
     public static Animation<TextureRegion> getAttackHorizontalAnim() { return attackHorizontalAnim; }
     public static Animation<TextureRegion> getAttackUpAnim() { return attackUpAnim; }
     public static Animation<TextureRegion> getAttackDownAnim() { return attackDownAnim; }
@@ -182,7 +202,7 @@ public class Assets {
         return healthBarTextures[idx];
     }
     public static Texture getFilledHealthTex() { return filledHealthTex; }
-    public static Texture getEmptyHealthTex()   { return emptyHealthTex; }
+    public static Texture getEmptyHealthTex() { return emptyHealthTex; }
     public static Animation<TextureRegion> getBreakHealthAnim() { return breakHealthAnim; }
     public static Animation<TextureRegion> getHealthRefillAnim() { return healthRefillAnim; }
     public static Texture getSoulOrbFrame(int soul) {
@@ -190,6 +210,11 @@ public class Assets {
         idx = MathUtils.clamp(idx, 0, AssetConstants.SOUL_ORB_FRAME_COUNT - 1);
         return soulOrbFrames[idx];
     }
+
+    public static Animation<TextureRegion> getMossflyShakeAnim() { return mossflyShakeAnim; }
+    public static Animation<TextureRegion> getMossflyAppearAnim() { return mossflyAppearAnim; }
+    public static Animation<TextureRegion> getMossflyFlyAnim() { return mossflyFlyAnim; }
+    public static Animation<TextureRegion> getMossflyDeathAnim() { return mossflyDeathAnim; }
 
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
@@ -200,7 +225,6 @@ public class Assets {
         disposeIfNotNull(jumpSheet); disposeIfNotNull(fallSheet);
         disposeIfNotNull(deathSheet); disposeIfNotNull(hurtSheet);
         disposeIfNotNull(focusSheet); disposeIfNotNull(healSheet);
-
         disposeIfNotNull(attackHorizontalSheet);
         disposeIfNotNull(attackUpSheet);
         disposeIfNotNull(attackDownSheet);
@@ -215,6 +239,11 @@ public class Assets {
         if (soulOrbFrames != null)
             for (Texture t : soulOrbFrames) disposeIfNotNull(t);
         disposeIfNotNull(soulOrbEye);
+
+        disposeIfNotNull(mossflyShakeSheet);
+        disposeIfNotNull(mossflyAppearSheet);
+        disposeIfNotNull(mossflyFlySheet);
+        disposeIfNotNull(mossflyDeathSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

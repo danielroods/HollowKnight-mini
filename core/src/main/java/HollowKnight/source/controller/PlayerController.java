@@ -1,5 +1,6 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
@@ -113,14 +114,6 @@ public class PlayerController {
         }
     }
 
-    public void attack(AttackDirection dir) {
-        if (player.isFocusing() || player.isKnockedBack()) return;
-        if (player.isAttacking()) return;
-
-        startAttack(dir);
-        player.addSoul(PlayerConstants.SOUL_GAIN_PER_HIT);
-    }
-
     public void takeDamage(int amount) {
         if (player.isInvincible() || !player.isAlive()) return;
         cancelFocus();
@@ -129,6 +122,7 @@ public class PlayerController {
         if (player.isAlive())
             player.setState(PlayerState.HURT);
     }
+
     public void startFocus() {
         if (!player.isOnGround() || player.isInvincible() || player.isAttacking())
             return;
@@ -176,11 +170,26 @@ public class PlayerController {
         player.getLastSafePosition().set(player.getPosition());
     }
 
-    public void startAttack(AttackDirection dir) {
+    public void attack(AttackDirection dir) {
         if (player.isFocusing() || player.isKnockedBack()) return;
+        if (player.isAttacking()) return;
+
         player.setAttacking(true);
         player.setAttackTimer(PlayerConstants.ATTACK_DUR);
         player.setAttackDirection(dir);
+
+        player.addSoul(PlayerConstants.SOUL_GAIN_PER_HIT);
+    }
+
+    public void checkSwordHits(MossflyController mossflyController) {
+        if (!player.isAttacking()) return;
+
+        Rectangle hitbox = getSwordHitbox();
+        if (hitbox == null) return;
+
+        if (mossflyController != null) {
+            mossflyController.checkSwordHits(hitbox, player);
+        }
     }
 
     public Rectangle getSwordHitbox() {

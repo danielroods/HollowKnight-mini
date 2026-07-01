@@ -38,8 +38,6 @@ public class PlayerRenderer {
 
         Animation<TextureRegion> playerAnim = animations.get(currentState);
 
-        playerAnim = animations.get(currentState);
-
         boolean doesLoop = !(currentState == PlayerState.ATTACK
             || currentState == PlayerState.HURT
             || currentState == PlayerState.HEAL
