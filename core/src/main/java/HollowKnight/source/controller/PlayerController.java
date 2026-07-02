@@ -1,5 +1,6 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
@@ -181,19 +182,22 @@ public class PlayerController {
         player.addSoul(PlayerConstants.SOUL_GAIN_PER_HIT);
     }
 
-    public void checkSwordHits(MossflyController mossflyController) {
+    public void checkSwordHits(MossflyController mossflyController, HuskHornheadController huskHornheadController) {
         if (!player.isAttacking()) return;
 
         Rectangle hitbox = getSwordHitbox();
         if (hitbox == null) return;
 
-        if (mossflyController != null) {
+        if (mossflyController != null)
             mossflyController.checkSwordHits(hitbox, player);
-        }
+
+        if (huskHornheadController != null)
+            huskHornheadController.checkSwordHits(hitbox, player);
     }
 
     public Rectangle getSwordHitbox() {
-        if (!player.isAttacking()) return null;
+        if (!player.isAttacking())
+            return null;
         float elapsed = PlayerConstants.ATTACK_DUR - player.getAttackTimer();
         if (elapsed < PlayerConstants.HITBOX_ACTIVE_START || elapsed > PlayerConstants.HITBOX_ACTIVE_END)
             return null;

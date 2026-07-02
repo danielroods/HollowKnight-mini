@@ -1,6 +1,7 @@
 package HollowKnight.source.model.asset;
 
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.PlayerConstants;
@@ -53,6 +54,16 @@ public class Assets {
     private static Animation<TextureRegion> mossflyFlyAnim;
     private static Animation<TextureRegion> mossflyDeathAnim;
 
+    private static Texture huskHornheadWalkSheet;
+    private static Texture huskHornheadIdleSheet;
+    private static Texture huskHornheadChargeSheet;
+    private static Texture huskHornheadDeathSheet;
+
+    private static Animation<TextureRegion> huskHornheadWalkAnim;
+    private static Animation<TextureRegion> huskHornheadIdleAnim;
+    private static Animation<TextureRegion> huskHornheadChargeAnim;
+    private static Animation<TextureRegion> huskHornheadDeathAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -65,6 +76,7 @@ public class Assets {
         loadPlayerAssets();
         loadHUDAssets();
         loadMossflyAssets();
+        loadHuskHornheadAssets();
         loadMaps();
     }
 
@@ -111,6 +123,18 @@ public class Assets {
         mossflyAppearAnim = makeAnim(MossflyConstants.APPEAR_FRAME_DUR, mossflyAppearSheet, MossflyConstants.APPEAR_FRAMES, Animation.PlayMode.NORMAL);
         mossflyFlyAnim = makeAnim(MossflyConstants.FLY_FRAME_DUR, mossflyFlySheet, MossflyConstants.FLY_FRAMES, Animation.PlayMode.LOOP);
         mossflyDeathAnim = makeAnim(MossflyConstants.DEATH_FRAME_DUR, mossflyDeathSheet, MossflyConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+    }
+
+    private static void loadHuskHornheadAssets() {
+        huskHornheadWalkSheet = new Texture(Gdx.files.internal("enemies/husk_hornhead/Walk.png"));
+        huskHornheadIdleSheet = new Texture(Gdx.files.internal("enemies/husk_hornhead/Idle.png"));
+        huskHornheadChargeSheet = new Texture(Gdx.files.internal("enemies/husk_hornhead/Charge.png"));
+        huskHornheadDeathSheet = new Texture(Gdx.files.internal("enemies/husk_hornhead/Death.png"));
+
+        huskHornheadWalkAnim = makeAnim(HuskHornheadConstants.WALK_FRAME_DUR, huskHornheadWalkSheet, HuskHornheadConstants.WALK_FRAMES, Animation.PlayMode.LOOP);
+        huskHornheadIdleAnim = makeAnim(HuskHornheadConstants.IDLE_FRAME_DUR, huskHornheadIdleSheet, HuskHornheadConstants.IDLE_FRAMES, Animation.PlayMode.LOOP);
+        huskHornheadChargeAnim = makeAnim(HuskHornheadConstants.CHARGE_FRAME_DUR, huskHornheadChargeSheet, HuskHornheadConstants.CHARGE_FRAMES, Animation.PlayMode.LOOP);
+        huskHornheadDeathAnim = makeAnim(HuskHornheadConstants.DEATH_FRAME_DUR, huskHornheadDeathSheet, HuskHornheadConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
     }
 
     private static void loadHUDAssets() {
@@ -216,6 +240,11 @@ public class Assets {
     public static Animation<TextureRegion> getMossflyFlyAnim() { return mossflyFlyAnim; }
     public static Animation<TextureRegion> getMossflyDeathAnim() { return mossflyDeathAnim; }
 
+    public static Animation<TextureRegion> getHuskHornheadWalkAnim() { return huskHornheadWalkAnim; }
+    public static Animation<TextureRegion> getHuskHornheadIdleAnim() { return huskHornheadIdleAnim; }
+    public static Animation<TextureRegion> getHuskHornheadChargeAnim() { return huskHornheadChargeAnim; }
+    public static Animation<TextureRegion> getHuskHornheadDeathAnim() { return huskHornheadDeathAnim; }
+
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
         if (achievementIcons != null)
@@ -244,6 +273,11 @@ public class Assets {
         disposeIfNotNull(mossflyAppearSheet);
         disposeIfNotNull(mossflyFlySheet);
         disposeIfNotNull(mossflyDeathSheet);
+
+        disposeIfNotNull(huskHornheadWalkSheet);
+        disposeIfNotNull(huskHornheadIdleSheet);
+        disposeIfNotNull(huskHornheadChargeSheet);
+        disposeIfNotNull(huskHornheadDeathSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

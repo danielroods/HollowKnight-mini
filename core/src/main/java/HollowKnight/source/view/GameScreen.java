@@ -2,11 +2,13 @@ package HollowKnight.source.view;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.GameController;
+import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
+import HollowKnight.source.view.enemies.HuskHornheadRenderer;
 import HollowKnight.source.view.enemies.MossflyRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -44,6 +46,7 @@ public class GameScreen implements Screen {
     private PlayerRenderer playerRenderer;
 
     private MossflyRenderer mossflyRenderer;
+    private HuskHornheadRenderer huskHornheadRenderer;
 
     // for debug
     private ShapeRenderer shapeRenderer;
@@ -74,6 +77,7 @@ public class GameScreen implements Screen {
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());
         hudRenderer = new HUDRenderer();
         mossflyRenderer = new MossflyRenderer();
+        huskHornheadRenderer = new HuskHornheadRenderer();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -104,14 +108,14 @@ public class GameScreen implements Screen {
             mapRenderer.render(new int[]{1, 2, 3, 4, 5});
 
             batch.setProjectionMatrix(worldCamera.combined);
-
             batch.begin();
-            renderEnemies();
+            renderMossfly();
             batch.end();
 
             mapRenderer.render(new int[]{6});
 
             batch.begin();
+            renderHuskHornhead();
             playerRenderer.render(batch, player, delta);
             batch.end();
 
@@ -125,14 +129,14 @@ public class GameScreen implements Screen {
             mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7});
 
             batch.setProjectionMatrix(worldCamera.combined);
-
             batch.begin();
-            renderEnemies();
+            renderMossfly();
             batch.end();
 
             mapRenderer.render(new int[]{8});
 
             batch.begin();
+            renderHuskHornhead();
             playerRenderer.render(batch, player, delta);
             batch.end();
 
@@ -140,10 +144,16 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void renderEnemies() {
+    private void renderMossfly() {
         MossflyController mossflyController = gameController.getMossflyController();
         if (mossflyController != null) {
             mossflyRenderer.render(batch, mossflyController.getMossflyList());
+        }
+    }
+    private void renderHuskHornhead() {
+        HuskHornheadController huskHornheadController = gameController.getHuskHornheadController();
+        if (huskHornheadController != null) {
+            huskHornheadRenderer.render(batch, huskHornheadController.getHuskHornheadList());
         }
     }
 

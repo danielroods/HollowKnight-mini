@@ -1,7 +1,9 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.AttackDirection;
@@ -29,6 +31,7 @@ public class GameController {
     private Player player;
     private PlayerController playerController;
     private MossflyController mossflyController;
+    private HuskHornheadController huskHornheadController;
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -64,7 +67,7 @@ public class GameController {
         if (!player.isFocusing()) {
             handleMovementInput();
             handleAttackInput();
-            playerController.checkSwordHits(mossflyController);
+            playerController.checkSwordHits(mossflyController, huskHornheadController);
         }
         else {
             playerController.stopHorizontal();
@@ -75,9 +78,14 @@ public class GameController {
         handleSpikes();
         handleDoors();
 
+        MapLayer logicLayer = currentMap.getLayers().get("logic");
+
         if (mossflyController != null) {
-            MapLayer logicLayer = currentMap.getLayers().get("logic");
             mossflyController.update(delta, player, logicLayer);
+        }
+
+        if (huskHornheadController != null) {
+            huskHornheadController.update(delta, player, logicLayer);
         }
 
         if (player.getPosition().y < -300f)
@@ -85,22 +93,28 @@ public class GameController {
     }
 
     public void loadEnemiesBySpawnPoints() {
-        List<Mossfly> spawns = new ArrayList<>();
+        List<Mossfly> mossflySpawns = new ArrayList<>();
+        List<HuskHornhead> huskHornheadSpawns = new ArrayList<>();
 
         MapLayer layer = currentMap.getLayers().get("logic");
         if (layer != null) {
             for (MapObject obj : layer.getObjects()) {
                 if (!(obj instanceof PointMapObject)) continue;
-
                 String name = obj.getName();
-                if (name == null || !name.equals("mossfly_spawn")) continue;
+                if (name == null) continue;
 
                 PointMapObject pt = (PointMapObject) obj;
-                spawns.add(new Mossfly(pt.getPoint().x, pt.getPoint().y));
+                if (name.equals("mossfly_spawn")) {
+                    mossflySpawns.add(new Mossfly(pt.getPoint().x, pt.getPoint().y));
+                }
+                else if (name.equals("husk_hornhead_spawn")) {
+                    huskHornheadSpawns.add(new HuskHornhead(pt.getPoint().x, pt.getPoint().y));
+                }
             }
         }
 
-        mossflyController = new MossflyController(spawns);
+        mossflyController = new MossflyController(mossflySpawns);
+        huskHornheadController = new HuskHornheadController(huskHornheadSpawns);
     }
 
     private void handleMovementInput() {
@@ -315,4 +329,5 @@ public class GameController {
     public TiledMap getCurrentMap() { return currentMap; }
     public int getCurrentMapIndex() { return currentMapIndex; }
     public MossflyController getMossflyController() { return mossflyController; }
+    public HuskHornheadController getHuskHornheadController() { return huskHornheadController; }
 }

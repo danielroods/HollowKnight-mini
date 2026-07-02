@@ -1,6 +1,5 @@
 package HollowKnight.source.model.enemies;
 
-import HollowKnight.source.model.enemies.mossfly.MossflyState;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -36,7 +35,7 @@ public class Enemy {
         bounds = new Rectangle(x + boundsOffsetX, y + boundsOffsetY, boundsW, boundsH);
 
         health = maxHealth;
-        facingRight = true;
+        facingRight = false;
         onGround = false;
         stateTimer = 0f;
         hurtTimer = 0f;

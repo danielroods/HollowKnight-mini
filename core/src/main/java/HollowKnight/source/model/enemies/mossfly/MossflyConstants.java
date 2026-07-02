@@ -8,13 +8,12 @@ public class MossflyConstants {
     public static final float BOUNDS_W = 50f;
     public static final float BOUNDS_H = 50f;
 
-    public static final int MAX_HEALTH = 3;
-    public static final int DAMAGE_TO_PLAYER = 1;
+    public static final int MAX_HEALTH = 2;
     public static final float HURT_COOLDOWN = 0.4f;
     public static final float KNOCKBACK_SPEED_X = 210f;
     public static final float KNOCKBACK_SPEED_Y = 210f;
     public static final float KNOCKBACK_DURATION = 0.30f;
-    public static final float DETECTION_RADIUS = 300f;
+    public static final float DETECTION_RADIUS = 290f;
     public static final float FLY_SPEED = 170f;
     public static final float GRAVITY = -580f;
 

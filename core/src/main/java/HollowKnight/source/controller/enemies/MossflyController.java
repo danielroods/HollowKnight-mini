@@ -79,15 +79,7 @@ public class MossflyController {
     }
 
     private void updateFly(float delta, Mossfly mossfly, Player player) {
-        if (Intersector.overlaps(mossfly.getBounds(), player.getBounds())) {
-            if (!player.isInvincible() && player.isAlive()) {
-                float enemyXCenter = mossfly.getBounds().x + mossfly.getBounds().width / 2f;
-                float playerXCenter = player.getBounds().x + player.getBounds().width / 2f;
-                float knockBackDirection = playerXCenter < enemyXCenter ? -1f : 1f;
-                playerController.takeDamage(MossflyConstants.DAMAGE_TO_PLAYER);
-                playerController.applyKnockback(knockBackDirection);
-            }
-        }
+        checkPlayerContact(mossfly, player);
 
         if (mossfly.getKnockbackTimer() <= 0f) {
             float playerX = player.getBounds().x + player.getBounds().width / 2f;
@@ -112,6 +104,17 @@ public class MossflyController {
         }
 
         applyVelocity(delta, mossfly);
+    }
+    private void checkPlayerContact(Mossfly mossfly, Player player) {
+        if (!player.isAlive() || player.isInvincible()) return;
+
+        if (Intersector.overlaps(mossfly.getBounds(), player.getBounds())) {
+            float enemyXCenter = mossfly.getBounds().x + mossfly.getBounds().width / 2f;
+            float playerXCenter = player.getBounds().x + player.getBounds().width / 2f;
+            float knockBackDirection = playerXCenter < enemyXCenter ? -1f : 1f;
+            playerController.takeDamage(1);
+            playerController.applyKnockback(knockBackDirection);
+        }
     }
 
     private void updateDead(float delta, Mossfly mossfly, MapLayer logicLayer) {
