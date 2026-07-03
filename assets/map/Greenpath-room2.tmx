@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="174" height="102" tilewidth="8" tileheight="8" infinite="0" nextlayerid="18" nextobjectid="82">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="174" height="102" tilewidth="8" tileheight="8" infinite="0" nextlayerid="18" nextobjectid="83">
  <tileset firstgid="1" source="ground_room1.tsx"/>
  <tileset firstgid="211" source="air_ground_room1.tsx"/>
  <tileset firstgid="391" source="bushes.tsx"/>
@@ -1549,13 +1549,13 @@
   <object id="77" name="mossfly_spawn" x="652.068" y="422.977">
    <point/>
   </object>
-  <object id="79" name="mossfly_spawn" x="1051.68" y="301.795">
-   <point/>
-  </object>
   <object id="80" name="husk_hornhead_spawn" x="510.333" y="602">
    <point/>
   </object>
   <object id="81" name="husk_hornhead_spawn" x="412" y="602.333">
+   <point/>
+  </object>
+  <object id="82" name="crystal_guardian_spawn" x="1106" y="288">
    <point/>
   </object>
  </objectgroup>

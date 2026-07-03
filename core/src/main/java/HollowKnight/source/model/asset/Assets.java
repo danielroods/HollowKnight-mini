@@ -1,6 +1,7 @@
 package HollowKnight.source.model.asset;
 
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.map.Maps;
@@ -64,6 +65,20 @@ public class Assets {
     private static Animation<TextureRegion> huskHornheadChargeAnim;
     private static Animation<TextureRegion> huskHornheadDeathAnim;
 
+    private static Texture crystalGuardianIdleSheet;
+    private static Texture crystalGuardianRunSheet;
+    private static Texture crystalGuardianShootSheet;
+    private static Texture crystalGuardianEvadeSheet;
+    private static Texture crystalGuardianDeathSheet;
+    private static Texture crystalLaserSheet;
+
+    private static Animation<TextureRegion> crystalGuardianIdleAnim;
+    private static Animation<TextureRegion> crystalGuardianRunAnim;
+    private static Animation<TextureRegion> crystalGuardianShootAnim;
+    private static Animation<TextureRegion> crystalGuardianEvadeAnim;
+    private static Animation<TextureRegion> crystalGuardianDeathAnim;
+    private static Animation<TextureRegion> crystalLaserAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -77,6 +92,7 @@ public class Assets {
         loadHUDAssets();
         loadMossflyAssets();
         loadHuskHornheadAssets();
+        loadCrystalGuardianAssets();
         loadMaps();
     }
 
@@ -135,6 +151,22 @@ public class Assets {
         huskHornheadIdleAnim = makeAnim(HuskHornheadConstants.IDLE_FRAME_DUR, huskHornheadIdleSheet, HuskHornheadConstants.IDLE_FRAMES, Animation.PlayMode.LOOP);
         huskHornheadChargeAnim = makeAnim(HuskHornheadConstants.CHARGE_FRAME_DUR, huskHornheadChargeSheet, HuskHornheadConstants.CHARGE_FRAMES, Animation.PlayMode.LOOP);
         huskHornheadDeathAnim = makeAnim(HuskHornheadConstants.DEATH_FRAME_DUR, huskHornheadDeathSheet, HuskHornheadConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+    }
+
+    private static void loadCrystalGuardianAssets() {
+        crystalGuardianIdleSheet = new Texture(Gdx.files.internal("enemies/crystal_guardian/Idle.png"));
+        crystalGuardianRunSheet = new Texture(Gdx.files.internal("enemies/crystal_guardian/Run.png"));
+        crystalGuardianShootSheet = new Texture(Gdx.files.internal("enemies/crystal_guardian/Shoot.png"));
+        crystalGuardianEvadeSheet = new Texture(Gdx.files.internal("enemies/crystal_guardian/Evade.png"));
+        crystalGuardianDeathSheet = new Texture(Gdx.files.internal("enemies/crystal_guardian/Death.png"));
+        crystalLaserSheet = new Texture(Gdx.files.internal("enemies/crystal_guardian/CrystalLaser.png"));
+
+        crystalGuardianIdleAnim = makeAnim(CrystalGuardianConstants.IDLE_FRAME_DUR, crystalGuardianIdleSheet, CrystalGuardianConstants.IDLE_FRAMES, Animation.PlayMode.LOOP);
+        crystalGuardianRunAnim = makeAnim(CrystalGuardianConstants.RUN_FRAME_DUR, crystalGuardianRunSheet, CrystalGuardianConstants.RUN_FRAMES, Animation.PlayMode.LOOP);
+        crystalGuardianShootAnim = makeAnim(CrystalGuardianConstants.SHOOT_FRAME_DUR, crystalGuardianShootSheet, CrystalGuardianConstants.SHOOT_FRAMES, Animation.PlayMode.NORMAL);
+        crystalGuardianEvadeAnim = makeAnim(CrystalGuardianConstants.EVADE_FRAME_DUR, crystalGuardianEvadeSheet, CrystalGuardianConstants.EVADE_FRAMES, Animation.PlayMode.NORMAL);
+        crystalGuardianDeathAnim = makeAnim(CrystalGuardianConstants.DEATH_FRAME_DUR, crystalGuardianDeathSheet, CrystalGuardianConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+        crystalLaserAnim = makeAnim(CrystalGuardianConstants.LASER_EFFECT_FRAME_DUR, crystalLaserSheet, CrystalGuardianConstants.LASER_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
     }
 
     private static void loadHUDAssets() {
@@ -245,6 +277,13 @@ public class Assets {
     public static Animation<TextureRegion> getHuskHornheadChargeAnim() { return huskHornheadChargeAnim; }
     public static Animation<TextureRegion> getHuskHornheadDeathAnim() { return huskHornheadDeathAnim; }
 
+    public static Animation<TextureRegion> getCrystalGuardianIdleAnim() { return crystalGuardianIdleAnim; }
+    public static Animation<TextureRegion> getCrystalGuardianRunAnim() { return crystalGuardianRunAnim; }
+    public static Animation<TextureRegion> getCrystalGuardianShootAnim() { return crystalGuardianShootAnim; }
+    public static Animation<TextureRegion> getCrystalGuardianEvadeAnim() { return crystalGuardianEvadeAnim; }
+    public static Animation<TextureRegion> getCrystalGuardianDeathAnim() { return crystalGuardianDeathAnim; }
+    public static Animation<TextureRegion> getCrystalLaserAnim() { return crystalLaserAnim; }
+
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
         if (achievementIcons != null)
@@ -278,6 +317,13 @@ public class Assets {
         disposeIfNotNull(huskHornheadIdleSheet);
         disposeIfNotNull(huskHornheadChargeSheet);
         disposeIfNotNull(huskHornheadDeathSheet);
+
+        disposeIfNotNull(crystalGuardianIdleSheet);
+        disposeIfNotNull(crystalGuardianRunSheet);
+        disposeIfNotNull(crystalGuardianShootSheet);
+        disposeIfNotNull(crystalGuardianEvadeSheet);
+        disposeIfNotNull(crystalGuardianDeathSheet);
+        disposeIfNotNull(crystalLaserSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();
