@@ -1,6 +1,7 @@
 package HollowKnight.source.model.asset;
 
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
@@ -79,6 +80,12 @@ public class Assets {
     private static Animation<TextureRegion> crystalGuardianDeathAnim;
     private static Animation<TextureRegion> crystalLaserAnim;
 
+    private static Texture crystalCrawlerWalkSheet;
+    private static Texture crystalCrawlerDeathSheet;
+
+    private static Animation<TextureRegion> crystalCrawlerWalkAnim;
+    private static Animation<TextureRegion> crystalCrawlerDeathAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -93,6 +100,7 @@ public class Assets {
         loadMossflyAssets();
         loadHuskHornheadAssets();
         loadCrystalGuardianAssets();
+        loadCrystalCrawlerAssets();
         loadMaps();
     }
 
@@ -167,6 +175,14 @@ public class Assets {
         crystalGuardianEvadeAnim = makeAnim(CrystalGuardianConstants.EVADE_FRAME_DUR, crystalGuardianEvadeSheet, CrystalGuardianConstants.EVADE_FRAMES, Animation.PlayMode.NORMAL);
         crystalGuardianDeathAnim = makeAnim(CrystalGuardianConstants.DEATH_FRAME_DUR, crystalGuardianDeathSheet, CrystalGuardianConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
         crystalLaserAnim = makeAnim(CrystalGuardianConstants.LASER_EFFECT_FRAME_DUR, crystalLaserSheet, CrystalGuardianConstants.LASER_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+    }
+
+    private static void loadCrystalCrawlerAssets() {
+        crystalCrawlerWalkSheet = new Texture(Gdx.files.internal("enemies/crystal_crawler/Walk.png"));
+        crystalCrawlerDeathSheet = new Texture(Gdx.files.internal("enemies/crystal_crawler/Death.png"));
+
+        crystalCrawlerWalkAnim = makeAnim(CrystalCrawlerConstants.WALK_FRAME_DUR, crystalCrawlerWalkSheet, CrystalCrawlerConstants.WALK_FRAMES, Animation.PlayMode.LOOP);
+        crystalCrawlerDeathAnim = makeAnim(CrystalCrawlerConstants.DEATH_FRAME_DUR, crystalCrawlerDeathSheet, CrystalCrawlerConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
     }
 
     private static void loadHUDAssets() {
@@ -284,6 +300,9 @@ public class Assets {
     public static Animation<TextureRegion> getCrystalGuardianDeathAnim() { return crystalGuardianDeathAnim; }
     public static Animation<TextureRegion> getCrystalLaserAnim() { return crystalLaserAnim; }
 
+    public static Animation<TextureRegion> getCrystalCrawlerWalkAnim() { return crystalCrawlerWalkAnim; }
+    public static Animation<TextureRegion> getCrystalCrawlerDeathAnim() { return crystalCrawlerDeathAnim; }
+
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
         if (achievementIcons != null)
@@ -324,6 +343,9 @@ public class Assets {
         disposeIfNotNull(crystalGuardianEvadeSheet);
         disposeIfNotNull(crystalGuardianDeathSheet);
         disposeIfNotNull(crystalLaserSheet);
+
+        disposeIfNotNull(crystalCrawlerWalkSheet);
+        disposeIfNotNull(crystalCrawlerDeathSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

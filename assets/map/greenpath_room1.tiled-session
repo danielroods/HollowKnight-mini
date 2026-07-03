@@ -1,17 +1,20 @@
 {
-    "activeFile": "Greenpath-room1.tmx",
+    "activeFile": "CrystalPeak.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "CrystalPeak.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 0,
+            "scale": 0.25,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 923,
-                "y": 1103
+                "x": 3270,
+                "y": 1186
             }
+        },
+        "CrystalPeak.tmx#floor": {
+            "scaleInDock": 1
         },
         "Greenpath-room1.tmx": {
             "expandedObjectLayers": [
@@ -94,11 +97,11 @@
             "scaleInEditor": 1
         },
         "crystal.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 1
         },
         "crystal_spikes.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.33,
             "scaleInEditor": 1
         },
         "crystal_spikes2.tsx": {
@@ -193,6 +196,22 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "mine_platform.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "mine_strut_03.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "mine_strut_05 #12406.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "platform.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "ropes.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -223,24 +242,24 @@
     "map.tileWidth": 8,
     "map.width": 1000,
     "openFiles": [
-        "Greenpath-room1.tmx",
-        "Greenpath-room2.tmx"
+        "CrystalPeak.tmx",
+        "mine_strut_05 #12406.tsx"
     ],
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "mine_strut_05 #12406.tsx",
+        "Greenpath-room1.tmx",
+        "CrystalPeak.tmx",
+        "mine_strut_03.tsx",
+        "platform.tsx",
+        "mine_platform.tsx",
         "crystal.tsx",
         "crystal_spikes4.tsx",
         "crystal_spikes3.tsx",
-        "Greenpath-room1.tmx",
         "crystal_spikes2.tsx",
         "crystal_spikes.tsx",
-        "air_ground_room1.tsx",
-        "floor.tsx",
-        "Greenpath-room2.tmx",
-        "eye_in_cave_anim.tsx",
-        "anim_eye.tsx",
-        "lights.tsx"
+        "air_ground_room1.tsx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

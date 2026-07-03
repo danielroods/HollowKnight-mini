@@ -2,6 +2,7 @@ package HollowKnight.source.view;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.GameController;
+import HollowKnight.source.controller.enemies.CrystalCrawlerController;
 import HollowKnight.source.controller.enemies.CrystalGuardianController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
@@ -9,6 +10,7 @@ import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
+import HollowKnight.source.view.enemies.CrystalCrawlerRenderer;
 import HollowKnight.source.view.enemies.CrystalGuardianRenderer;
 import HollowKnight.source.view.enemies.HuskHornheadRenderer;
 import HollowKnight.source.view.enemies.MossflyRenderer;
@@ -50,6 +52,7 @@ public class GameScreen implements Screen {
     private MossflyRenderer mossflyRenderer;
     private HuskHornheadRenderer huskHornheadRenderer;
     private CrystalGuardianRenderer crystalGuardianRenderer;
+    private CrystalCrawlerRenderer crystalCrawlerRenderer;
 
     // for debug
     private ShapeRenderer shapeRenderer;
@@ -82,6 +85,7 @@ public class GameScreen implements Screen {
         mossflyRenderer = new MossflyRenderer();
         huskHornheadRenderer = new HuskHornheadRenderer();
         crystalGuardianRenderer = new CrystalGuardianRenderer();
+        crystalCrawlerRenderer = new CrystalCrawlerRenderer();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -121,6 +125,7 @@ public class GameScreen implements Screen {
             batch.begin();
             renderHuskHornhead();
             renderCrystalGuardian();
+            renderCrystalCrawler();
             playerRenderer.render(batch, player, delta);
             batch.end();
 
@@ -143,6 +148,7 @@ public class GameScreen implements Screen {
             batch.begin();
             renderHuskHornhead();
             renderCrystalGuardian();
+            renderCrystalCrawler();
             playerRenderer.render(batch, player, delta);
             batch.end();
 
@@ -166,6 +172,12 @@ public class GameScreen implements Screen {
         CrystalGuardianController crystalGuardianController = gameController.getCrystalGuardianController();
         if (crystalGuardianController != null) {
             crystalGuardianRenderer.render(batch, crystalGuardianController.getGuardianList());
+        }
+    }
+    private void renderCrystalCrawler() {
+        CrystalCrawlerController crystalCrawlerController = gameController.getCrystalCrawlerController();
+        if (crystalCrawlerController != null) {
+            crystalCrawlerRenderer.render(batch, crystalCrawlerController.getCrystalCrawlerList());
         }
     }
 

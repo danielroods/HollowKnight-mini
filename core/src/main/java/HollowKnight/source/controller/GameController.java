@@ -1,9 +1,11 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.controller.enemies.CrystalCrawlerController;
 import HollowKnight.source.controller.enemies.CrystalGuardianController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
@@ -35,6 +37,7 @@ public class GameController {
     private MossflyController mossflyController;
     private HuskHornheadController huskHornheadController;
     private CrystalGuardianController crystalGuardianController;
+    private CrystalCrawlerController crystalCrawlerController;
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -73,7 +76,7 @@ public class GameController {
         if (!player.isFocusing()) {
             handleMovementInput();
             handleAttackInput();
-            playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController);
+            playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController);
         }
         else {
             playerController.stopHorizontal();
@@ -98,6 +101,10 @@ public class GameController {
             crystalGuardianController.update(delta, player, logicLayer);
         }
 
+        if (crystalCrawlerController != null) {
+            crystalCrawlerController.update(delta, player, logicLayer);
+        }
+
         if (player.getPosition().y < -300f)
             respawnPlayer();
     }
@@ -106,6 +113,7 @@ public class GameController {
         List<Mossfly> mossflySpawns = new ArrayList<>();
         List<HuskHornhead> huskHornheadSpawns = new ArrayList<>();
         List<CrystalGuardian> crystalGuardianSpawns = new ArrayList<>();
+        List<CrystalCrawler> crystalCrawlerSpawns = new ArrayList<>();
 
         MapLayer layer = currentMap.getLayers().get("logic");
         if (layer != null) {
@@ -124,12 +132,16 @@ public class GameController {
                 else if (name.equals("crystal_guardian_spawn")) {
                     crystalGuardianSpawns.add(new CrystalGuardian(pt.getPoint().x, pt.getPoint().y));
                 }
+                else if (name.equals("crystal_crawler_spawn")) {
+                    crystalCrawlerSpawns.add(new CrystalCrawler(pt.getPoint().x, pt.getPoint().y));
+                }
             }
         }
 
         mossflyController = new MossflyController(mossflySpawns);
         huskHornheadController = new HuskHornheadController(huskHornheadSpawns);
         crystalGuardianController = new CrystalGuardianController(crystalGuardianSpawns);
+        crystalCrawlerController = new CrystalCrawlerController(crystalCrawlerSpawns);
     }
 
     private void handleMovementInput() {
@@ -346,4 +358,5 @@ public class GameController {
     public MossflyController getMossflyController() { return mossflyController; }
     public HuskHornheadController getHuskHornheadController() { return huskHornheadController; }
     public CrystalGuardianController getCrystalGuardianController() { return crystalGuardianController; }
+    public CrystalCrawlerController getCrystalCrawlerController() { return crystalCrawlerController; }
 }

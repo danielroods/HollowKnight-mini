@@ -1765,7 +1765,7 @@
   <object id="175" name="crystal_guardian_spawn" x="2074" y="1041.5">
    <point/>
   </object>
-  <object id="176" name="crystal_guardian_spawn" x="695" y="1042">
+  <object id="176" name="crystal_crawler_spawn" x="695" y="1042">
    <point/>
   </object>
  </objectgroup>

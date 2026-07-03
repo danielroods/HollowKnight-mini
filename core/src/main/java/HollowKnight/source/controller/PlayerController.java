@@ -1,5 +1,6 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.controller.enemies.CrystalCrawlerController;
 import HollowKnight.source.controller.enemies.CrystalGuardianController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
@@ -183,7 +184,7 @@ public class PlayerController {
         player.addSoul(PlayerConstants.SOUL_GAIN_PER_HIT);
     }
 
-    public void checkSwordHits(MossflyController mossflyController, HuskHornheadController huskHornheadController, CrystalGuardianController crystalGuardianController) {
+    public void checkSwordHits(MossflyController mossflyController, HuskHornheadController huskHornheadController, CrystalGuardianController crystalGuardianController, CrystalCrawlerController crystalCrawlerController) {
         if (!player.isAttacking()) return;
 
         Rectangle hitbox = getSwordHitbox();
@@ -197,6 +198,9 @@ public class PlayerController {
 
         if (crystalGuardianController != null)
             crystalGuardianController.checkSwordHits(hitbox, player);
+
+        if (crystalCrawlerController != null)
+            crystalCrawlerController.checkSwordHits(hitbox, player);
     }
 
     public Rectangle getSwordHitbox() {
