@@ -1,8 +1,0 @@
-{
-"com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
-	"default": {
-		"vScroll": "background",
-		"vScrollKnob": "Scroller"
-	}
-}
-}

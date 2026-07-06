@@ -15,5 +15,4 @@ public class AssetConstants {
     static final int BREAK_HEALTH_FRAMES = 6;
     static final int HEALTH_REFILL_FRAMES = 5;
     static final int SOUL_ORB_FRAME_COUNT = 20;
-    static final int MAP_COUNT = 2;
 }

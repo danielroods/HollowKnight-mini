@@ -4,18 +4,24 @@ import HollowKnight.source.Main;
 import HollowKnight.source.controller.GameController;
 import HollowKnight.source.controller.enemies.CrystalCrawlerController;
 import HollowKnight.source.controller.enemies.CrystalGuardianController;
+import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.game_utils.CameraShake;
 import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.view.enemies.CrystalCrawlerRenderer;
 import HollowKnight.source.view.enemies.CrystalGuardianRenderer;
+import HollowKnight.source.view.enemies.FalseKnightRenderer;
 import HollowKnight.source.view.enemies.HuskHornheadRenderer;
 import HollowKnight.source.view.enemies.MossflyRenderer;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +29,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -31,7 +38,7 @@ public class GameScreen implements Screen {
 
     private static final float WORLD_W = 1280f;
     private static final float WORLD_H = 720f;
-    private static final float CAM_LERP = 0.01f;
+    private static final float CAM_LERP = 0.02f;
 
     private GameController gameController;
     private SpriteBatch batch;
@@ -53,6 +60,7 @@ public class GameScreen implements Screen {
     private HuskHornheadRenderer huskHornheadRenderer;
     private CrystalGuardianRenderer crystalGuardianRenderer;
     private CrystalCrawlerRenderer crystalCrawlerRenderer;
+    private FalseKnightRenderer falseKnightRenderer;
 
     // for debug
     private ShapeRenderer shapeRenderer;
@@ -86,6 +94,7 @@ public class GameScreen implements Screen {
         huskHornheadRenderer = new HuskHornheadRenderer();
         crystalGuardianRenderer = new CrystalGuardianRenderer();
         crystalCrawlerRenderer = new CrystalCrawlerRenderer();
+        falseKnightRenderer = new FalseKnightRenderer();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -108,51 +117,99 @@ public class GameScreen implements Screen {
     }
 
     private void renderWorld(float delta) {
-        if (gameController.getCurrentMapIndex() == 0) {
-            mapRenderer.setView(bgCamera);
-            mapRenderer.render(new int[]{0});
+        switch (gameController.getCurrentMapIndex()) {
+            case 0:
+                mapRenderer.setView(bgCamera);
+                mapRenderer.render(new int[]{0});
 
-            mapRenderer.setView(worldCamera);
-            mapRenderer.render(new int[]{1, 2, 3, 4, 5});
+                mapRenderer.setView(worldCamera);
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5});
 
-            batch.setProjectionMatrix(worldCamera.combined);
-            batch.begin();
-            renderMossfly();
-            batch.end();
+                batch.setProjectionMatrix(worldCamera.combined);
+                batch.begin();
+                renderMossfly();
+                batch.end();
 
-            mapRenderer.render(new int[]{6});
+                mapRenderer.render(new int[]{6});
 
-            batch.begin();
-            renderHuskHornhead();
-            renderCrystalGuardian();
-            renderCrystalCrawler();
-            playerRenderer.render(batch, player, delta);
-            batch.end();
+                batch.begin();
+                renderHuskHornhead();
+                renderCrystalGuardian();
+                renderCrystalCrawler();
+                renderFalseKnight();
+                playerRenderer.render(batch, player, delta);
+                batch.end();
 
-            mapRenderer.render(new int[]{7, 8, 9});
-        }
-        else {
-            mapRenderer.setView(bgCamera);
-            mapRenderer.render(new int[]{0});
+                mapRenderer.render(new int[]{7, 8, 9});
+                break;
 
-            mapRenderer.setView(worldCamera);
-            mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7});
+            case 1:
+                mapRenderer.setView(bgCamera);
+                mapRenderer.render(new int[]{0});
 
-            batch.setProjectionMatrix(worldCamera.combined);
-            batch.begin();
-            renderMossfly();
-            batch.end();
+                mapRenderer.setView(worldCamera);
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7});
 
-            mapRenderer.render(new int[]{8});
+                batch.setProjectionMatrix(worldCamera.combined);
+                batch.begin();
+                renderMossfly();
+                batch.end();
 
-            batch.begin();
-            renderHuskHornhead();
-            renderCrystalGuardian();
-            renderCrystalCrawler();
-            playerRenderer.render(batch, player, delta);
-            batch.end();
+                mapRenderer.render(new int[]{8});
 
-            mapRenderer.render(new int[]{9, 10, 11, 12, 13});
+                batch.begin();
+                renderHuskHornhead();
+                renderCrystalGuardian();
+                renderCrystalCrawler();
+                renderFalseKnight();
+                playerRenderer.render(batch, player, delta);
+                batch.end();
+
+                mapRenderer.render(new int[]{9, 10, 11, 12, 13});
+                break;
+
+            case 2:
+                mapRenderer.setView(bgCamera);
+                mapRenderer.render(new int[]{0});
+
+                mapRenderer.setView(worldCamera);
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7, 8});
+
+                batch.setProjectionMatrix(worldCamera.combined);
+                batch.begin();
+                renderMossfly();
+                batch.end();
+
+                mapRenderer.render(new int[]{9});
+
+                batch.begin();
+                renderHuskHornhead();
+                renderCrystalGuardian();
+                renderCrystalCrawler();
+                renderFalseKnight();
+                playerRenderer.render(batch, player, delta);
+                batch.end();
+
+                mapRenderer.render(new int[]{10, 11, 12, 13, 14, 15});
+                break;
+
+            case 3:
+                mapRenderer.setView(bgCamera);
+                mapRenderer.render(new int[]{0});
+
+                mapRenderer.setView(worldCamera);
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7});
+
+                batch.setProjectionMatrix(worldCamera.combined);
+
+                batch.begin();
+                renderFalseKnight();
+                playerRenderer.render(batch, player, delta);
+                batch.end();
+
+                mapRenderer.render(new int[]{8, 9, 10});
+
+                break;
         }
     }
 
@@ -178,6 +235,12 @@ public class GameScreen implements Screen {
         CrystalCrawlerController crystalCrawlerController = gameController.getCrystalCrawlerController();
         if (crystalCrawlerController != null) {
             crystalCrawlerRenderer.render(batch, crystalCrawlerController.getCrystalCrawlerList());
+        }
+    }
+    private void renderFalseKnight() {
+        FalseKnightController falseKnightController = gameController.getFalseKnightController();
+        if (falseKnightController != null) {
+            falseKnightRenderer.render(batch, falseKnightController.getFalseKnightList());
         }
     }
 
@@ -241,15 +304,20 @@ public class GameScreen implements Screen {
             worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 1f, 4f * delta);
         }
 
+        Vector2 shakeOffset = CameraShake.update(delta);
+        worldCamera.position.add(shakeOffset.x, shakeOffset.y, 0f);
         worldCamera.update();
 
-        if (gameController.getCurrentMapIndex() == 0) {
-            bgCamera.position.x = worldCamera.position.x * 0.3f + 500f;
-            bgCamera.position.y = worldCamera.position.y * 0.7f + 260f;
-        } else {
+        if (gameController.getCurrentMapIndex() == 1) {
             bgCamera.position.set(worldCamera.position);
         }
+        else {
+            bgCamera.position.x = worldCamera.position.x * 0.3f + 500f;
+            bgCamera.position.y = worldCamera.position.y * 0.7f + 260f;
+        }
         bgCamera.update();
+
+        worldCamera.position.sub(shakeOffset.x, shakeOffset.y, 0f);
     }
 
     @Override public void resize(int width, int height) {

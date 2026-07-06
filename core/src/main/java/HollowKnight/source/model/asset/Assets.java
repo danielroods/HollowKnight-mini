@@ -3,6 +3,7 @@ package HollowKnight.source.model.asset;
 import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
+import HollowKnight.source.model.enemies.false_knight.FalseKnightConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.map.Maps;
@@ -10,6 +11,7 @@ import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
@@ -86,6 +89,30 @@ public class Assets {
     private static Animation<TextureRegion> crystalCrawlerWalkAnim;
     private static Animation<TextureRegion> crystalCrawlerDeathAnim;
 
+    private static Texture falseKnightIdleSheet;
+    private static Texture falseKnightRunSheet;
+    private static Texture falseKnightAttackSheet;
+    private static Texture falseKnightAttackRecoverSheet;
+    private static Texture falseKnightDeathSheet;
+    private static Texture falseKnightJumpSheet;
+    private static Texture falseKnightJumpAttackSheet;
+    private static Texture falseKnightLandSheet;
+    private static Texture falseKnightStunnedSheet;
+    private static Texture falseKnightStunRecoverSheet;
+    private static Texture falseKnightShockwaveSheet;
+
+    private static Animation<TextureRegion> falseKnightIdleAnim;
+    private static Animation<TextureRegion> falseKnightRunAnim;
+    private static Animation<TextureRegion> falseKnightAttackAnim;
+    private static Animation<TextureRegion> falseKnightAttackRecoverAnim;
+    private static Animation<TextureRegion> falseKnightDeathAnim;
+    private static Animation<TextureRegion> falseKnightJumpAnim;
+    private static Animation<TextureRegion> falseKnightJumpAttackAnim;
+    private static Animation<TextureRegion> falseKnightLandAnim;
+    private static Animation<TextureRegion> falseKnightStunnedAnim;
+    private static Animation<TextureRegion> falseKnightStunRecoverAnim;
+    private static Animation<TextureRegion> falseKnightShockwaveAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -101,6 +128,7 @@ public class Assets {
         loadHuskHornheadAssets();
         loadCrystalGuardianAssets();
         loadCrystalCrawlerAssets();
+        loadFalseKnightAssets();
         loadMaps();
     }
 
@@ -185,6 +213,32 @@ public class Assets {
         crystalCrawlerDeathAnim = makeAnim(CrystalCrawlerConstants.DEATH_FRAME_DUR, crystalCrawlerDeathSheet, CrystalCrawlerConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
     }
 
+    private static void loadFalseKnightAssets() {
+        falseKnightIdleSheet = new Texture(Gdx.files.internal("enemies/false_knight/Idle.png"));
+        falseKnightRunSheet = new Texture(Gdx.files.internal("enemies/false_knight/Run.png"));
+        falseKnightAttackSheet = new Texture(Gdx.files.internal("enemies/false_knight/Attack.png"));
+        falseKnightAttackRecoverSheet = new Texture(Gdx.files.internal("enemies/false_knight/Attack Recover.png"));
+        falseKnightDeathSheet = new Texture(Gdx.files.internal("enemies/false_knight/Death.png"));
+        falseKnightJumpSheet = new Texture(Gdx.files.internal("enemies/false_knight/Jump.png"));
+        falseKnightJumpAttackSheet = new Texture(Gdx.files.internal("enemies/false_knight/Jump Attack.png"));
+        falseKnightLandSheet = new Texture(Gdx.files.internal("enemies/false_knight/Land.png"));
+        falseKnightStunnedSheet = new Texture(Gdx.files.internal("enemies/false_knight/Stunned.png"));
+        falseKnightStunRecoverSheet = new Texture(Gdx.files.internal("enemies/false_knight/Stun Recover.png"));
+        falseKnightShockwaveSheet = new Texture(Gdx.files.internal("enemies/false_knight/Shockwave Effect.png"));
+
+        falseKnightIdleAnim = makeAnim(FalseKnightConstants.IDLE_FRAME_DUR, falseKnightIdleSheet, FalseKnightConstants.IDLE_FRAMES, Animation.PlayMode.LOOP);
+        falseKnightRunAnim = makeAnim(FalseKnightConstants.RUN_FRAME_DUR, falseKnightRunSheet, FalseKnightConstants.RUN_FRAMES, Animation.PlayMode.LOOP);
+        falseKnightAttackAnim = makeAnim(FalseKnightConstants.ATTACK_FRAME_DUR, falseKnightAttackSheet, FalseKnightConstants.ATTACK_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightAttackRecoverAnim = makeAnim(FalseKnightConstants.ATTACK_RECOVER_FRAME_DUR, falseKnightAttackRecoverSheet, FalseKnightConstants.ATTACK_RECOVER_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightDeathAnim = makeAnim(FalseKnightConstants.DEATH_FRAME_DUR, falseKnightDeathSheet, FalseKnightConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightJumpAnim = makeAnim(FalseKnightConstants.JUMP_FRAME_DUR, falseKnightJumpSheet, FalseKnightConstants.JUMP_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightJumpAttackAnim = makeAnim(FalseKnightConstants.JUMP_ATTACK_FRAME_DUR, falseKnightJumpAttackSheet, FalseKnightConstants.JUMP_ATTACK_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightLandAnim = makeAnim(FalseKnightConstants.LAND_FRAME_DUR, falseKnightLandSheet, FalseKnightConstants.LAND_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightStunnedAnim = makeAnim(FalseKnightConstants.STUNNED_FRAME_DUR, falseKnightStunnedSheet, FalseKnightConstants.STUNNED_FRAMES, Animation.PlayMode.LOOP);
+        falseKnightStunRecoverAnim = makeAnim(FalseKnightConstants.STUN_RECOVER_FRAME_DUR, falseKnightStunRecoverSheet, FalseKnightConstants.STUN_RECOVER_FRAMES, Animation.PlayMode.NORMAL);
+        falseKnightShockwaveAnim = makeAnim(FalseKnightConstants.SHOCKWAVE_EFFECT_FRAME_DUR, falseKnightShockwaveSheet, FalseKnightConstants.SHOCKWAVE_EFFECT_FRAMES, Animation.PlayMode.LOOP);
+    }
+
     private static void loadHUDAssets() {
         healthBarTextures = new Texture[5];
         for (int i = 0; i < 5; i++)
@@ -208,9 +262,11 @@ public class Assets {
 
     private static void loadMaps() {
         TmxMapLoader loader = new TmxMapLoader();
-        maps = new TiledMap[AssetConstants.MAP_COUNT];
-        maps[0] = loader.load(Maps.GREENPATH_ROOM_1.getPath());
-        maps[1] = loader.load(Maps.GREENPATH_ROOM_2.getPath());
+        Maps[] allMaps = Maps.values();
+        maps = new TiledMap[allMaps.length];
+        for (int i = 0; i < allMaps.length; i++) {
+            maps[i] = loader.load(allMaps[i].getPath());
+        }
     }
 
     private static Animation<TextureRegion> makeAnim(float frameDur, Texture sheet, int frameCount, Animation.PlayMode mode) {
@@ -228,8 +284,10 @@ public class Assets {
     public static Skin getSkin() {
         if (skin == null) {
             skin = new Skin();
-            TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/HollowSkin.atlas"));
+
+            TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/Hollow Knight skin.atlas"));
             skin.addRegions(atlas);
+
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/TrajanPro-Regular.ttf"));
 
             FreeTypeFontGenerator.FreeTypeFontParameter normal = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -249,14 +307,34 @@ public class Assets {
             desc.size = 25;
             BitmapFont descFont = generator.generateFont(desc);
             skin.add("AchievementDescFont", descFont);
+
             generator.dispose();
 
-            skin.load(Gdx.files.internal("ui/HollowSkin.json"));
-            TextButton.TextButtonStyle style = skin.get("default", TextButton.TextButtonStyle.class);
-            style.font = normalFont;
-            style.fontColor = new Color(0.85f, 0.85f, 0.85f, 1f);
-            style.overFontColor = Color.WHITE;
-            style.downFontColor = Color.LIGHT_GRAY;
+            Pixmap offPixmap = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
+            offPixmap.setColor(new Color(0.8f, 0.8f, 0.8f, 1f));
+            offPixmap.drawRectangle(0, 0, 32, 32);
+            offPixmap.setColor(new Color(0.08f, 0.08f, 0.08f, 0.85f));
+            offPixmap.fillRectangle(2, 2, 28, 28);
+            Texture offTexture = new Texture(offPixmap);
+            skin.add("hk-checkbox-off", new TextureRegion(offTexture));
+
+            Pixmap onPixmap = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
+            onPixmap.setColor(new Color(0.8f, 0.8f, 0.8f, 1f));
+            onPixmap.drawRectangle(0, 0, 32, 32);
+            onPixmap.setColor(new Color(0.08f, 0.08f, 0.08f, 0.85f));
+            onPixmap.fillRectangle(2, 2, 28, 28);
+            onPixmap.setColor(Color.WHITE);
+            onPixmap.drawLine(8, 8, 24, 24);
+            onPixmap.drawLine(8, 9, 23, 24);
+            onPixmap.drawLine(8, 24, 24, 8);
+            onPixmap.drawLine(8, 23, 23, 8);
+            Texture onTexture = new Texture(onPixmap);
+            skin.add("hk-checkbox-on", new TextureRegion(onTexture));
+
+            offPixmap.dispose();
+            onPixmap.dispose();
+
+            skin.load(Gdx.files.internal("ui/Hollow Knight skin.json"));
         }
         return skin;
     }
@@ -303,6 +381,18 @@ public class Assets {
     public static Animation<TextureRegion> getCrystalCrawlerWalkAnim() { return crystalCrawlerWalkAnim; }
     public static Animation<TextureRegion> getCrystalCrawlerDeathAnim() { return crystalCrawlerDeathAnim; }
 
+    public static Animation<TextureRegion> getFalseKnightIdleAnim() { return falseKnightIdleAnim; }
+    public static Animation<TextureRegion> getFalseKnightRunAnim() { return falseKnightRunAnim; }
+    public static Animation<TextureRegion> getFalseKnightAttackAnim() { return falseKnightAttackAnim; }
+    public static Animation<TextureRegion> getFalseKnightAttackRecoverAnim() { return falseKnightAttackRecoverAnim; }
+    public static Animation<TextureRegion> getFalseKnightDeathAnim() { return falseKnightDeathAnim; }
+    public static Animation<TextureRegion> getFalseKnightJumpAnim() { return falseKnightJumpAnim; }
+    public static Animation<TextureRegion> getFalseKnightJumpAttackAnim() { return falseKnightJumpAttackAnim; }
+    public static Animation<TextureRegion> getFalseKnightLandAnim() { return falseKnightLandAnim; }
+    public static Animation<TextureRegion> getFalseKnightStunnedAnim() { return falseKnightStunnedAnim; }
+    public static Animation<TextureRegion> getFalseKnightStunRecoverAnim() { return falseKnightStunRecoverAnim; }
+    public static Animation<TextureRegion> getFalseKnightShockwaveAnim() { return falseKnightShockwaveAnim; }
+
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
         if (achievementIcons != null)
@@ -346,6 +436,18 @@ public class Assets {
 
         disposeIfNotNull(crystalCrawlerWalkSheet);
         disposeIfNotNull(crystalCrawlerDeathSheet);
+
+        disposeIfNotNull(falseKnightIdleSheet);
+        disposeIfNotNull(falseKnightRunSheet);
+        disposeIfNotNull(falseKnightAttackSheet);
+        disposeIfNotNull(falseKnightAttackRecoverSheet);
+        disposeIfNotNull(falseKnightDeathSheet);
+        disposeIfNotNull(falseKnightJumpSheet);
+        disposeIfNotNull(falseKnightJumpAttackSheet);
+        disposeIfNotNull(falseKnightLandSheet);
+        disposeIfNotNull(falseKnightStunnedSheet);
+        disposeIfNotNull(falseKnightStunRecoverSheet);
+        disposeIfNotNull(falseKnightShockwaveSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

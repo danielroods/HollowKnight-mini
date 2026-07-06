@@ -2,11 +2,13 @@ package HollowKnight.source.controller;
 
 import HollowKnight.source.controller.enemies.CrystalCrawlerController;
 import HollowKnight.source.controller.enemies.CrystalGuardianController;
+import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
+import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.map.Maps;
@@ -38,6 +40,7 @@ public class GameController {
     private HuskHornheadController huskHornheadController;
     private CrystalGuardianController crystalGuardianController;
     private CrystalCrawlerController crystalCrawlerController;
+    private FalseKnightController falseKnightController;
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -67,6 +70,9 @@ public class GameController {
             if (crystalGuardianController != null) {
                 crystalGuardianController.updateLasersOnly(delta, player);
             }
+            if (falseKnightController != null) {
+                falseKnightController.updateShockwaveOnly(delta, player);
+            }
             if (player.getDeathTimer() >= PlayerConstants.DEATH_ANIM_DUR)
                 respawnPlayer();
             return;
@@ -76,7 +82,7 @@ public class GameController {
         if (!player.isFocusing()) {
             handleMovementInput();
             handleAttackInput();
-            playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController);
+            playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController);
         }
         else {
             playerController.stopHorizontal();
@@ -105,6 +111,10 @@ public class GameController {
             crystalCrawlerController.update(delta, player, logicLayer);
         }
 
+        if (falseKnightController != null) {
+            falseKnightController.update(delta, player, logicLayer);
+        }
+
         if (player.getPosition().y < -300f)
             respawnPlayer();
     }
@@ -114,6 +124,7 @@ public class GameController {
         List<HuskHornhead> huskHornheadSpawns = new ArrayList<>();
         List<CrystalGuardian> crystalGuardianSpawns = new ArrayList<>();
         List<CrystalCrawler> crystalCrawlerSpawns = new ArrayList<>();
+        List<FalseKnight> falseKnightSpawns = new ArrayList<>();
 
         MapLayer layer = currentMap.getLayers().get("logic");
         if (layer != null) {
@@ -135,6 +146,9 @@ public class GameController {
                 else if (name.equals("crystal_crawler_spawn")) {
                     crystalCrawlerSpawns.add(new CrystalCrawler(pt.getPoint().x, pt.getPoint().y));
                 }
+                else if (name.equals("false_knight_spawn")) {
+                    falseKnightSpawns.add(new FalseKnight(pt.getPoint().x, pt.getPoint().y));
+                }
             }
         }
 
@@ -142,6 +156,7 @@ public class GameController {
         huskHornheadController = new HuskHornheadController(huskHornheadSpawns);
         crystalGuardianController = new CrystalGuardianController(crystalGuardianSpawns);
         crystalCrawlerController = new CrystalCrawlerController(crystalCrawlerSpawns);
+        falseKnightController = new FalseKnightController(falseKnightSpawns);
     }
 
     private void handleMovementInput() {
@@ -317,7 +332,7 @@ public class GameController {
         if (pos != null)
             return pos;
 
-        return new Vector2(220f, 220f);
+        return new Vector2(700f, 400f);
     }
 
     private static Vector2 tryGetPoint(MapLayer layer, String name) {
@@ -332,21 +347,17 @@ public class GameController {
     }
 
     private int resolveMapIndex(String doorName) {
-        if (doorName.endsWith(Maps.GREENPATH_ROOM_1.getId()))
-            return 0;
-        else if (doorName.endsWith(Maps.GREENPATH_ROOM_2.getId()))
-            return 1;
+        for (Maps map : Maps.values()) {
+            if (doorName.endsWith(map.getId())) {
+                return map.getIndex();
+            }
+        }
 
-        return 0;
+        return currentMapIndex;
     }
 
     private String resolveMapId(int index) {
-        if (index == 0)
-            return Maps.GREENPATH_ROOM_1.getId();
-        else if (index == 1)
-            return Maps.GREENPATH_ROOM_2.getId();
-
-        return Maps.GREENPATH_ROOM_1.getId();
+        return Maps.fromIndex(index).getId();
     }
 
     public void setPlayer(Player player) { this.player = player; }
@@ -359,4 +370,5 @@ public class GameController {
     public HuskHornheadController getHuskHornheadController() { return huskHornheadController; }
     public CrystalGuardianController getCrystalGuardianController() { return crystalGuardianController; }
     public CrystalCrawlerController getCrystalCrawlerController() { return crystalCrawlerController; }
+    public FalseKnightController getFalseKnightController() { return falseKnightController; }
 }

@@ -22,11 +22,11 @@ public class CrystalGuardianConstants {
     public static final float RETURN_SPEED = 110f;
     public static final float RETURN_ARRIVE_EPSILON = 6f;
 
-    public static final float EVADE_TRIGGER_DISTANCE = 90f;
+    public static final float EVADE_TRIGGER_DISTANCE = 100f;
     public static final float EVADE_SPEED = 260f;
     public static final float EVADE_COOLDOWN = 1.2f;
     public static final float LASER_FIRE_DELAY = 0.55f;
-    public static final float LASER_RANGE = 850f;
+    public static final float LASER_RANGE = 1250f;
     public static final float LASER_HEIGHT = 40f;
     public static final float LASER_ACTIVE_DUR = 0.18f;
 
