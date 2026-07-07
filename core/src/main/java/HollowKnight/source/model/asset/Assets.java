@@ -35,6 +35,7 @@ public class Assets {
     private static Texture attackHorizontalEffectSheet, attackUpEffectSheet, attackDownEffectSheet;
     private static Texture dashSheet;
     private static Texture dashEffectSheet;
+    private static Texture wallSlideSheet;
 
     private static Texture[] healthBarTextures;
     private static Texture filledHealthTex;
@@ -149,6 +150,7 @@ public class Assets {
         attackDownEffectSheet = new Texture(Gdx.files.internal("player/effects/DownSlashEffect.png"));
         dashSheet = new Texture(Gdx.files.internal("player/Dash.png"));
         dashEffectSheet = new Texture(Gdx.files.internal("player/effects/Dash Effect.png"));
+        wallSlideSheet = new Texture(Gdx.files.internal("player/Wall Slide.png"));
 
         playerAnimations = new EnumMap<>(PlayerState.class);
         playerAnimations.put(PlayerState.IDLE, makeAnim(1f / AssetConstants.IDLE_FRAMES, idleSheet, AssetConstants.IDLE_FRAMES, Animation.PlayMode.LOOP));
@@ -162,6 +164,7 @@ public class Assets {
         playerAnimations.put(PlayerState.HEAL, makeAnim(PlayerConstants.HEAL_ANIM_DUR / AssetConstants.HEAL_FRAMES, healSheet, AssetConstants.HEAL_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.ATTACK, makeAnim(PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_FRAMES, attackSheet, AssetConstants.ATTACK_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.DASH, makeAnim(PlayerConstants.DASH_DURATION / AssetConstants.DASH_FRAMES, dashSheet, AssetConstants.DASH_FRAMES, Animation.PlayMode.NORMAL));
+        playerAnimations.put(PlayerState.WALL_SLIDE, makeAnim(0.12f, wallSlideSheet, AssetConstants.WALL_SLIDE_FRAMES, Animation.PlayMode.LOOP));
 
         float attackFrameDur = PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_EFFECT_FRAMES;
         attackHorizontalEffectAnim = makeAnim(attackFrameDur, attackHorizontalEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
@@ -414,6 +417,7 @@ public class Assets {
         disposeIfNotNull(attackSheet);
         disposeIfNotNull(dashSheet);
         disposeIfNotNull(dashEffectSheet);
+        disposeIfNotNull(wallSlideSheet);
 
         if (healthBarTextures != null)
             for (Texture t : healthBarTextures) disposeIfNotNull(t);

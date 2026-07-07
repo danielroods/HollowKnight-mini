@@ -24,5 +24,5 @@ public class PlayerConstants {
     public static final float DASH_DURATION = 0.38f;
     public static final float DASH_COOLDOWN = 0.50f;
     public static final int MAX_DASH_IN_AIR = 2;
-
+    public static final float WALL_SLIDE_SPEED = -120f;
 }

@@ -81,6 +81,7 @@ public class GameController {
         handleFocusInput(delta);
         if (!player.isFocusing()) {
             handleMovementInput();
+            handleWallSlideInput();
             handleDashInput();
             handleAttackInput();
             playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController);
@@ -213,6 +214,34 @@ public class GameController {
             playerController.dash();
     }
 
+    private void handleWallSlideInput() {
+        if (player.isKnockedBack()) return;
+
+        boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
+        boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
+
+        boolean touchingWallLeft = isTouchingWall(false);
+        boolean touchingWallRight = isTouchingWall(true);
+
+        playerController.updateWallSlide(left, right, touchingWallLeft, touchingWallRight);
+    }
+
+    private boolean isTouchingWall(boolean rightSide) {
+        MapLayer layer = currentMap.getLayers().get("logic");
+        if (layer == null)
+            return false;
+
+        Rectangle b = player.getBounds();
+        float wallOverlapX = rightSide ? b.x + b.width : b.x - 4f;
+        Rectangle wallOverlap = new Rectangle(wallOverlapX, b.y + 4f, 4f, Math.max(1f, b.height - 8f));
+
+        for (MapObject obj : layer.getObjects()) {
+            if (!isSolid(obj)) continue;
+            if (Intersector.overlaps(wallOverlap, ((RectangleMapObject) obj).getRectangle()))
+                return true;
+        }
+        return false;
+    }
 
     private void handleCollisions() {
         MapLayer layer = currentMap.getLayers().get("logic");

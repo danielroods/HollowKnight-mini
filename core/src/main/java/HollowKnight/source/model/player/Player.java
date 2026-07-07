@@ -30,11 +30,12 @@ public class Player {
     private float knockbackTimer;
 
     private boolean canDoubleJump = true;
-
     private boolean isDashing;
     private float dashTimer;
     private float dashCooldownTimer;
     private int dashCountInAir;
+    private boolean isWallSliding;
+
 
     private AttackDirection attackDirection = AttackDirection.RIGHT;
 
@@ -71,6 +72,7 @@ public class Player {
         dashTimer = 0f;
         dashCooldownTimer = 0f;
         dashCountInAir = 0;
+        isWallSliding = false;
     }
 
     public void setVelocityX(float velocityX) {
@@ -148,6 +150,9 @@ public class Player {
     public void setDashCountInAir(int dashCountInAir) {
         this.dashCountInAir = dashCountInAir;
     }
+    public void setWallSliding(boolean wallSliding) {
+        isWallSliding = wallSliding;
+    }
 
     public Vector2 getPosition() { return position; }
     public Vector2 getVelocity() { return velocity; }
@@ -175,4 +180,5 @@ public class Player {
     public float getDashTimer() { return dashTimer; }
     public float getDashCooldownTimer() { return dashCooldownTimer; }
     public int getDashCountInAir() { return dashCountInAir; }
+    public boolean isWallSliding() { return isWallSliding; }
 }

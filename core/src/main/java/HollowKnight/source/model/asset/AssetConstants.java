@@ -14,6 +14,7 @@ public class AssetConstants {
     static final int HEAL_FRAMES = 6;
     static final int DASH_FRAMES = 8;
     static final int DASH_EFFECT_FRAMES = 8;
+    static final int WALL_SLIDE_FRAMES = 4;
     static final int BREAK_HEALTH_FRAMES = 6;
     static final int HEALTH_REFILL_FRAMES = 5;
     static final int SOUL_ORB_FRAME_COUNT = 20;

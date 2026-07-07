@@ -59,6 +59,9 @@ public class PlayerController {
         }
         else {
             player.setVelocityY(player.getVelocity().y + PlayerConstants.GRAVITY * delta);
+            if (player.isWallSliding() && player.getVelocity().y < PlayerConstants.WALL_SLIDE_SPEED) {
+                player.setVelocityY(PlayerConstants.WALL_SLIDE_SPEED);
+            }
         }
 
         float currentX = player.getPosition().x;
@@ -85,7 +88,10 @@ public class PlayerController {
             player.setState(PlayerState.HEAL);
         }
         else if (!player.isOnGround()) {
-            if (player.getVelocity().y > 0) {
+            if (player.isWallSliding()) {
+                player.setState(PlayerState.WALL_SLIDE);
+            }
+            else if (player.getVelocity().y > 0) {
                 if (player.canDoubleJump()) {
                     player.setState(PlayerState.JUMP);
                 }
@@ -154,6 +160,29 @@ public class PlayerController {
 
         player.setAttacking(false);
         player.setAttackTimer(0f);
+        player.setWallSliding(false);
+    }
+
+    public void updateWallSlide(boolean leftHeld, boolean rightHeld, boolean touchingWallLeft, boolean touchingWallRight) {
+        if (player.isOnGround() || player.isKnockedBack() || player.isFocusing() || player.isDashing()) {
+            player.setWallSliding(false);
+            return;
+        }
+
+        boolean pressingIntoLeftWall = leftHeld && touchingWallLeft;
+        boolean pressingIntoRightWall = rightHeld && touchingWallRight;
+
+        if (pressingIntoLeftWall) {
+            player.setWallSliding(true);
+            player.setFacingRight(false);
+        }
+        else if (pressingIntoRightWall) {
+            player.setWallSliding(true);
+            player.setFacingRight(true);
+        }
+        else {
+            player.setWallSliding(false);
+        }
     }
 
     public void takeDamage(int amount) {
@@ -207,6 +236,7 @@ public class PlayerController {
         player.setAttackTimer(0f);
         player.setDashing(false);
         player.setDashTimer(0f);
+        player.setWallSliding(false);
         player.setState(PlayerState.HURT);
     }
 

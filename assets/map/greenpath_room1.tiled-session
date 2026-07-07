@@ -1,5 +1,5 @@
 {
-    "activeFile": "BossRoom.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         "."
     ],
@@ -493,21 +493,20 @@
     "map.tileWidth": 8,
     "map.width": 300,
     "openFiles": [
-        "BossRoom.tmx"
     ],
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "Greenpath-room1.tmx",
+        "CrystalPeak.tmx",
+        "Greenpath-room2.tmx",
         "BossRoom.tmx",
         "background_boss_room.tsx",
-        "Greenpath-room2.tmx",
-        "CrystalPeak.tmx",
         "background_crystal_peak3.tsx",
         "crystal_spikes3.tsx",
         "wall2.tsx",
         "wall.tsx",
         "platform.tsx",
-        "Greenpath-room1.tmx",
         "flower.tsx",
         "background_crystal_peak2.tsx"
     ],
