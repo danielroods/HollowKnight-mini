@@ -31,6 +31,11 @@ public class Player {
 
     private boolean canDoubleJump = true;
 
+    private boolean isDashing;
+    private float dashTimer;
+    private float dashCooldownTimer;
+    private int dashCountInAir;
+
     private AttackDirection attackDirection = AttackDirection.RIGHT;
 
     private Player(float x, float y) {
@@ -62,6 +67,10 @@ public class Player {
         isAttacking = false;
         knockbackTimer = 0f;
         canDoubleJump = true;
+        isDashing = false;
+        dashTimer = 0f;
+        dashCooldownTimer = 0f;
+        dashCountInAir = 0;
     }
 
     public void setVelocityX(float velocityX) {
@@ -93,6 +102,7 @@ public class Player {
         if (onGround) {
             velocity.y = 0;
             canDoubleJump = true;
+            dashCountInAir = 0;
         }
     }
     public void setPosition(float x, float y) {
@@ -123,11 +133,20 @@ public class Player {
     public void setDeathTimer(float deathTimer) {
         this.deathTimer = deathTimer;
     }
-    public void setCanDoubleJump(boolean canDoubleJump) {
-        this.canDoubleJump = canDoubleJump;
-    }
     public void setAttackDirection(AttackDirection attackDirection) {
         this.attackDirection = attackDirection;
+    }
+    public void setDashing(boolean dashing) {
+        isDashing = dashing;
+    }
+    public void setDashTimer(float dashTimer) {
+        this.dashTimer = dashTimer;
+    }
+    public void setDashCooldownTimer(float dashCooldownTimer) {
+        this.dashCooldownTimer = dashCooldownTimer;
+    }
+    public void setDashCountInAir(int dashCountInAir) {
+        this.dashCountInAir = dashCountInAir;
     }
 
     public Vector2 getPosition() { return position; }
@@ -152,5 +171,8 @@ public class Player {
     public boolean canDoubleJump() { return canDoubleJump; }
     public AttackDirection getAttackDirection() { return attackDirection; }
     public float getKnockbackTimer() { return knockbackTimer; }
-    public boolean isCanDoubleJump() { return canDoubleJump; }
+    public boolean isDashing() { return isDashing; }
+    public float getDashTimer() { return dashTimer; }
+    public float getDashCooldownTimer() { return dashCooldownTimer; }
+    public int getDashCountInAir() { return dashCountInAir; }
 }

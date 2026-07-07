@@ -228,10 +228,7 @@ public class FalseKnightController {
         switch (choice) {
             case MACE_SLAM:
                 falseKnight.setLastState(FalseKnightState.MACE_SLAM);
-                faceTowardPlayer(falseKnight, player);
-                falseKnight.getVelocity().x = 0f;
-                falseKnight.setAttackHasHitPlayer(false);
-                enterState(falseKnight, FalseKnightState.MACE_SLAM);
+                startMaceSlam(falseKnight, player);
                 break;
 
             case CHARGE_RUN:
@@ -256,6 +253,13 @@ public class FalseKnightController {
         }
     }
 
+    private void startMaceSlam(FalseKnight falseKnight, Player player) {
+        faceTowardPlayer(falseKnight, player);
+        falseKnight.getVelocity().x = 0f;
+        falseKnight.setAttackHasHitPlayer(false);
+        enterState(falseKnight, FalseKnightState.MACE_SLAM);
+    }
+
     private void updateMaceSlam(FalseKnight falseKnight, Player player) {
         falseKnight.getVelocity().x = 0f;
         if (!falseKnight.isAttackHasHitPlayer() && falseKnight.getStateTimer() >= FalseKnightConstants.MACE_SLAM_TRIGGER_TIME) {
@@ -263,7 +267,7 @@ public class FalseKnightController {
             CameraShake.trigger(FalseKnightConstants.SHAKE_DURATION_HEAVY, FalseKnightConstants.SHAKE_MAGNITUDE_HEAVY);
 
             if (player.isAlive() && !player.isInvincible()) {
-                Rectangle slamBox = buildForwardHitbox(falseKnight, FalseKnightConstants.MACE_SLAM_HITBOX_W, FalseKnightConstants.MACE_SLAM_HITBOX_H);
+                Rectangle slamBox = buildMaceSlamHitbox(falseKnight, FalseKnightConstants.MACE_SLAM_HITBOX_W, FalseKnightConstants.MACE_SLAM_HITBOX_H);
                 if (Intersector.overlaps(slamBox, player.getBounds())) {
                     float knockDir = falseKnight.isFacingRight() ? 1f : -1f;
                     playerController.takeDamage(FalseKnightConstants.MACE_SLAM_DAMAGE);
@@ -450,7 +454,7 @@ public class FalseKnightController {
         return state != FalseKnightState.STUN_ENTER && state != FalseKnightState.STUNNED && state != FalseKnightState.STUN_RECOVER && state != FalseKnightState.DEAD;
     }
 
-    private Rectangle buildForwardHitbox(FalseKnight falseKnight, float width, float height) {
+    private Rectangle buildMaceSlamHitbox(FalseKnight falseKnight, float width, float height) {
         Rectangle b = falseKnight.getBounds();
         float x = falseKnight.isFacingRight() ? b.x + b.width : b.x - width;
         return new Rectangle(x, b.y, width, height);

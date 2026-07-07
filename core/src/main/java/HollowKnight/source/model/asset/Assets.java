@@ -21,9 +21,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.EnumMap;
@@ -34,7 +32,9 @@ public class Assets {
     private static EnumMap<AchievementType, Texture> achievementIcons;
     private static Texture idleSheet, runSheet, jumpSheet, doubleJumpSheet, fallSheet;
     private static Texture deathSheet, hurtSheet, focusSheet, healSheet, attackSheet;
-    private static Texture attackHorizontalSheet, attackUpSheet, attackDownSheet;
+    private static Texture attackHorizontalEffectSheet, attackUpEffectSheet, attackDownEffectSheet;
+    private static Texture dashSheet;
+    private static Texture dashEffectSheet;
 
     private static Texture[] healthBarTextures;
     private static Texture filledHealthTex;
@@ -46,7 +46,8 @@ public class Assets {
 
     private static Animation<TextureRegion> breakHealthAnim;
     private static Animation<TextureRegion> healthRefillAnim;
-    private static Animation<TextureRegion> attackHorizontalAnim, attackUpAnim, attackDownAnim;
+    private static Animation<TextureRegion> attackHorizontalEffectAnim, attackUpEffectAnim, attackDownEffectAnim;
+    private static Animation<TextureRegion> dashEffectAnim;
     private static EnumMap<PlayerState, Animation<TextureRegion>> playerAnimations;
 
     private static Texture mossflyShakeSheet;
@@ -143,9 +144,11 @@ public class Assets {
         focusSheet = new Texture(Gdx.files.internal("player/Focus.png"));
         healSheet = new Texture(Gdx.files.internal("player/Heal.png"));
         attackSheet = new Texture(Gdx.files.internal("player/Slash.png"));
-        attackHorizontalSheet = new Texture(Gdx.files.internal("player/effects/SlashEffect.png"));
-        attackUpSheet = new Texture(Gdx.files.internal("player/effects/UpSlashEffect.png"));
-        attackDownSheet = new Texture(Gdx.files.internal("player/effects/DownSlashEffect.png"));
+        attackHorizontalEffectSheet = new Texture(Gdx.files.internal("player/effects/SlashEffect.png"));
+        attackUpEffectSheet = new Texture(Gdx.files.internal("player/effects/UpSlashEffect.png"));
+        attackDownEffectSheet = new Texture(Gdx.files.internal("player/effects/DownSlashEffect.png"));
+        dashSheet = new Texture(Gdx.files.internal("player/Dash.png"));
+        dashEffectSheet = new Texture(Gdx.files.internal("player/effects/Dash Effect.png"));
 
         playerAnimations = new EnumMap<>(PlayerState.class);
         playerAnimations.put(PlayerState.IDLE, makeAnim(1f / AssetConstants.IDLE_FRAMES, idleSheet, AssetConstants.IDLE_FRAMES, Animation.PlayMode.LOOP));
@@ -158,11 +161,13 @@ public class Assets {
         playerAnimations.put(PlayerState.FOCUS, makeAnim(PlayerConstants.FOCUS_DURATION / AssetConstants.FOCUS_FRAMES, focusSheet, AssetConstants.FOCUS_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.HEAL, makeAnim(PlayerConstants.HEAL_ANIM_DUR / AssetConstants.HEAL_FRAMES, healSheet, AssetConstants.HEAL_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.ATTACK, makeAnim(PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_FRAMES, attackSheet, AssetConstants.ATTACK_FRAMES, Animation.PlayMode.NORMAL));
+        playerAnimations.put(PlayerState.DASH, makeAnim(PlayerConstants.DASH_DURATION / AssetConstants.DASH_FRAMES, dashSheet, AssetConstants.DASH_FRAMES, Animation.PlayMode.NORMAL));
 
         float attackFrameDur = PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_EFFECT_FRAMES;
-        attackHorizontalAnim = makeAnim(attackFrameDur, attackHorizontalSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
-        attackUpAnim = makeAnim(attackFrameDur, attackUpSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
-        attackDownAnim = makeAnim(attackFrameDur, attackDownSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+        attackHorizontalEffectAnim = makeAnim(attackFrameDur, attackHorizontalEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+        attackUpEffectAnim = makeAnim(attackFrameDur, attackUpEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+        attackDownEffectAnim = makeAnim(attackFrameDur, attackDownEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+        dashEffectAnim = makeAnim(PlayerConstants.DASH_DURATION / AssetConstants.DASH_EFFECT_FRAMES, dashEffectSheet, AssetConstants.DASH_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
     }
 
     private static void loadMossflyAssets() {
@@ -341,9 +346,10 @@ public class Assets {
 
     public static TiledMap getMap(int index) { return maps[index]; }
     public static EnumMap<PlayerState, Animation<TextureRegion>> getPlayerAnimations() { return playerAnimations; }
-    public static Animation<TextureRegion> getAttackHorizontalAnim() { return attackHorizontalAnim; }
-    public static Animation<TextureRegion> getAttackUpAnim() { return attackUpAnim; }
-    public static Animation<TextureRegion> getAttackDownAnim() { return attackDownAnim; }
+    public static Animation<TextureRegion> getAttackHorizontalEffectAnim() { return attackHorizontalEffectAnim; }
+    public static Animation<TextureRegion> getAttackUpEffectAnim() { return attackUpEffectAnim; }
+    public static Animation<TextureRegion> getAttackDownEffectAnim() { return attackDownEffectAnim; }
+    public static Animation<TextureRegion> getDashEffectAnim() { return dashEffectAnim; }
     public static Texture getSoulOrbEye() { return soulOrbEye; }
     public static Texture getLockIcon() { return lockIcon; }
     public static Texture getAchievementIcon(AchievementType a) { return achievementIcons.get(a); }
@@ -402,10 +408,12 @@ public class Assets {
         disposeIfNotNull(jumpSheet); disposeIfNotNull(fallSheet);
         disposeIfNotNull(deathSheet); disposeIfNotNull(hurtSheet);
         disposeIfNotNull(focusSheet); disposeIfNotNull(healSheet);
-        disposeIfNotNull(attackHorizontalSheet);
-        disposeIfNotNull(attackUpSheet);
-        disposeIfNotNull(attackDownSheet);
+        disposeIfNotNull(attackHorizontalEffectSheet);
+        disposeIfNotNull(attackUpEffectSheet);
+        disposeIfNotNull(attackDownEffectSheet);
         disposeIfNotNull(attackSheet);
+        disposeIfNotNull(dashSheet);
+        disposeIfNotNull(dashEffectSheet);
 
         if (healthBarTextures != null)
             for (Texture t : healthBarTextures) disposeIfNotNull(t);

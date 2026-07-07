@@ -10,5 +10,6 @@ public enum PlayerState {
     HURT,
     FOCUS,
     HEAL,
+    DASH,
     DEAD
 }

@@ -81,6 +81,7 @@ public class GameController {
         handleFocusInput(delta);
         if (!player.isFocusing()) {
             handleMovementInput();
+            handleDashInput();
             handleAttackInput();
             playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController);
         }
@@ -206,6 +207,12 @@ public class GameController {
             playerController.cancelFocus();
         }
     }
+
+    private void handleDashInput() {
+        if (Gdx.input.isKeyJustPressed(Keys.C))
+            playerController.dash();
+    }
+
 
     private void handleCollisions() {
         MapLayer layer = currentMap.getLayers().get("logic");

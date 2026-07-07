@@ -46,7 +46,20 @@ public class PlayerController {
         if (player.getKnockbackTimer() > 0)
             player.setKnockbackTimer(player.getKnockbackTimer() - delta);
 
-        player.setVelocityY(player.getVelocity().y + PlayerConstants.GRAVITY * delta);
+        if (player.getDashTimer() > 0) {
+            player.setDashTimer(player.getDashTimer() - delta);
+            if (player.getDashTimer() <= 0)
+                player.setDashing(false);
+        }
+        if (player.getDashCooldownTimer() > 0)
+            player.setDashCooldownTimer(player.getDashCooldownTimer() - delta);
+
+        if (player.isDashing()) {
+            player.setVelocityY(0f);
+        }
+        else {
+            player.setVelocityY(player.getVelocity().y + PlayerConstants.GRAVITY * delta);
+        }
 
         float currentX = player.getPosition().x;
         float currentY = player.getPosition().y;
@@ -58,6 +71,9 @@ public class PlayerController {
 
         if (player.getKnockbackTimer() > 0) {
             player.setState(PlayerState.HURT);
+        }
+        else if (player.isDashing()) {
+            player.setState(PlayerState.DASH);
         }
         else if (player.isAttacking()) {
             player.setState(PlayerState.ATTACK);
@@ -90,24 +106,24 @@ public class PlayerController {
     }
 
     public void moveLeft() {
-        if (player.isFocusing() || player.isKnockedBack()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
         player.setVelocityX(-PlayerConstants.SPEED);
         player.setFacingRight(false);
     }
 
     public void moveRight() {
-        if (player.isFocusing() || player.isKnockedBack()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
         player.setVelocityX(PlayerConstants.SPEED);
         player.setFacingRight(true);
     }
 
     public void stopHorizontal() {
-        if (player.isKnockedBack()) return;
+        if (player.isKnockedBack() || player.isDashing()) return;
         player.setVelocityX(0f);
     }
 
     public void jump() {
-        if (player.isFocusing() || player.isKnockedBack()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
 
         if (player.isOnGround()) {
             player.setVelocityY(PlayerConstants.JUMP_FORCE);
@@ -117,6 +133,27 @@ public class PlayerController {
             player.setVelocityY(PlayerConstants.JUMP_FORCE * 0.92f);
             player.consumeDoubleJump();
         }
+    }
+
+    public void dash() {
+        if (!player.isAlive()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+        if (player.getDashCountInAir() >= PlayerConstants.MAX_DASH_IN_AIR) return;
+        if (player.getDashCooldownTimer() > 0) return;
+
+        float dir = player.isFacingRight() ? 1f : -1f;
+
+        player.setDashing(true);
+        player.setDashTimer(PlayerConstants.DASH_DURATION);
+        player.setDashCooldownTimer(PlayerConstants.DASH_COOLDOWN);
+
+        player.setVelocityX(dir * PlayerConstants.DASH_SPEED);
+        player.setVelocityY(0f);
+
+        player.setDashCountInAir(player.getDashCountInAir() + 1);
+
+        player.setAttacking(false);
+        player.setAttackTimer(0f);
     }
 
     public void takeDamage(int amount) {
@@ -129,7 +166,7 @@ public class PlayerController {
     }
 
     public void startFocus() {
-        if (!player.isOnGround() || player.isInvincible() || player.isAttacking())
+        if (!player.isOnGround() || player.isInvincible() || player.isAttacking() || player.isDashing())
             return;
         if (player.getHealAnimTimer() > 0)
             return;
@@ -168,6 +205,8 @@ public class PlayerController {
         player.setKnockbackTimer(PlayerConstants.KNOCKBACK_DURATION);
         player.setAttacking(false);
         player.setAttackTimer(0f);
+        player.setDashing(false);
+        player.setDashTimer(0f);
         player.setState(PlayerState.HURT);
     }
 
@@ -176,7 +215,7 @@ public class PlayerController {
     }
 
     public void attack(AttackDirection dir) {
-        if (player.isFocusing() || player.isKnockedBack()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
         if (player.isAttacking()) return;
 
         player.setAttacking(true);

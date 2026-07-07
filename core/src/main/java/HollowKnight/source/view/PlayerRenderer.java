@@ -36,6 +36,22 @@ public class PlayerRenderer {
             batch.setColor(1f, 1f, 1f, alpha);
         }
 
+        float x = player.getPosition().x;
+        float y = player.getPosition().y;
+        boolean shouldFlip = player.isFacingRight();
+
+        if (player.isDashing()) {
+            Animation<TextureRegion> dashEffectAnim = Assets.getDashEffectAnim();
+            if (dashEffectAnim != null) {
+                float dashStateTime = PlayerConstants.DASH_DURATION - player.getDashTimer();
+                TextureRegion dashFrame = dashEffectAnim.getKeyFrame(dashStateTime, false);
+                if (dashFrame.isFlipX() == shouldFlip) {
+                    dashFrame.flip(true, false);
+                }
+                batch.draw(dashFrame, shouldFlip ? x - 2f : x + 77f , y + 1f , PlayerConstants.WIDTH - 80f, PlayerConstants.HEIGHT - 25f);
+            }
+        }
+
         Animation<TextureRegion> playerAnim = animations.get(currentState);
 
         boolean doesLoop = !(currentState == PlayerState.ATTACK
@@ -45,12 +61,8 @@ public class PlayerRenderer {
 
         TextureRegion frame = playerAnim.getKeyFrame(stateTime, doesLoop);
 
-        boolean shouldFlip = player.isFacingRight();
         if (frame.isFlipX() != shouldFlip)
             frame.flip(true, false);
-
-        float x = player.getPosition().x;
-        float y = player.getPosition().y;
 
         batch.draw(frame, x, y, PlayerConstants.WIDTH, PlayerConstants.HEIGHT);
 
@@ -61,15 +73,15 @@ public class PlayerRenderer {
 
             switch (player.getAttackDirection()) {
                 case UP:
-                    attackAnim = Assets.getAttackUpAnim();
+                    attackAnim = Assets.getAttackUpEffectAnim();
                     break;
                 case DOWN:
-                    attackAnim = Assets.getAttackDownAnim();
+                    attackAnim = Assets.getAttackDownEffectAnim();
                     break;
                 case LEFT:
                 case RIGHT:
                 default:
-                    attackAnim = Assets.getAttackHorizontalAnim();
+                    attackAnim = Assets.getAttackHorizontalEffectAnim();
                     break;
             }
 
@@ -80,9 +92,9 @@ public class PlayerRenderer {
                     slashFrame.flip(true, false);
                 }
 
-                if (attackAnim.equals(Assets.getAttackUpAnim()))
+                if (attackAnim.equals(Assets.getAttackUpEffectAnim()))
                     batch.draw(slashFrame, x+56 , y+30 , PlayerConstants.WIDTH * 0.45f, PlayerConstants.HEIGHT * 0.75f);
-                else if (attackAnim.equals(Assets.getAttackDownAnim()))
+                else if (attackAnim.equals(Assets.getAttackDownEffectAnim()))
                     batch.draw(slashFrame, x+56 , y-32 , PlayerConstants.WIDTH * 0.4f, PlayerConstants.HEIGHT * 0.7f);
                 else
                     batch.draw(slashFrame, x, y, PlayerConstants.WIDTH, PlayerConstants.HEIGHT);
