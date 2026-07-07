@@ -56,7 +56,7 @@ public class FalseKnightConstants {
     public static final float SHOCKWAVE_SLAM_WEIGHT = 40f;
 
     public static final float FACING_DEADZONE = 20f;
-    public static final float STUN_DURATION = 3.5f;
+    public static final float STUN_DURATION = 2.5f;
     public static final float SHAKE_DURATION_LAND = 0.22f;
     public static final float SHAKE_MAGNITUDE_LAND = 6f;
     public static final float SHAKE_DURATION_HEAVY = 0.35f;

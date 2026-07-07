@@ -23,9 +23,9 @@
                 2
             ],
             "scale": 0.75,
-            "selectedLayer": 11,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 787.3333333333333,
+                "x": 616.6666666666667,
                 "y": 381.99999999999994
             }
         },
@@ -191,11 +191,11 @@
             "expandedObjectLayers": [
                 18
             ],
-            "scale": 1.5,
+            "scale": 0.33,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 5237,
-                "y": 2187
+                "x": 2104.5454545454545,
+                "y": 1453.030303030303
             }
         },
         "CrystalPeak.tmx#floor": {
@@ -206,11 +206,11 @@
             "expandedObjectLayers": [
                 12
             ],
-            "scale": 0.75,
-            "selectedLayer": 8,
+            "scale": 2,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 1651.3333333333335,
-                "y": 488.66666666666674
+                "x": 925.75,
+                "y": 929.75
             }
         },
         "Greenpath-room2.tmx": {
@@ -220,7 +220,7 @@
             "scale": 1.5,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 696.3333333333333,
+                "x": 424.99999999999994,
                 "y": 408.33333333333337
             }
         },
@@ -493,23 +493,21 @@
     "map.tileWidth": 8,
     "map.width": 300,
     "openFiles": [
-        "BossRoom.tmx",
-        "CrystalPeak.tmx",
-        "Greenpath-room2.tmx"
+        "BossRoom.tmx"
     ],
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "BossRoom.tmx",
+        "background_boss_room.tsx",
         "Greenpath-room2.tmx",
         "CrystalPeak.tmx",
-        "BossRoom.tmx",
         "background_crystal_peak3.tsx",
         "crystal_spikes3.tsx",
         "wall2.tsx",
         "wall.tsx",
         "platform.tsx",
         "Greenpath-room1.tmx",
-        "background_boss_room.tsx",
         "flower.tsx",
         "background_crystal_peak2.tsx"
     ],

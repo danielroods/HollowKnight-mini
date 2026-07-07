@@ -1569,7 +1569,7 @@
 </data>
  </layer>
  <objectgroup id="12" name="logic">
-  <object id="1" name="game_start_spawn" x="287.333" y="1018.5">
+  <object id="1" name="game_start_spawn" x="278.666" y="1042.5">
    <point/>
   </object>
   <object id="2" name="spawn_from_greenpath_room2" x="2322" y="189.667">
@@ -1730,7 +1730,7 @@
   <object id="156" name="platform" x="1518" y="288.667" width="104.333" height="21"/>
   <object id="158" name="platform" x="1508" y="230.333" width="99" height="56.6667"/>
   <object id="159" name="platform" x="1520" y="311" width="117.333" height="8"/>
-  <object id="160" name="mossfly_spawn" x="813.689" y="1065.7">
+  <object id="160" name="mossfly_spawn" x="986.689" y="1065.7">
    <point/>
   </object>
   <object id="161" name="mossfly_spawn" x="745.324" y="682.216">
@@ -1748,25 +1748,19 @@
   <object id="167" name="mossfly_spawn" x="1957.65" y="585.057">
    <point/>
   </object>
-  <object id="170" name="husk_hornhead_spawn" x="1239.5" y="374.5">
+  <object id="170" name="husk_hornhead_spawn" x="1834.83" y="1056">
    <point/>
   </object>
-  <object id="171" name="husk_hornhead_spawn" x="1106" y="374.333">
+  <object id="171" name="husk_hornhead_spawn" x="1088.67" y="375">
    <point/>
   </object>
-  <object id="172" name="husk_hornhead_spawn" x="1944" y="211">
+  <object id="172" name="husk_hornhead_spawn" x="1944" y="213.667">
    <point/>
   </object>
-  <object id="173" name="husk_hornhead_spawn" x="1858.5" y="1055.5">
+  <object id="173" name="husk_hornhead_spawn" x="2251.17" y="1052.83">
    <point/>
   </object>
-  <object id="174" name="crystal_guardian_spawn" x="2065.67" y="200">
-   <point/>
-  </object>
-  <object id="175" name="crystal_guardian_spawn" x="2074" y="1041.5">
-   <point/>
-  </object>
-  <object id="176" name="crystal_crawler_spawn" x="695" y="1042">
+  <object id="174" name="crystal_guardian_spawn" x="2176.34" y="206.667">
    <point/>
   </object>
  </objectgroup>

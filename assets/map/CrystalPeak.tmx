@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="700" height="300" tilewidth="8" tileheight="8" infinite="0" nextlayerid="19" nextobjectid="76">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="700" height="300" tilewidth="8" tileheight="8" infinite="0" nextlayerid="19" nextobjectid="87">
  <tileset firstgid="1" name="floor" tilewidth="8" tileheight="8" tilecount="297" columns="33">
   <image source="../map_images/Crystal Peak/mines_metal_thin_floors_0004_a.png" width="270" height="76"/>
  </tileset>
@@ -4940,7 +4940,7 @@
   <object id="39" name="ceiling" x="21.5" y="46" width="4525" height="54"/>
   <object id="40" name="ceiling" x="4546.5" y="1495.67" width="919" height="54"/>
   <object id="41" name="door_to_boss_room" x="5002.5" y="2379.67" width="462" height="19.3333"/>
-  <object id="42" name="spawn_from_greenpath_room2" x="87.1667" y="441.167">
+  <object id="42" name="spawn_from_greenpath_room2" x="85.1667" y="449.834">
    <point/>
   </object>
   <object id="45" name="spikes" x="526.667" y="234">
@@ -5029,6 +5029,36 @@
   </object>
   <object id="75" name="spikes" x="5001.33" y="2208">
    <polygon points="0,0 30,-13.3334 73.3333,17.5 72.6667,170 2,168.334"/>
+  </object>
+  <object id="76" name="crystal_crawler_spawn" x="576" y="451.333">
+   <point/>
+  </object>
+  <object id="77" name="crystal_crawler_spawn" x="402.667" y="454.667">
+   <point/>
+  </object>
+  <object id="78" name="crystal_crawler_spawn" x="2036" y="1842">
+   <point/>
+  </object>
+  <object id="79" name="crystal_crawler_spawn" x="2620" y="1422">
+   <point/>
+  </object>
+  <object id="80" name="crystal_crawler_spawn" x="2618" y="1093">
+   <point/>
+  </object>
+  <object id="82" name="crystal_guardian_spawn" x="1463" y="2110">
+   <point/>
+  </object>
+  <object id="83" name="crystal_guardian_spawn" x="2912" y="1413">
+   <point/>
+  </object>
+  <object id="84" name="crystal_guardian_spawn" x="4671" y="2177">
+   <point/>
+  </object>
+  <object id="85" name="crystal_crawler_spawn" x="4444" y="2194">
+   <point/>
+  </object>
+  <object id="86" name="crystal_crawler_spawn" x="4228" y="2194">
+   <point/>
   </object>
  </objectgroup>
 </map>
