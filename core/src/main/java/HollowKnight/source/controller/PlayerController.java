@@ -54,6 +54,9 @@ public class PlayerController {
         if (player.getDashCooldownTimer() > 0)
             player.setDashCooldownTimer(player.getDashCooldownTimer() - delta);
 
+        if (player.getWallJumpLockTimer() > 0) {
+            player.setWallJumpLockTimer(player.getWallJumpLockTimer() - delta);
+        }
         if (player.isDashing()) {
             player.setVelocityY(0f);
         }
@@ -112,24 +115,29 @@ public class PlayerController {
     }
 
     public void moveLeft() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
         player.setVelocityX(-PlayerConstants.SPEED);
         player.setFacingRight(false);
     }
 
     public void moveRight() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
         player.setVelocityX(PlayerConstants.SPEED);
         player.setFacingRight(true);
     }
 
     public void stopHorizontal() {
-        if (player.isKnockedBack() || player.isDashing()) return;
+        if (player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
         player.setVelocityX(0f);
     }
 
     public void jump() {
         if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+
+        if (player.isWallSliding()) {
+            wallJump();
+            return;
+        }
 
         if (player.isOnGround()) {
             player.setVelocityY(PlayerConstants.JUMP_FORCE);
@@ -139,6 +147,19 @@ public class PlayerController {
             player.setVelocityY(PlayerConstants.JUMP_FORCE * 0.92f);
             player.consumeDoubleJump();
         }
+    }
+
+    private void wallJump() {
+        float awayDir = player.isFacingRight() ? -1f : 1f;
+
+        player.setVelocityX(awayDir * PlayerConstants.WALL_JUMP_SPEED_X);
+        player.setVelocityY(PlayerConstants.JUMP_FORCE);
+        player.setFacingRight(awayDir > 0f);
+
+        player.setWallSliding(false);
+        player.setOnGround(false);
+        player.setCanDoubleJump(true);
+        player.setWallJumpLockTimer(PlayerConstants.WALL_JUMP_LOCK_DURATION);
     }
 
     public void dash() {
@@ -164,7 +185,7 @@ public class PlayerController {
     }
 
     public void updateWallSlide(boolean leftHeld, boolean rightHeld, boolean touchingWallLeft, boolean touchingWallRight) {
-        if (player.isOnGround() || player.isKnockedBack() || player.isFocusing() || player.isDashing()) {
+        if (player.isOnGround() || player.isKnockedBack() || player.isFocusing() || player.isDashing() || player.isWallJumpLocked()) {
             player.setWallSliding(false);
             return;
         }
@@ -175,10 +196,12 @@ public class PlayerController {
         if (pressingIntoLeftWall) {
             player.setWallSliding(true);
             player.setFacingRight(false);
+            player.setCanDoubleJump(true);
         }
         else if (pressingIntoRightWall) {
             player.setWallSliding(true);
             player.setFacingRight(true);
+            player.setCanDoubleJump(true);
         }
         else {
             player.setWallSliding(false);

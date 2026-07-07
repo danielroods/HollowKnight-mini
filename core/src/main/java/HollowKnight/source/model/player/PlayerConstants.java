@@ -25,4 +25,6 @@ public class PlayerConstants {
     public static final float DASH_COOLDOWN = 0.50f;
     public static final int MAX_DASH_IN_AIR = 2;
     public static final float WALL_SLIDE_SPEED = -120f;
+    public static final float WALL_JUMP_SPEED_X = 250f;
+    public static final float WALL_JUMP_LOCK_DURATION = 0.19f;
 }
