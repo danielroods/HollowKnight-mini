@@ -6,7 +6,11 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
+import HollowKnight.source.data.GameData;
+import HollowKnight.source.data.SaveLoadManager;
+import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.false_knight.FalseKnight;
@@ -32,7 +36,9 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GameController {
@@ -50,6 +56,8 @@ public class GameController {
 
     private TiledMap currentMap;
     private int currentMapIndex = 0;
+
+    private int activeSlotIndex = -1;
 
     private GameController(TiledMap map, int mapIndex) {
         this.currentMap = map;
@@ -85,6 +93,7 @@ public class GameController {
             return;
         }
 
+        handleSaveInput();
         handleInventoryMenuInput();
 
         handleZoteInteractionInput();
@@ -137,6 +146,47 @@ public class GameController {
             respawnPlayer();
     }
 
+    private void handleSaveInput() {
+        if (Gdx.input.isKeyJustPressed(Keys.S)) {
+            saveToActiveSlot();
+        }
+    }
+
+    public GameData captureGameData() {
+        GameData data = new GameData();
+
+        data.setMasksCount(player.getHealth());
+        data.setSoulsCount(player.getSoul());
+        data.setMapId(Maps.fromIndex(currentMapIndex).getId());
+        data.setPlayerX(player.getPosition().x);
+        data.setPlayerY(player.getPosition().y);
+        data.setFalseKnightDefeated(BossProgressManager.isDefeated(BossProgressManager.FALSE_KNIGHT));
+        data.setUnlockedAchievementNames(AchievementManager.getUnlockedNames());
+        data.setSavedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+
+        return data;
+    }
+
+    public void applyGameData(GameData data) {
+        if (data == null) return;
+
+        player.setPosition(data.getPlayerX(), data.getPlayerY());
+        player.setHealth(data.getMasksCount());
+        player.setSoul(data.getSoulsCount());
+        playerController.updateLastSafePosition();
+
+        BossProgressManager.setDefeated(BossProgressManager.FALSE_KNIGHT, data.isFalseKnightDefeated());
+        AchievementManager.loadUnlocked(data.getUnlockedAchievementNames());
+    }
+
+    public void saveToActiveSlot() {
+        if (activeSlotIndex < 0) return;
+        SaveLoadManager.save(activeSlotIndex, captureGameData());
+    }
+
+    public void setActiveSlotIndex(int activeSlotIndex) { this.activeSlotIndex = activeSlotIndex; }
+    public int getActiveSlotIndex() { return activeSlotIndex; }
+
     private void handleZoteInteractionInput() {
         if (zoteController == null) return;
 
@@ -177,7 +227,9 @@ public class GameController {
                     crystalCrawlerSpawns.add(new CrystalCrawler(pt.getPoint().x, pt.getPoint().y));
                 }
                 else if (name.equals("false_knight_spawn")) {
-                    falseKnightSpawns.add(new FalseKnight(pt.getPoint().x, pt.getPoint().y));
+                    if (!BossProgressManager.isDefeated(BossProgressManager.FALSE_KNIGHT)) {
+                        falseKnightSpawns.add(new FalseKnight(pt.getPoint().x, pt.getPoint().y));
+                    }
                 }
                 else if (name.equals("zote_spawn")) {
                     zoteSpawns.add(new Zote(pt.getPoint().x, pt.getPoint().y));

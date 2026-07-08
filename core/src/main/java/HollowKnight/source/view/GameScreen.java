@@ -9,8 +9,12 @@ import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.data.GameData;
 import HollowKnight.source.game_utils.CameraShake;
+import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
+import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.view.enemies.CrystalCrawlerRenderer;
@@ -22,7 +26,6 @@ import HollowKnight.source.view.menus.InventoryScreen;
 import HollowKnight.source.view.npc.ZoteDialogueRenderer;
 import HollowKnight.source.view.npc.ZoteRenderer;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -68,6 +71,13 @@ public class GameScreen implements Screen {
 
     // for debug
     private ShapeRenderer shapeRenderer;
+    private final int slotIndex;
+    private final GameData dataToLoad;
+
+    public GameScreen(int slotIndex, GameData dataToLoad) {
+        this.slotIndex = slotIndex;
+        this.dataToLoad = dataToLoad;
+    }
 
     @Override
     public void show() {
@@ -88,8 +98,29 @@ public class GameScreen implements Screen {
         gameController = GameController.getInstance();
         gameController.setPlayer(Player.getInstance());
         gameController.setPlayerController(PlayerController.getInstance());
+        gameController.setActiveSlotIndex(slotIndex);
 
-        loadMap(0);
+        AchievementManager.reset();
+        BossProgressManager.reset();
+
+        int startMapIndex = 0;
+        if (dataToLoad != null) {
+            Maps targetMap = Maps.fromId(dataToLoad.getMapId());
+            if (targetMap != null) {
+                startMapIndex = targetMap.getIndex();
+            }
+        }
+
+        loadMap(startMapIndex);
+
+        if (dataToLoad != null) {
+            gameController.applyGameData(dataToLoad);
+
+            float targetX = dataToLoad.getPlayerX() + PlayerConstants.WIDTH / 2f;
+            float targetY = dataToLoad.getPlayerY() + PlayerConstants.HEIGHT / 2f;
+            worldCamera.position.set(targetX, targetY, 0f);
+            worldCamera.update();
+        }
 
         player = Player.getInstance();
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());

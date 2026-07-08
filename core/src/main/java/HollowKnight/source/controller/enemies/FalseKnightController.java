@@ -2,6 +2,9 @@ package HollowKnight.source.controller.enemies;
 
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.game_utils.CameraShake;
+import HollowKnight.source.model.achievement.AchievementManager;
+import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightConstants;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightState;
@@ -435,6 +438,9 @@ public class FalseKnightController {
         if (falseKnight.getHealth() <= 0) {
             falseKnight.setShockwaveActive(false);
             enterState(falseKnight, FalseKnightState.DEAD);
+
+            BossProgressManager.markDefeated(BossProgressManager.FALSE_KNIGHT);
+            AchievementManager.unlock(AchievementType.DEFEAT_FALSE_KNIGHT);
         }
     }
 

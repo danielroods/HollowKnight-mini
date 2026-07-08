@@ -1,6 +1,7 @@
 package HollowKnight.source.controller;
 
 import HollowKnight.source.Main;
+import HollowKnight.source.data.GameData;
 import HollowKnight.source.view.menus.MenuBackground;
 import HollowKnight.source.view.menus.MenuParticleLayer;
 import HollowKnight.source.view.GameScreen;
@@ -37,8 +38,8 @@ public class MenuController {
         game.setScreen(menuScreen);
     }
 
-    public static void setGameScreen() {
-        gameScreen = new GameScreen();
+    public static void setGameScreen(int slotIndex, GameData dataToLoad) {
+        gameScreen = new GameScreen(slotIndex, dataToLoad);
         if (currentMenuScreen != null) {
             currentMenuScreen.dispose();
             currentMenuScreen = null;
