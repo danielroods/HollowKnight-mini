@@ -5,12 +5,14 @@ import HollowKnight.source.controller.enemies.CrystalGuardianController;
 import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
+import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
+import HollowKnight.source.model.npc.zote.Zote;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
@@ -41,6 +43,7 @@ public class GameController {
     private CrystalGuardianController crystalGuardianController;
     private CrystalCrawlerController crystalCrawlerController;
     private FalseKnightController falseKnightController;
+    private ZoteController zoteController;
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -78,13 +81,16 @@ public class GameController {
             return;
         }
 
+        handleZoteInteractionInput();
+        boolean zoteDialogueOpen = zoteController != null && zoteController.isDialogueOpen();
+
         handleFocusInput(delta);
-        if (!player.isFocusing()) {
+        if (!player.isFocusing() && !zoteDialogueOpen) {
             handleMovementInput();
             handleWallSlideInput();
             handleDashInput();
             handleAttackInput();
-            playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController);
+            playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController, zoteController);
         }
         else {
             playerController.stopHorizontal();
@@ -117,8 +123,23 @@ public class GameController {
             falseKnightController.update(delta, player, logicLayer);
         }
 
+        if (zoteController != null) {
+            zoteController.update(delta, player, logicLayer);
+        }
+
         if (player.getPosition().y < -300f)
             respawnPlayer();
+    }
+
+    private void handleZoteInteractionInput() {
+        if (zoteController == null) return;
+
+        if (Gdx.input.isKeyJustPressed(Keys.E)) {
+            zoteController.tryInteract(player);
+        }
+        if (zoteController.isDialogueOpen() && Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+            zoteController.controlDialogue();
+        }
     }
 
     public void loadEnemiesBySpawnPoints() {
@@ -127,6 +148,7 @@ public class GameController {
         List<CrystalGuardian> crystalGuardianSpawns = new ArrayList<>();
         List<CrystalCrawler> crystalCrawlerSpawns = new ArrayList<>();
         List<FalseKnight> falseKnightSpawns = new ArrayList<>();
+        List<Zote> zoteSpawns = new ArrayList<>();
 
         MapLayer layer = currentMap.getLayers().get("logic");
         if (layer != null) {
@@ -151,6 +173,9 @@ public class GameController {
                 else if (name.equals("false_knight_spawn")) {
                     falseKnightSpawns.add(new FalseKnight(pt.getPoint().x, pt.getPoint().y));
                 }
+                else if (name.equals("zote_spawn")) {
+                    zoteSpawns.add(new Zote(pt.getPoint().x, pt.getPoint().y));
+                }
             }
         }
 
@@ -159,6 +184,7 @@ public class GameController {
         crystalGuardianController = new CrystalGuardianController(crystalGuardianSpawns);
         crystalCrawlerController = new CrystalCrawlerController(crystalCrawlerSpawns);
         falseKnightController = new FalseKnightController(falseKnightSpawns);
+        zoteController = new ZoteController(zoteSpawns);
     }
 
     private void handleMovementInput() {
@@ -407,4 +433,5 @@ public class GameController {
     public CrystalGuardianController getCrystalGuardianController() { return crystalGuardianController; }
     public CrystalCrawlerController getCrystalCrawlerController() { return crystalCrawlerController; }
     public FalseKnightController getFalseKnightController() { return falseKnightController; }
+    public ZoteController getZoteController() { return zoteController; }
 }

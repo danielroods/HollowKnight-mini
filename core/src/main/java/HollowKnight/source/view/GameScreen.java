@@ -7,10 +7,10 @@ import HollowKnight.source.controller.enemies.CrystalGuardianController;
 import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
+import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.game_utils.CameraShake;
 import HollowKnight.source.model.asset.Assets;
-import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.view.enemies.CrystalCrawlerRenderer;
@@ -18,10 +18,10 @@ import HollowKnight.source.view.enemies.CrystalGuardianRenderer;
 import HollowKnight.source.view.enemies.FalseKnightRenderer;
 import HollowKnight.source.view.enemies.HuskHornheadRenderer;
 import HollowKnight.source.view.enemies.MossflyRenderer;
+import HollowKnight.source.view.npc.ZoteDialogueRenderer;
+import HollowKnight.source.view.npc.ZoteRenderer;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,7 +29,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -61,6 +60,8 @@ public class GameScreen implements Screen {
     private CrystalGuardianRenderer crystalGuardianRenderer;
     private CrystalCrawlerRenderer crystalCrawlerRenderer;
     private FalseKnightRenderer falseKnightRenderer;
+    private ZoteRenderer zoteRenderer;
+    private ZoteDialogueRenderer zoteDialogueRenderer;
 
     // for debug
     private ShapeRenderer shapeRenderer;
@@ -95,6 +96,8 @@ public class GameScreen implements Screen {
         crystalGuardianRenderer = new CrystalGuardianRenderer();
         crystalCrawlerRenderer = new CrystalCrawlerRenderer();
         falseKnightRenderer = new FalseKnightRenderer();
+        zoteRenderer = new ZoteRenderer();
+        zoteDialogueRenderer = new ZoteDialogueRenderer();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -112,6 +115,7 @@ public class GameScreen implements Screen {
 
         renderWorld(delta);
         renderHUD();
+        zoteDialogueRenderer.render(batch, uiCamera, gameController.getZoteController());
 
         BrightnessRenderer.render(batch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -187,6 +191,7 @@ public class GameScreen implements Screen {
                 renderCrystalGuardian();
                 renderCrystalCrawler();
                 renderFalseKnight();
+                renderZote();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -241,6 +246,13 @@ public class GameScreen implements Screen {
         FalseKnightController falseKnightController = gameController.getFalseKnightController();
         if (falseKnightController != null) {
             falseKnightRenderer.render(batch, falseKnightController.getFalseKnightList());
+        }
+    }
+
+    private void renderZote() {
+        ZoteController zoteController = gameController.getZoteController();
+        if (zoteController != null) {
+            zoteRenderer.render(batch, zoteController.getZoteList(), zoteController, player);
         }
     }
 
@@ -329,6 +341,7 @@ public class GameScreen implements Screen {
     @Override public void dispose() {
         if (mapRenderer != null) mapRenderer.dispose();
         if (hudRenderer != null) hudRenderer.dispose();
+        if (zoteDialogueRenderer != null) zoteDialogueRenderer.dispose();
     }
 
     @Override public void pause() {}

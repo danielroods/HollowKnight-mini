@@ -1,5 +1,5 @@
 {
-    "activeFile": "",
+    "activeFile": "CrystalPeak.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -191,11 +191,11 @@
             "expandedObjectLayers": [
                 18
             ],
-            "scale": 0.33,
+            "scale": 1,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 2104.5454545454545,
-                "y": 1453.030303030303
+                "x": 3915.5,
+                "y": 938.5
             }
         },
         "CrystalPeak.tmx#floor": {
@@ -493,6 +493,8 @@
     "map.tileWidth": 8,
     "map.width": 300,
     "openFiles": [
+        "CrystalPeak.tmx",
+        "Greenpath-room1.tmx"
     ],
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",

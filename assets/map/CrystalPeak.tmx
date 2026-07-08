@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="700" height="300" tilewidth="8" tileheight="8" infinite="0" nextlayerid="19" nextobjectid="87">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="700" height="300" tilewidth="8" tileheight="8" infinite="0" nextlayerid="19" nextobjectid="88">
  <tileset firstgid="1" name="floor" tilewidth="8" tileheight="8" tilecount="297" columns="33">
   <image source="../map_images/Crystal Peak/mines_metal_thin_floors_0004_a.png" width="270" height="76"/>
  </tileset>
@@ -5003,8 +5003,8 @@
   <object id="64" name="spikes" x="3344.5" y="967">
    <polygon points="0,0 61,23.5 97,-12 139.5,57 83,113.5 -27.5,112.5"/>
   </object>
-  <object id="65" name="spikes" x="4367.33" y="1003.33">
-   <polygon points="-9.33333,-0.666667 -54,-30.6667 -70.3333,-148.333 -134.667,-240.667 -290.182,-617.758 -11.3333,-617"/>
+  <object id="65" name="spikes" x="4367.33" y="1003.49">
+   <polygon points="-9.33333,-0.825477 -54,-37.9719 -70.3333,-183.668 -134.667,-297.997 -361.182,-765.917 -11.3333,-763.978"/>
   </object>
   <object id="66" name="spikes" x="4016.67" y="1032">
    <polygon points="0,0 15.3333,-14 59.3333,-12.6667 142,26 82,234.667 30,243.333 30.6667,-1.33333"/>
@@ -5058,6 +5058,9 @@
    <point/>
   </object>
   <object id="86" name="crystal_crawler_spawn" x="4228" y="2194">
+   <point/>
+  </object>
+  <object id="87" name="zote_spawn" x="3856" y="1001">
    <point/>
   </object>
  </objectgroup>

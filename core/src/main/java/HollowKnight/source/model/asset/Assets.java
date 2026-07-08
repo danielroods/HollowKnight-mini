@@ -9,7 +9,9 @@ import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
+import HollowKnight.source.model.npc.zote.ZoteConstants;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -115,6 +117,16 @@ public class Assets {
     private static Animation<TextureRegion> falseKnightStunRecoverAnim;
     private static Animation<TextureRegion> falseKnightShockwaveAnim;
 
+    private static Texture zoteIdleSheet;
+    private static Texture zoteTalkSheet;
+    private static Texture zoteAttackSheet;
+
+    private static Animation<TextureRegion> zoteIdleAnim;
+    private static Animation<TextureRegion> zoteTalkAnim;
+    private static Animation<TextureRegion> zoteAttackAnim;
+
+    private static Sound[] zoteVoiceSfx;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -131,6 +143,7 @@ public class Assets {
         loadCrystalGuardianAssets();
         loadCrystalCrawlerAssets();
         loadFalseKnightAssets();
+        loadZoteAssets();
         loadMaps();
     }
 
@@ -245,6 +258,24 @@ public class Assets {
         falseKnightStunnedAnim = makeAnim(FalseKnightConstants.STUNNED_FRAME_DUR, falseKnightStunnedSheet, FalseKnightConstants.STUNNED_FRAMES, Animation.PlayMode.LOOP);
         falseKnightStunRecoverAnim = makeAnim(FalseKnightConstants.STUN_RECOVER_FRAME_DUR, falseKnightStunRecoverSheet, FalseKnightConstants.STUN_RECOVER_FRAMES, Animation.PlayMode.NORMAL);
         falseKnightShockwaveAnim = makeAnim(FalseKnightConstants.SHOCKWAVE_EFFECT_FRAME_DUR, falseKnightShockwaveSheet, FalseKnightConstants.SHOCKWAVE_EFFECT_FRAMES, Animation.PlayMode.LOOP);
+    }
+
+    private static void loadZoteAssets() {
+        zoteIdleSheet = new Texture(Gdx.files.internal("zote/Idle.png"));
+        zoteTalkSheet = new Texture(Gdx.files.internal("zote/Talk.png"));
+        zoteAttackSheet = new Texture(Gdx.files.internal("zote/Attack.png"));
+
+        zoteIdleAnim = makeAnim(ZoteConstants.IDLE_FRAME_DUR, zoteIdleSheet, ZoteConstants.IDLE_FRAMES, Animation.PlayMode.LOOP);
+        zoteTalkAnim = makeAnim(ZoteConstants.TALK_FRAME_DUR, zoteTalkSheet, ZoteConstants.TALK_FRAMES, Animation.PlayMode.LOOP);
+        zoteAttackAnim = makeAnim(ZoteConstants.ATTACK_FRAME_DUR, zoteAttackSheet, ZoteConstants.ATTACK_FRAMES, Animation.PlayMode.LOOP);
+
+        zoteVoiceSfx = new Sound[] {
+            Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_01.wav")),
+            Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_02.wav")),
+            Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_03.wav")),
+            Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_04.wav")),
+            Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_05.wav")),
+        };
     }
 
     private static void loadHUDAssets() {
@@ -402,6 +433,11 @@ public class Assets {
     public static Animation<TextureRegion> getFalseKnightStunRecoverAnim() { return falseKnightStunRecoverAnim; }
     public static Animation<TextureRegion> getFalseKnightShockwaveAnim() { return falseKnightShockwaveAnim; }
 
+    public static Animation<TextureRegion> getZoteIdleAnim() { return zoteIdleAnim; }
+    public static Animation<TextureRegion> getZoteTalkAnim() { return zoteTalkAnim; }
+    public static Animation<TextureRegion> getZoteAttackAnim() { return zoteAttackAnim; }
+    public static Sound[] getZoteVoiceSfx() { return zoteVoiceSfx; }
+
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
         if (achievementIcons != null)
@@ -460,6 +496,13 @@ public class Assets {
         disposeIfNotNull(falseKnightStunnedSheet);
         disposeIfNotNull(falseKnightStunRecoverSheet);
         disposeIfNotNull(falseKnightShockwaveSheet);
+
+        disposeIfNotNull(zoteIdleSheet);
+        disposeIfNotNull(zoteTalkSheet);
+        disposeIfNotNull(zoteAttackSheet);
+        if (zoteVoiceSfx != null) {
+            for (Sound s : zoteVoiceSfx) if (s != null) s.dispose();
+        }
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

@@ -5,6 +5,7 @@ import HollowKnight.source.controller.enemies.CrystalGuardianController;
 import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
+import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
@@ -278,7 +279,12 @@ public class PlayerController {
         player.addSoul(PlayerConstants.SOUL_GAIN_PER_HIT);
     }
 
-    public void checkSwordHits(MossflyController mossflyController, HuskHornheadController huskHornheadController, CrystalGuardianController crystalGuardianController, CrystalCrawlerController crystalCrawlerController, FalseKnightController falseKnightController) {
+    public void checkSwordHits(MossflyController mossflyController,
+                               HuskHornheadController huskHornheadController,
+                               CrystalGuardianController crystalGuardianController,
+                               CrystalCrawlerController crystalCrawlerController,
+                               FalseKnightController falseKnightController,
+                               ZoteController zoteController) {
         if (!player.isAttacking()) return;
 
         Rectangle hitbox = getSwordHitbox();
@@ -298,6 +304,9 @@ public class PlayerController {
 
         if (falseKnightController != null)
             falseKnightController.checkSwordHits(hitbox);
+
+        if (zoteController != null)
+            zoteController.checkSwordHits(hitbox, player);
     }
 
     public Rectangle getSwordHitbox() {
