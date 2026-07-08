@@ -35,16 +35,16 @@ public class SettingsMenuScreen extends BaseMenuScreen {
             backBtn
         );
 
-        volumeLabel.setPosition(320, 470);
-        volumeSlider.setSize(450, 20);
-        volumeSlider.setPosition(500, 480);
+        volumeLabel.setPosition(520, 570);
+        volumeSlider.setSize(450, 40);
+        volumeSlider.setPosition(700, 560);
 
-        muteLabel.setPosition(320, 390);
-        muteCheckBox.setPosition(500, 385);
+        muteLabel.setPosition(520, 490);
+        muteCheckBox.setPosition(700, 485);
 
-        brightnessLabel.setPosition(320, 310);
-        brightnessSlider.setSize(450, 20);
-        brightnessSlider.setPosition(500, 320);
+        brightnessLabel.setPosition(520, 410);
+        brightnessSlider.setSize(450, 40);
+        brightnessSlider.setPosition(700, 400);
 
         prepareButton(backBtn, 300, 60);
 

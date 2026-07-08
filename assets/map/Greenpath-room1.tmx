@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="300" height="150" tilewidth="8" tileheight="8" infinite="0" nextlayerid="13" nextobjectid="178">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="300" height="150" tilewidth="8" tileheight="8" infinite="0" nextlayerid="13" nextobjectid="180">
  <tileset firstgid="1" source="adawda.tsx"/>
  <tileset firstgid="193" source="ground_room1.tsx"/>
  <tileset firstgid="403" source="air_ground_room1.tsx"/>
@@ -1695,8 +1695,8 @@
   <object id="99" name="spikes" x="1417.33" y="551">
    <polygon points="0,0 28.6667,4.66667 47.3333,52 50,113.333"/>
   </object>
-  <object id="100" name="door_to_greenpath_room2" x="2357.33" y="2" width="40.6667" height="218.667"/>
-  <object id="102" name="ceiling" x="81.3333" y="1.33333" width="2276.67" height="20.6667"/>
+  <object id="100" name="door_to_greenpath_room2" x="2357.33" y="2" width="40.6667" height="221.334"/>
+  <object id="102" name="ceiling" x="81.3333" y="1.33333" width="2292" height="20.6667"/>
   <object id="103" name="wall" x="3.5" y="807.5" width="31" height="256"/>
   <object id="108" name="wall" x="168.5" y="24.5" width="20.5" height="380"/>
   <object id="109" name="wall" x="2376" y="236" width="22" height="467"/>
@@ -1706,12 +1706,12 @@
    <polygon points="-0.5,1 40,32.5 48.5,80 35,120 -45,120 -46,-9.5"/>
   </object>
   <object id="118" name="wall" x="1476.5" y="23.5" width="21" height="201"/>
-  <object id="120" name="platform" x="542" y="822" width="120.333" height="63"/>
+  <object id="120" name="platform" x="542" y="819.333" width="120.333" height="65.6667"/>
   <object id="121" name="platform" x="483.333" y="780.667" width="160" height="36.6667"/>
   <object id="122" name="platform" x="447" y="763.333" width="126" height="15"/>
-  <object id="124" name="platform" x="398" y="731.5" width="138" height="28.5"/>
+  <object id="124" name="platform" x="398" y="730.167" width="138" height="30.5"/>
   <object id="125" name="platform" x="372" y="703.5" width="151.5" height="24"/>
-  <object id="128" name="platform" x="378.5" y="607" width="40.5" height="93"/>
+  <object id="128" name="platform" x="378.5" y="607" width="40.5" height="95.6667"/>
   <object id="132" name="platform" x="302.5" y="573.5" width="96.5" height="30.5"/>
   <object id="134" name="platform" x="273.5" y="557.5" width="107" height="12"/>
   <object id="135" name="platform" x="269.5" y="501" width="74.5" height="52"/>
@@ -1754,14 +1754,12 @@
   <object id="171" name="husk_hornhead_spawn" x="1088.67" y="375">
    <point/>
   </object>
-  <object id="172" name="husk_hornhead_spawn" x="1944" y="213.667">
-   <point/>
-  </object>
   <object id="173" name="husk_hornhead_spawn" x="2251.17" y="1052.83">
    <point/>
   </object>
-  <object id="174" name="crystal_guardian_spawn" x="2176.34" y="206.667">
+  <object id="174" name="crystal_guardian_spawn" x="2162.34" y="207.667">
    <point/>
   </object>
+  <object id="178" name="wall" x="2376.08" y="2.25" width="22.5" height="218.833"/>
  </objectgroup>
 </map>

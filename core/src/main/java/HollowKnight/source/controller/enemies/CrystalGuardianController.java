@@ -241,6 +241,7 @@ public class CrystalGuardianController {
             if (hitGuardians.contains(guardian)) continue;
 
             if (Intersector.overlaps(swordHitbox, guardian.getBounds())) {
+                playerController.gainSoul();
                 hitGuardians.add(guardian);
                 applyHit(guardian, player);
             }
@@ -248,7 +249,7 @@ public class CrystalGuardianController {
     }
 
     private void applyHit(CrystalGuardian guardian, Player player) {
-        guardian.setHealth(guardian.getHealth() - 1);
+        guardian.setHealth(guardian.getHealth() - playerController.getNailDamage());
         guardian.setHurtTimer(CrystalGuardianConstants.HURT_COOLDOWN);
         guardian.setOnGround(false);
 
@@ -263,8 +264,8 @@ public class CrystalGuardianController {
         }
 
         guardian.getVelocity().set(
-            knockBackDirectionX * CrystalGuardianConstants.KNOCKBACK_SPEED_X,
-            CrystalGuardianConstants.KNOCKBACK_SPEED_Y
+            knockBackDirectionX * CrystalGuardianConstants.KNOCKBACK_SPEED_X * playerController.getKnockbackMultiplier(),
+            CrystalGuardianConstants.KNOCKBACK_SPEED_Y * playerController.getKnockbackMultiplier()
         );
     }
 

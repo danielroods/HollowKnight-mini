@@ -18,9 +18,11 @@ import HollowKnight.source.view.enemies.CrystalGuardianRenderer;
 import HollowKnight.source.view.enemies.FalseKnightRenderer;
 import HollowKnight.source.view.enemies.HuskHornheadRenderer;
 import HollowKnight.source.view.enemies.MossflyRenderer;
+import HollowKnight.source.view.menus.InventoryScreen;
 import HollowKnight.source.view.npc.ZoteDialogueRenderer;
 import HollowKnight.source.view.npc.ZoteRenderer;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -48,6 +50,7 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera uiCamera;
     private HUDRenderer hudRenderer;
+    private InventoryScreen inventoryScreen;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private float mapPixelW, mapPixelH;
@@ -91,6 +94,9 @@ public class GameScreen implements Screen {
         player = Player.getInstance();
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());
         hudRenderer = new HUDRenderer();
+        inventoryScreen = new InventoryScreen();
+        gameController.setInventoryScreen(inventoryScreen);
+
         mossflyRenderer = new MossflyRenderer();
         huskHornheadRenderer = new HuskHornheadRenderer();
         crystalGuardianRenderer = new CrystalGuardianRenderer();
@@ -106,9 +112,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        gameController.update(delta);
-        hudRenderer.update(delta);
-        updateCamera(delta);
+        boolean paused = inventoryScreen.isOpen();
+
+        if (!paused) {
+            gameController.update(delta);
+            hudRenderer.update(delta);
+            updateCamera(delta);
+        }
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -118,6 +128,10 @@ public class GameScreen implements Screen {
         zoteDialogueRenderer.render(batch, uiCamera, gameController.getZoteController());
 
         BrightnessRenderer.render(batch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        if (paused) {
+            inventoryScreen.render(delta);
+        }
     }
 
     private void renderWorld(float delta) {
@@ -127,20 +141,14 @@ public class GameScreen implements Screen {
                 mapRenderer.render(new int[]{0});
 
                 mapRenderer.setView(worldCamera);
-                mapRenderer.render(new int[]{1, 2, 3, 4, 5});
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6});
 
                 batch.setProjectionMatrix(worldCamera.combined);
+
                 batch.begin();
                 renderMossfly();
-                batch.end();
-
-                mapRenderer.render(new int[]{6});
-
-                batch.begin();
                 renderHuskHornhead();
                 renderCrystalGuardian();
-                renderCrystalCrawler();
-                renderFalseKnight();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -152,20 +160,14 @@ public class GameScreen implements Screen {
                 mapRenderer.render(new int[]{0});
 
                 mapRenderer.setView(worldCamera);
-                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7});
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7, 8});
 
                 batch.setProjectionMatrix(worldCamera.combined);
+
                 batch.begin();
                 renderMossfly();
-                batch.end();
-
-                mapRenderer.render(new int[]{8});
-
-                batch.begin();
                 renderHuskHornhead();
-                renderCrystalGuardian();
                 renderCrystalCrawler();
-                renderFalseKnight();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -177,20 +179,14 @@ public class GameScreen implements Screen {
                 mapRenderer.render(new int[]{0});
 
                 mapRenderer.setView(worldCamera);
-                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7, 8});
+                mapRenderer.render(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
 
                 batch.setProjectionMatrix(worldCamera.combined);
-                batch.begin();
-                renderMossfly();
-                batch.end();
 
-                mapRenderer.render(new int[]{9});
 
                 batch.begin();
-                renderHuskHornhead();
                 renderCrystalGuardian();
                 renderCrystalCrawler();
-                renderFalseKnight();
                 renderZote();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
@@ -336,12 +332,14 @@ public class GameScreen implements Screen {
         worldViewport.update(width, height);
         uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
         uiCamera.update();
+        if (inventoryScreen != null)
+            inventoryScreen.resize(width, height);
     }
 
     @Override public void dispose() {
         if (mapRenderer != null) mapRenderer.dispose();
         if (hudRenderer != null) hudRenderer.dispose();
-        if (zoteDialogueRenderer != null) zoteDialogueRenderer.dispose();
+        if (inventoryScreen != null) inventoryScreen.dispose();
     }
 
     @Override public void pause() {}

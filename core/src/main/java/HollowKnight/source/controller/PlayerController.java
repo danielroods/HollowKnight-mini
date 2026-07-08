@@ -6,6 +6,9 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
+import HollowKnight.source.model.charm.CharmConstants;
+import HollowKnight.source.model.charm.CharmManager;
+import HollowKnight.source.model.charm.CharmType;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
@@ -173,7 +176,7 @@ public class PlayerController {
 
         player.setDashing(true);
         player.setDashTimer(PlayerConstants.DASH_DURATION);
-        player.setDashCooldownTimer(PlayerConstants.DASH_COOLDOWN);
+        player.setDashCooldownTimer(getDashCooldown());
 
         player.setVelocityX(dir * PlayerConstants.DASH_SPEED);
         player.setVelocityY(0f);
@@ -238,7 +241,7 @@ public class PlayerController {
         float newFocusTimer = player.getFocusTimer() + delta;
         player.setFocusTimer(newFocusTimer);
         player.setVelocityX(0f);
-        if (player.getFocusTimer() >= PlayerConstants.FOCUS_DURATION) {
+        if (player.getFocusTimer() >= getFocusDuration()) {
             player.setSoul(Math.max(0, player.getSoul() - PlayerConstants.SOUL_HEAL_COST));
             player.setHealth(Math.min(PlayerConstants.MAX_HEALTH, player.getHealth() + 1));
             player.setFocusing(false);
@@ -273,10 +276,8 @@ public class PlayerController {
         if (player.isAttacking()) return;
 
         player.setAttacking(true);
-        player.setAttackTimer(PlayerConstants.ATTACK_DUR);
+        player.setAttackTimer(getAttackDuration());
         player.setAttackDirection(dir);
-
-        player.addSoul(PlayerConstants.SOUL_GAIN_PER_HIT);
     }
 
     public void checkSwordHits(MossflyController mossflyController,
@@ -312,8 +313,11 @@ public class PlayerController {
     public Rectangle getSwordHitbox() {
         if (!player.isAttacking())
             return null;
-        float elapsed = PlayerConstants.ATTACK_DUR - player.getAttackTimer();
-        if (elapsed < PlayerConstants.HITBOX_ACTIVE_START || elapsed > PlayerConstants.HITBOX_ACTIVE_END)
+        float duration = getAttackDuration();
+        float elapsed = duration - player.getAttackTimer();
+        float activeStart = duration * PlayerConstants.HITBOX_ACTIVE_START;
+        float activeEnd = duration * PlayerConstants.HITBOX_ACTIVE_END;
+        if (elapsed < activeStart || elapsed > activeEnd)
             return null;
 
         float bx = player.getBounds().x;
@@ -334,4 +338,35 @@ public class PlayerController {
                 return null;
         }
     }
+
+    public int getNailDamage() {
+        int damage = 1;
+        if (CharmManager.isEquipped(CharmType.UNBREAKABLE_STRENGTH))
+            damage += CharmConstants.UNBREAKABLE_STRENGTH_BONUS_DAMAGE;
+        return damage;
+    }
+
+    public float getKnockbackMultiplier() {
+        return CharmManager.isEquipped(CharmType.HEAVY_BLOW) ? CharmConstants.HEAVY_BLOW_KNOCKBACK_MULTIPLIER : 1f;
+    }
+
+    public float getAttackDuration() {
+        return CharmManager.isEquipped(CharmType.QUICK_SLASH) ? PlayerConstants.ATTACK_DUR * CharmConstants.QUICK_SLASH_ATTACK_DUR_MULTIPLIER : PlayerConstants.ATTACK_DUR;
+    }
+
+    public float getFocusDuration() {
+        return CharmManager.isEquipped(CharmType.QUICK_FOCUS) ? PlayerConstants.FOCUS_DURATION * CharmConstants.QUICK_FOCUS_DURATION_MULTIPLIER : PlayerConstants.FOCUS_DURATION;
+    }
+
+    public float getDashCooldown() {
+        return CharmManager.isEquipped(CharmType.DASHMASTER) ? PlayerConstants.DASH_COOLDOWN * CharmConstants.DASHMASTER_COOLDOWN_MULTIPLIER : PlayerConstants.DASH_COOLDOWN;
+    }
+
+    public void gainSoul() {
+        int soulAmount = PlayerConstants.SOUL_GAIN_PER_HIT;
+        if (CharmManager.isEquipped(CharmType.SOUL_CATCHER))
+            soulAmount += CharmConstants.SOUL_CATCHER_BONUS_SOUL;
+        player.addSoul(soulAmount);
+    }
 }
+

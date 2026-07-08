@@ -43,6 +43,7 @@ public class HuskHornheadController {
             if (hitHuskHornheads.contains(huskHornhead)) continue;
 
             if (Intersector.overlaps(swordHitbox, huskHornhead.getBounds())) {
+                playerController.gainSoul();
                 hitHuskHornheads.add(huskHornhead);
                 applyHit(huskHornhead, player);
             }
@@ -254,7 +255,7 @@ public class HuskHornheadController {
     }
 
     private void applyHit(HuskHornhead huskHornhead, Player player) {
-        huskHornhead.setHealth(huskHornhead.getHealth() - 1);
+        huskHornhead.setHealth(huskHornhead.getHealth() - playerController.getNailDamage());
         huskHornhead.setHurtTimer(HuskHornheadConstants.HURT_COOLDOWN);
         huskHornhead.setKnockbackTimer(HuskHornheadConstants.KNOCKBACK_DURATION);
         huskHornhead.setOnGround(false);
@@ -263,12 +264,11 @@ public class HuskHornheadController {
 
         if (huskHornhead.getHealth() <= 0) {
             enterState(huskHornhead, HuskHornheadState.DEAD);
-            huskHornhead.getVelocity().set(knockBackDirectionX * HuskHornheadConstants.KNOCKBACK_SPEED_X, HuskHornheadConstants.KNOCKBACK_SPEED_Y);
         }
-        else {
-            huskHornhead.setKnockbackTimer(HuskHornheadConstants.KNOCKBACK_DURATION);
-            huskHornhead.getVelocity().set(knockBackDirectionX * HuskHornheadConstants.KNOCKBACK_SPEED_X, HuskHornheadConstants.KNOCKBACK_SPEED_Y);
-        }
+
+        huskHornhead.setKnockbackTimer(HuskHornheadConstants.KNOCKBACK_DURATION);
+        huskHornhead.getVelocity().set(knockBackDirectionX * HuskHornheadConstants.KNOCKBACK_SPEED_X * playerController.getKnockbackMultiplier(),
+            HuskHornheadConstants.KNOCKBACK_SPEED_Y * playerController.getKnockbackMultiplier());
     }
 
     private void tickTimers(HuskHornhead huskHornhead, float delta) {

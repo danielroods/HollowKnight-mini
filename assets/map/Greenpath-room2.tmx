@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="174" height="102" tilewidth="8" tileheight="8" infinite="0" nextlayerid="18" nextobjectid="84">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="174" height="102" tilewidth="8" tileheight="8" infinite="0" nextlayerid="18" nextobjectid="85">
  <tileset firstgid="1" source="ground_room1.tsx"/>
  <tileset firstgid="211" source="air_ground_room1.tsx"/>
  <tileset firstgid="391" source="bushes.tsx"/>
@@ -1535,8 +1535,8 @@
    <polygon points="0,0 76,0 69,-41 87,-135 68,-194 -2,-233"/>
   </object>
   <object id="68" name="door_to_greenpath_room1" x="52.6667" y="119.167" width="24" height="198.5"/>
-  <object id="69" name="door_to_crystal_peak" x="1313" y="114.5" width="22.5" height="186"/>
-  <object id="70" name="ceiling" x="99" y="91" width="1213" height="20.6667"/>
+  <object id="69" name="door_to_crystal_peak" x="1313" y="113" width="22.5" height="189"/>
+  <object id="70" name="ceiling" x="99" y="91" width="1233" height="20.6667"/>
   <object id="71" name="spikes" x="654" y="576">
    <polygon points="0,0 53.25,-1 63,29.625 -12.75,29.75"/>
   </object>
@@ -1559,5 +1559,6 @@
   <object id="83" name="crystal_crawler_spawn" x="1110.67" y="294.667">
    <point/>
   </object>
+  <object id="84" name="wall" x="1333.75" y="92.75" width="22.5" height="210"/>
  </objectgroup>
 </map>

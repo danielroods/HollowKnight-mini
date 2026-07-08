@@ -10,7 +10,7 @@ public class ZoteConstants {
     public static final float BOUNDS_H = 60f;
 
     public static final float INTERACTION_RANGE = 140f;
-    public static final float ANGER_DURATION = 3.0f;
+    public static final float ANGER_DURATION = 7.5f;
     public static final float ANGER_CHASE_SPEED = 150f;
     public static final float RETURN_SPEED = 120f;
     public static final float GRAVITY = -900f;

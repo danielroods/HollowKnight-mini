@@ -17,7 +17,9 @@ import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
+import HollowKnight.source.view.menus.InventoryScreen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -44,6 +46,8 @@ public class GameController {
     private CrystalCrawlerController crystalCrawlerController;
     private FalseKnightController falseKnightController;
     private ZoteController zoteController;
+    private InventoryScreen inventoryScreen;
+
     private TiledMap currentMap;
     private int currentMapIndex = 0;
 
@@ -80,6 +84,8 @@ public class GameController {
                 respawnPlayer();
             return;
         }
+
+        handleInventoryMenuInput();
 
         handleZoteInteractionInput();
         boolean zoteDialogueOpen = zoteController != null && zoteController.isDialogueOpen();
@@ -238,6 +244,12 @@ public class GameController {
     private void handleDashInput() {
         if (Gdx.input.isKeyJustPressed(Keys.C))
             playerController.dash();
+    }
+
+    private void handleInventoryMenuInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            inventoryScreen.open();
+        }
     }
 
     private void handleWallSlideInput() {
@@ -426,6 +438,10 @@ public class GameController {
     public void setPlayerController(PlayerController playerController) { this.playerController = playerController; }
     public void setCurrentMap(TiledMap map) { currentMap = map; }
     public void setCurrentMapIndex(int idx) { this.currentMapIndex = idx; }
+    public void setInventoryScreen(InventoryScreen inventoryScreen) {
+        this.inventoryScreen = inventoryScreen;
+    }
+
     public TiledMap getCurrentMap() { return currentMap; }
     public int getCurrentMapIndex() { return currentMapIndex; }
     public MossflyController getMossflyController() { return mossflyController; }

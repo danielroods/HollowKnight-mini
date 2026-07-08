@@ -77,9 +77,10 @@ public class ZoteController {
 
     public void checkSwordHits(Rectangle swordHitbox, Player player) {
         for (Zote zote : zoteList) {
-            if (zote.getState() == ZoteState.TALKING) continue;
+            if (zote.getState() == ZoteState.TALKING || zote.getState() == ZoteState.ANGRY) continue;
             if (!Intersector.overlaps(swordHitbox, zote.getBounds())) continue;
 
+            playAngryVoiceSfx();
             enterState(zote, ZoteState.ANGRY);
         }
     }
@@ -259,6 +260,12 @@ public class ZoteController {
         if (sfx == null || sfx.length == 0) return;
         int idx = MathUtils.random(sfx.length - 1);
         sfx[idx].play(GameSettings.getVolume());
+    }
+
+    private void playAngryVoiceSfx() {
+        Sound sfx = Assets.getZoteAngryVoiceSfx();
+        if (sfx == null) return;
+        sfx.play(GameSettings.getVolume());
     }
 
     private boolean isPlayerInRange(Zote zote, Player player) {

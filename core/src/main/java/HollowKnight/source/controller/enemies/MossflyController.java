@@ -163,6 +163,7 @@ public class MossflyController {
             if (hitMossflies.contains(mossfly)) continue;
 
             if (Intersector.overlaps(swordHitbox, mossfly.getBounds())) {
+                playerController.gainSoul();
                 hitMossflies.add(mossfly);
                 applyHit(mossfly, player);
             }
@@ -170,7 +171,7 @@ public class MossflyController {
     }
 
     private void applyHit(Mossfly mossfly, Player player) {
-        mossfly.setHealth(mossfly.getHealth() - 1);
+        mossfly.setHealth(mossfly.getHealth() - playerController.getNailDamage());
         mossfly.setHurtTimer(MossflyConstants.HURT_COOLDOWN);
 
         float playerY = player.getBounds().y + player.getBounds().height / 2f;
@@ -182,12 +183,11 @@ public class MossflyController {
         if (mossfly.getHealth() <= 0) {
             enterState(mossfly, MossflyState.DEAD);
             mossfly.setOnGround(false);
-            mossfly.getVelocity().set(knockBackDirectionX * MossflyConstants.KNOCKBACK_SPEED_X, knockBackDirectionY * MossflyConstants.KNOCKBACK_SPEED_Y);
         }
-        else {
-            mossfly.setKnockbackTimer(MossflyConstants.KNOCKBACK_DURATION);
-            mossfly.getVelocity().set(knockBackDirectionX * MossflyConstants.KNOCKBACK_SPEED_X, knockBackDirectionY * MossflyConstants.KNOCKBACK_SPEED_Y);
-        }
+
+        mossfly.setKnockbackTimer(MossflyConstants.KNOCKBACK_DURATION);
+        mossfly.getVelocity().set(knockBackDirectionX * MossflyConstants.KNOCKBACK_SPEED_X * playerController.getKnockbackMultiplier(),
+            knockBackDirectionY * MossflyConstants.KNOCKBACK_SPEED_Y * playerController.getKnockbackMultiplier());
     }
 
     private void enterState(Mossfly mossfly, MossflyState newState) {

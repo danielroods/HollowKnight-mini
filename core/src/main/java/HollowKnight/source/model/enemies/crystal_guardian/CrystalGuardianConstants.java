@@ -4,12 +4,12 @@ public class CrystalGuardianConstants {
 
     public static final float WIDTH = 110f;
     public static final float HEIGHT = 110f;
-    public static final float BOUNDS_OFFSET_X = 25f;
+    public static final float BOUNDS_OFFSET_X = 35f;
     public static final float BOUNDS_OFFSET_Y = 10f;
     public static final float BOUNDS_W = 60f;
     public static final float BOUNDS_H = 85f;
 
-    public static final int MAX_HEALTH = 3;
+    public static final int MAX_HEALTH = 2;
     public static final float HURT_COOLDOWN = 0.4f;
     public static final float KNOCKBACK_SPEED_X = 300f;
     public static final float KNOCKBACK_SPEED_Y = 140f;
@@ -22,9 +22,9 @@ public class CrystalGuardianConstants {
     public static final float RETURN_SPEED = 110f;
     public static final float RETURN_ARRIVE_EPSILON = 6f;
 
-    public static final float EVADE_TRIGGER_DISTANCE = 100f;
-    public static final float EVADE_SPEED = 260f;
-    public static final float EVADE_COOLDOWN = 1.2f;
+    public static final float EVADE_TRIGGER_DISTANCE = 90f;
+    public static final float EVADE_SPEED = 180f;
+    public static final float EVADE_COOLDOWN = 2f;
     public static final float LASER_FIRE_DELAY = 0.55f;
     public static final float LASER_RANGE = 1250f;
     public static final float LASER_HEIGHT = 40f;

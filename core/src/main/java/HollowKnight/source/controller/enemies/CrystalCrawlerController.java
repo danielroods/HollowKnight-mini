@@ -43,6 +43,7 @@ public class CrystalCrawlerController {
             if (hitCrawlers.contains(crawler)) continue;
 
             if (Intersector.overlaps(swordHitbox, crawler.getBounds())) {
+                playerController.gainSoul();
                 hitCrawlers.add(crawler);
                 applyHit(crawler, player);
             }
@@ -191,7 +192,7 @@ public class CrystalCrawlerController {
     }
 
     private void applyHit(CrystalCrawler crawler, Player player) {
-        crawler.setHealth(crawler.getHealth() - 1);
+        crawler.setHealth(crawler.getHealth() - playerController.getNailDamage());
         crawler.setHurtTimer(CrystalCrawlerConstants.HURT_COOLDOWN);
         crawler.setKnockbackTimer(CrystalCrawlerConstants.KNOCKBACK_DURATION);
         crawler.setOnGround(false);
@@ -200,11 +201,10 @@ public class CrystalCrawlerController {
 
         if (crawler.getHealth() <= 0) {
             enterState(crawler, CrystalCrawlerState.DEAD);
-            crawler.getVelocity().set(knockBackDirectionX * CrystalCrawlerConstants.KNOCKBACK_SPEED_X, CrystalCrawlerConstants.KNOCKBACK_SPEED_Y);
         }
-        else {
-            crawler.getVelocity().set(knockBackDirectionX * CrystalCrawlerConstants.KNOCKBACK_SPEED_X, CrystalCrawlerConstants.KNOCKBACK_SPEED_Y);
-        }
+
+        crawler.getVelocity().set(knockBackDirectionX * CrystalCrawlerConstants.KNOCKBACK_SPEED_X * playerController.getKnockbackMultiplier(),
+            CrystalCrawlerConstants.KNOCKBACK_SPEED_Y * playerController.getKnockbackMultiplier());
     }
 
     private void tickTimers(CrystalCrawler crawler, float delta) {

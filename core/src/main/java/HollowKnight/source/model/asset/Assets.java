@@ -1,6 +1,7 @@
 package HollowKnight.source.model.asset;
 
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.charm.CharmType;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightConstants;
@@ -31,7 +32,9 @@ import java.util.EnumMap;
 public class Assets {
     private static Skin skin;
     private static Texture lockIcon;
+    private static Texture whitePixel;
     private static EnumMap<AchievementType, Texture> achievementIcons;
+    private static EnumMap<CharmType, Texture> charmIcons;
     private static Texture idleSheet, runSheet, jumpSheet, doubleJumpSheet, fallSheet;
     private static Texture deathSheet, hurtSheet, focusSheet, healSheet, attackSheet;
     private static Texture attackHorizontalEffectSheet, attackUpEffectSheet, attackDownEffectSheet;
@@ -126,6 +129,7 @@ public class Assets {
     private static Animation<TextureRegion> zoteAttackAnim;
 
     private static Sound[] zoteVoiceSfx;
+    private static Sound zoteAngryVoiceSfx;
 
     private static TiledMap[] maps;
 
@@ -136,6 +140,8 @@ public class Assets {
         for (AchievementType a : AchievementType.values())
             achievementIcons.put(a, new Texture(a.getIconPath()));
 
+        loadWhitePixel();
+        loadCharmAssets();
         loadPlayerAssets();
         loadHUDAssets();
         loadMossflyAssets();
@@ -145,6 +151,24 @@ public class Assets {
         loadFalseKnightAssets();
         loadZoteAssets();
         loadMaps();
+    }
+
+    private static void loadWhitePixel() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        whitePixel = new Texture(pixmap);
+        pixmap.dispose();
+    }
+
+    private static void loadCharmAssets() {
+        charmIcons = new EnumMap<>(CharmType.class);
+        for (CharmType charm : CharmType.values())
+            charmIcons.put(charm, makeCharmIconTexture(charm));
+    }
+
+    private static Texture makeCharmIconTexture(CharmType charm) {
+        return new Texture(charm.getIconPath());
     }
 
     private static void loadPlayerAssets() {
@@ -276,6 +300,7 @@ public class Assets {
             Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_04.wav")),
             Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_05.wav")),
         };
+        zoteAngryVoiceSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_angry.wav"));
     }
 
     private static void loadHUDAssets() {
@@ -386,7 +411,9 @@ public class Assets {
     public static Animation<TextureRegion> getDashEffectAnim() { return dashEffectAnim; }
     public static Texture getSoulOrbEye() { return soulOrbEye; }
     public static Texture getLockIcon() { return lockIcon; }
+    public static Texture getWhitePixel() { return whitePixel; }
     public static Texture getAchievementIcon(AchievementType a) { return achievementIcons.get(a); }
+    public static Texture getCharmIcon(CharmType charm) { return charmIcons.get(charm); }
     public static Texture getHealthBarTexture(int health) {
         int idx = MathUtils.clamp(health - 1, 0, 4);
         return healthBarTextures[idx];
@@ -437,11 +464,15 @@ public class Assets {
     public static Animation<TextureRegion> getZoteTalkAnim() { return zoteTalkAnim; }
     public static Animation<TextureRegion> getZoteAttackAnim() { return zoteAttackAnim; }
     public static Sound[] getZoteVoiceSfx() { return zoteVoiceSfx; }
+    public static Sound getZoteAngryVoiceSfx() { return zoteAngryVoiceSfx; }
 
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
+        disposeIfNotNull(whitePixel);
         if (achievementIcons != null)
             for (Texture t : achievementIcons.values()) t.dispose();
+        if (charmIcons != null)
+            for (Texture t : charmIcons.values()) t.dispose();
 
         disposeIfNotNull(idleSheet); disposeIfNotNull(runSheet);
         disposeIfNotNull(jumpSheet); disposeIfNotNull(fallSheet);
@@ -501,8 +532,12 @@ public class Assets {
         disposeIfNotNull(zoteTalkSheet);
         disposeIfNotNull(zoteAttackSheet);
         if (zoteVoiceSfx != null) {
-            for (Sound s : zoteVoiceSfx) if (s != null) s.dispose();
+            for (Sound s : zoteVoiceSfx)
+                if (s != null)
+                    s.dispose();
         }
+        if (zoteAngryVoiceSfx != null)
+            zoteAngryVoiceSfx.dispose();
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

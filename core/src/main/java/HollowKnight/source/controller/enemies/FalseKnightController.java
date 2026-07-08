@@ -417,6 +417,7 @@ public class FalseKnightController {
             Rectangle hurtbox = falseKnight.getState() == FalseKnightState.STUNNED ? buildInnerHitbox(falseKnight) : falseKnight.getBounds();
 
             if (Intersector.overlaps(swordHitbox, hurtbox)) {
+                playerController.gainSoul();
                 hitBosses.add(falseKnight);
                 applyHit(falseKnight);
             }
@@ -428,7 +429,7 @@ public class FalseKnightController {
     }
 
     private void applyHit(FalseKnight falseKnight) {
-        falseKnight.setHealth(falseKnight.getHealth() - 1);
+        falseKnight.setHealth(falseKnight.getHealth() - playerController.getNailDamage());
         falseKnight.setHurtTimer(FalseKnightConstants.HURT_COOLDOWN);
 
         if (falseKnight.getHealth() <= 0) {
