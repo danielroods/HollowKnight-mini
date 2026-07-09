@@ -1,6 +1,8 @@
 package HollowKnight.source.controller.enemies;
 
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.model.achievement.AchievementManager;
+import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianState;
@@ -151,6 +153,7 @@ public class CrystalGuardianController {
             && player.isAlive() && !player.isInvincible()) {
 
             if (Intersector.overlaps(buildLaserHitbox(guardian), player.getBounds())) {
+                if (playerController.isGodMode()) return;
                 guardian.setLaserHasHitPlayer(true);
 
                 float guardianCX = guardian.getBounds().x + guardian.getBounds().width / 2f;
@@ -270,6 +273,11 @@ public class CrystalGuardianController {
         float knockBackDirectionX = player.isFacingRight() ? 1f : -1f;
 
         if (guardian.getHealth() <= 0) {
+            player.setKilledCrystalGuardian(true);
+            if (player.isKilledMossfly() && player.isKilledHuskHornhead() && player.isKilledCrystalCrawler())
+            {
+                AchievementManager.unlock(AchievementType.TRUE_HUNTER);
+            }
             guardian.setLaserActive(false);
             enterState(guardian, CrystalGuardianState.DEAD);
         }
@@ -288,6 +296,7 @@ public class CrystalGuardianController {
         if (!player.isAlive() || player.isInvincible()) return;
 
         if (Intersector.overlaps(guardian.getBounds(), player.getBounds())) {
+            if (playerController.isGodMode()) return;
             float guardianCX = guardian.getBounds().x + guardian.getBounds().width / 2f;
             float playerCX = player.getBounds().x + player.getBounds().width / 2f;
             float knockBackDirection = playerCX < guardianCX ? -1f : 1f;

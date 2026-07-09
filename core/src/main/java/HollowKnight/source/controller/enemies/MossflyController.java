@@ -1,6 +1,8 @@
 package HollowKnight.source.controller.enemies;
 
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.model.achievement.AchievementManager;
+import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.enemies.mossfly.MossflyState;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
@@ -110,6 +112,7 @@ public class MossflyController {
         if (!player.isAlive() || player.isInvincible()) return;
 
         if (Intersector.overlaps(mossfly.getBounds(), player.getBounds())) {
+            if (playerController.isGodMode()) return;
             float enemyXCenter = mossfly.getBounds().x + mossfly.getBounds().width / 2f;
             float playerXCenter = player.getBounds().x + player.getBounds().width / 2f;
             float knockBackDirection = playerXCenter < enemyXCenter ? -1f : 1f;
@@ -196,6 +199,11 @@ public class MossflyController {
         float knockBackDirectionY = (playerY > enemyY) ? -1f : 1f;
 
         if (mossfly.getHealth() <= 0) {
+            player.setKilledMossfly(true);
+            if (player.isKilledHuskHornhead() && player.isKilledCrystalCrawler() && player.isKilledCrystalGuardian())
+            {
+                AchievementManager.unlock(AchievementType.TRUE_HUNTER);
+            }
             enterState(mossfly, MossflyState.DEAD);
             mossfly.setOnGround(false);
         }

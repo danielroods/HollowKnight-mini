@@ -10,10 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class CheatsMenuScreen extends BaseMenuScreen {
 
     private static final String[] CHEAT_CODES = {
-        "Ctrl + G   -   God Mode (no damage)",
-        "Ctrl + R   -   Refill Soul",
-        "Ctrl + H   -   Emergency Heal",
-        "Ctrl + B   -   Boss Arena Teleport",
+        "Ctrl + D   ->   God Mode",
+        "Ctrl + A   ->   Boss Arena Teleport",
+        "Ctrl + N   ->   Spectator",
+        "Ctrl + I   ->   Charm Master",
+        "Ctrl + E   ->   Emergency Heal",
+        "Ctrl + L   ->   Refill Soul",
     };
 
     @Override

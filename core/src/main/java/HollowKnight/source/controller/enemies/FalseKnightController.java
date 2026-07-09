@@ -273,8 +273,10 @@ public class FalseKnightController {
             if (player.isAlive() && !player.isInvincible()) {
                 Rectangle slamBox = buildMaceSlamHitbox(falseKnight, FalseKnightConstants.MACE_SLAM_HITBOX_W, FalseKnightConstants.MACE_SLAM_HITBOX_H);
                 if (Intersector.overlaps(slamBox, player.getBounds())) {
+                    if (playerController.isGodMode()) return;
                     float knockDir = falseKnight.isFacingRight() ? 1f : -1f;
                     playerController.takeDamage(FalseKnightConstants.MACE_SLAM_DAMAGE);
+                    playerController.addDamageTakenFromBoss(FalseKnightConstants.MACE_SLAM_DAMAGE);
                     playerController.applyKnockback(knockDir);
                 }
             }
@@ -392,7 +394,9 @@ public class FalseKnightController {
 
         if (player.isAlive() && !player.isInvincible()) {
             if (Intersector.overlaps(buildShockwaveHitbox(falseKnight), player.getBounds())) {
+                if (playerController.isGodMode()) return;
                 playerController.takeDamage(FalseKnightConstants.SHOCKWAVE_SLAM_DAMAGE);
+                playerController.addDamageTakenFromBoss(FalseKnightConstants.SHOCKWAVE_SLAM_DAMAGE);
                 playerController.applyKnockback(falseKnight.getShockwaveDirection());
             }
         }
@@ -457,6 +461,10 @@ public class FalseKnightController {
 
             BossProgressManager.markDefeated(BossProgressManager.FALSE_KNIGHT);
             AchievementManager.unlock(AchievementType.DEFEAT_FALSE_KNIGHT);
+            AchievementManager.unlock(AchievementType.COMPLETION);
+            if (playerController.getDamageTakenFromBoss() == 0) {
+                AchievementManager.unlock(AchievementType.NO_DAMAGE_FALSE_KNIGHT);
+            }
         }
     }
 
@@ -465,10 +473,12 @@ public class FalseKnightController {
         if (!player.isAlive() || player.isInvincible()) return;
 
         if (Intersector.overlaps(falseKnight.getBounds(), player.getBounds())) {
+            if (playerController.isGodMode()) return;
             float bossCX = falseKnight.getBounds().x + falseKnight.getBounds().width / 2f;
             float playerCX = player.getBounds().x + player.getBounds().width / 2f;
             float knockDir = playerCX < bossCX ? -1f : 1f;
             playerController.takeDamage(1);
+            playerController.addDamageTakenFromBoss(1);
             playerController.applyKnockback(knockDir);
         }
     }

@@ -1,6 +1,8 @@
 package HollowKnight.source.controller.enemies;
 
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.model.achievement.AchievementManager;
+import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerState;
@@ -170,6 +172,7 @@ public class CrystalCrawlerController {
         if (!player.isAlive() || player.isInvincible()) return;
 
         if (Intersector.overlaps(crawler.getBounds(), player.getBounds())) {
+            if (playerController.isGodMode()) return;
             float enemyXCenter = crawler.getBounds().x + crawler.getBounds().width / 2f;
             float playerXCenter = player.getBounds().x + player.getBounds().width / 2f;
             float knockBackDirection = playerXCenter < enemyXCenter ? -1f : 1f;
@@ -214,6 +217,11 @@ public class CrystalCrawlerController {
         float knockBackDirectionX = player.isFacingRight() ? 1f : -1f;
 
         if (crawler.getHealth() <= 0) {
+            player.setKilledCrystalCrawler(true);
+            if (player.isKilledMossfly() && player.isKilledHuskHornhead() && player.isKilledCrystalGuardian())
+            {
+                AchievementManager.unlock(AchievementType.TRUE_HUNTER);
+            }
             enterState(crawler, CrystalCrawlerState.DEAD);
         }
 

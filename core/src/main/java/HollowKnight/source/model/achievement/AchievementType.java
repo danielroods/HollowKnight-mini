@@ -1,6 +1,11 @@
 package HollowKnight.source.model.achievement;
 
 public enum AchievementType {
+    DEFEAT_FALSE_KNIGHT(
+        "Defeat False Knight",
+        "Defeat the False Knight boss",
+        "achievements/defeat_false_knight.png"
+    ),
 
     COMPLETION(
         "Completion",
@@ -18,12 +23,6 @@ public enum AchievementType {
         "True Hunter",
         "Kill all enemy types",
         "achievements/true_hunter.png"
-    ),
-
-    DEFEAT_FALSE_KNIGHT(
-        "Defeat False Knight",
-        "Defeat the False Knight boss",
-        "achievements/defeat_false_knight.png"
     ),
 
     NO_DAMAGE_FALSE_KNIGHT(

@@ -1,6 +1,8 @@
 package HollowKnight.source.controller.enemies;
 
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.model.achievement.AchievementManager;
+import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadState;
@@ -233,6 +235,7 @@ public class HuskHornheadController {
         if (!player.isAlive() || player.isInvincible()) return;
 
         if (Intersector.overlaps(huskHornhead.getBounds(), player.getBounds())) {
+            if (playerController.isGodMode()) return;
             float enemyXCenter = huskHornhead.getBounds().x + huskHornhead.getBounds().width / 2f;
             float playerXCenter = player.getBounds().x + player.getBounds().width / 2f;
             float knockBackDirection = playerXCenter < enemyXCenter ? -1f : 1f;
@@ -277,6 +280,11 @@ public class HuskHornheadController {
         float knockBackDirectionX = player.isFacingRight() ? 1f : -1f;
 
         if (huskHornhead.getHealth() <= 0) {
+            player.setKilledHuskHornhead(true);
+            if (player.isKilledMossfly() && player.isKilledCrystalCrawler() && player.isKilledCrystalGuardian())
+            {
+                AchievementManager.unlock(AchievementType.TRUE_HUNTER);
+            }
             enterState(huskHornhead, HuskHornheadState.DEAD);
         }
 

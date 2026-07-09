@@ -21,6 +21,7 @@ public class PlayerController {
     private final Player player;
 
     private static boolean godMode = false;
+    private static boolean emergencyHeal = false;
 
     private PlayerController() {
         player = Player.getInstance();
@@ -31,9 +32,6 @@ public class PlayerController {
             instance = new PlayerController();
         return instance;
     }
-
-    public static boolean isGodMode() { return godMode; }
-    public static void toggleGodMode() { godMode = !godMode; }
 
     public void update(float delta) {
         if (!player.isAlive()) {
@@ -226,14 +224,25 @@ public class PlayerController {
         }
     }
 
+    public static void toggleGodMode() {
+        godMode = !godMode;
+    }
+
+    public static void toggleEmergencyHeal() {
+        emergencyHeal = !emergencyHeal;
+    }
+
     public void takeDamage(int amount) {
-        if (godMode) return;
         if (player.isInvincible() || !player.isAlive()) return;
         cancelFocus();
         player.setHealth(Math.max(0, player.getHealth() - amount));
         player.setHurtTimer(PlayerConstants.HURT_COOLDOWN);
         if (player.isAlive())
             player.setState(PlayerState.HURT);
+    }
+
+    public void addDamageTakenFromBoss(int damage) {
+        player.setDamageTakenFromBoss(player.getDamageTakenFromBoss() + damage);
     }
 
     public void startFocus() {
@@ -395,6 +404,15 @@ public class PlayerController {
 
     public float getDashCooldown() {
         return CharmManager.isEquipped(CharmType.DASHMASTER) ? PlayerConstants.DASH_COOLDOWN * CharmConstants.DASHMASTER_COOLDOWN_MULTIPLIER : PlayerConstants.DASH_COOLDOWN;
+    }
+
+    public int getDamageTakenFromBoss() { return player.getDamageTakenFromBoss(); }
+
+    public boolean isGodMode() {
+        return godMode;
+    }
+    public boolean isEmergencyHeal() {
+        return emergencyHeal;
     }
 
     public void gainSoul() {

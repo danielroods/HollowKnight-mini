@@ -187,7 +187,7 @@ public class GameController {
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.H)) {
-            player.setHealth(PlayerConstants.MAX_HEALTH);
+            PlayerController.toggleEmergencyHeal();
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.B) && transitionListener != null) {
@@ -457,6 +457,7 @@ public class GameController {
             float playerCX = playerRect.x + playerRect.width / 2f;
             float knockBackDirection = playerCX < spikeCX ? -1f : 1f;
 
+            if (playerController.isGodMode()) return;
             playerController.takeDamage(1);
             playerController.applyKnockback(knockBackDirection);
             return;

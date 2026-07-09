@@ -15,13 +15,19 @@ public class Player {
     private PlayerState state;
     private boolean facingRight;
     private boolean isOnGround;
-
     private boolean isAttacking;
     private float attackTimer;
     private float hurtTimer;
 
     private int health;
     private int soul;
+
+    private int damageTakenFromBoss;
+
+    private boolean killedMossfly;
+    private boolean killedHuskHornhead;
+    private boolean killedCrystalGuardian;
+    private boolean killedCrystalCrawler;
 
     private boolean isFocusing;
     private float focusTimer;
@@ -51,6 +57,11 @@ public class Player {
         isOnGround = false;
         health = PlayerConstants.MAX_HEALTH;
         soul = 0;
+        damageTakenFromBoss = 0;
+        killedMossfly = false;
+        killedHuskHornhead = false;
+        killedCrystalGuardian = false;
+        killedCrystalCrawler = false;
     }
 
     public static Player getInstance() {
@@ -170,6 +181,11 @@ public class Player {
     public void setCastTimer(float castTimer) {
         this.castTimer = castTimer;
     }
+    public void setDamageTakenFromBoss(int damage) { this.damageTakenFromBoss = damage; }
+    public void setKilledCrystalCrawler(boolean killedCrystalCrawler) { this.killedCrystalCrawler = killedCrystalCrawler; }
+    public void setKilledCrystalGuardian(boolean killedCrystalGuardian) { this.killedCrystalGuardian = killedCrystalGuardian; }
+    public void setKilledHuskHornhead(boolean killedHuskHornhead) { this.killedHuskHornhead = killedHuskHornhead; }
+    public void setKilledMossfly(boolean killedMossfly) { this.killedMossfly = killedMossfly; }
 
     public Vector2 getPosition() { return position; }
     public Vector2 getVelocity() { return velocity; }
@@ -202,4 +218,9 @@ public class Player {
     public boolean isWallJumpLocked() { return wallJumpLockTimer > 0f; }
     public boolean isCasting() { return isCasting; }
     public float getCastTimer() { return castTimer; }
+    public int getDamageTakenFromBoss() { return damageTakenFromBoss; }
+    public boolean isKilledMossfly() { return killedMossfly; }
+    public boolean isKilledCrystalCrawler() { return killedCrystalCrawler; }
+    public boolean isKilledCrystalGuardian() { return killedCrystalGuardian; }
+    public boolean isKilledHuskHornhead() { return killedHuskHornhead; }
 }
