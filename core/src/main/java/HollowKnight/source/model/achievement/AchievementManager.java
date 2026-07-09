@@ -1,17 +1,56 @@
 package HollowKnight.source.model.achievement;
 
+import HollowKnight.source.data.AchievementSaveData;
+import HollowKnight.source.data.AchievementSaveManager;
+
+import java.util.ArrayDeque;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Queue;
 
 public class AchievementManager {
     private static final HashSet<AchievementType> unlockedAchievements = new HashSet<>();
+    private static final Queue<AchievementType> pendingPopups = new ArrayDeque<>();
+    private static boolean loaded = false;
 
     public static void unlock(AchievementType achievement) {
-        unlockedAchievements.add(achievement);
+        ensureLoaded();
+
+        if (unlockedAchievements.add(achievement)) {
+            pendingPopups.add(achievement);
+            persist();
+        }
     }
 
     public static boolean isUnlocked(AchievementType achievement) {
+        ensureLoaded();
         return unlockedAchievements.contains(achievement);
+    }
+
+    public static AchievementType pollPendingPopup() {
+        return pendingPopups.poll();
+    }
+
+    public static void ensureLoaded() {
+        if (loaded) return;
+        loaded = true;
+
+        AchievementSaveData data = AchievementSaveManager.load();
+        if (data == null || data.getUnlockedAchievementNames() == null) return;
+
+        for (String name : data.getUnlockedAchievementNames()) {
+            try {
+                unlockedAchievements.add(AchievementType.valueOf(name));
+            }
+            catch (IllegalArgumentException ignored) {
+                // Achievement no longer exists under this name - skip it :)
+            }
+        }
+    }
+
+    private static void persist() {
+        AchievementSaveData data = new AchievementSaveData();
+        data.setUnlockedAchievementNames(getUnlockedNames());
+        AchievementSaveManager.save(data);
     }
 
     public static String[] getUnlockedNames() {
@@ -23,21 +62,9 @@ public class AchievementManager {
         return names;
     }
 
-    public static void loadUnlocked(String[] names) {
+    public static void resetAll() {
         unlockedAchievements.clear();
-        if (names == null) return;
-
-        for (String name : names) {
-            try {
-                unlockedAchievements.add(AchievementType.valueOf(name));
-            }
-            catch (IllegalArgumentException ignored) {
-                // Achievement no longer exists under this name - skip it :)
-            }
-        }
-    }
-
-    public static void reset() {
-        unlockedAchievements.clear();
+        pendingPopups.clear();
+        AchievementSaveManager.delete();
     }
 }

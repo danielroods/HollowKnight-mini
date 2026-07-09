@@ -17,8 +17,8 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
     public void show() {
         float panelWidth = 700;
         float x = (Gdx.graphics.getWidth() - panelWidth) / 2f;
-        float y = 730;
-        float spacing = 95;
+        float y = 800;
+        float spacing = 115;
 
         Label.LabelStyle titleStyle = new Label.LabelStyle();
         titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
@@ -35,13 +35,16 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
             Stack stack = new Stack();
 
             if (!AchievementManager.isUnlocked(achievement)) {
+                icon.setScale(icon.getScaleX() * 1.2f, icon.getScaleY() * 1.2f);
                 icon.setColor(0.25f, 0.25f, 0.25f, 0.55f);
 
                 Image lock = new Image(Assets.getLockIcon());
+                lock.setScale(lock.getScaleX() * 1.2f, lock.getScaleY() * 1.2f);
 
                 stack.add(icon);
                 stack.add(lock);
             } else {
+                icon.setScale(icon.getScaleX() * 1.2f, icon.getScaleY() * 1.2f);
                 stack.add(icon);
             }
 

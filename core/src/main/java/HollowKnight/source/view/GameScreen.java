@@ -11,7 +11,6 @@ import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.game_utils.CameraShake;
-import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.model.map.Maps;
@@ -53,6 +52,7 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera uiCamera;
     private HUDRenderer hudRenderer;
+    private AchievementPopupRenderer achievementPopupRenderer;
     private InventoryScreen inventoryScreen;
 
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -100,7 +100,6 @@ public class GameScreen implements Screen {
         gameController.setPlayerController(PlayerController.getInstance());
         gameController.setActiveSlotIndex(slotIndex);
 
-        AchievementManager.reset();
         BossProgressManager.reset();
 
         int startMapIndex = 0;
@@ -125,6 +124,7 @@ public class GameScreen implements Screen {
         player = Player.getInstance();
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());
         hudRenderer = new HUDRenderer();
+        achievementPopupRenderer = new AchievementPopupRenderer();
         inventoryScreen = new InventoryScreen();
         gameController.setInventoryScreen(inventoryScreen);
 
@@ -148,6 +148,7 @@ public class GameScreen implements Screen {
         if (!paused) {
             gameController.update(delta);
             hudRenderer.update(delta);
+            achievementPopupRenderer.update(delta);
             updateCamera(delta);
         }
 
@@ -287,6 +288,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         hudRenderer.render(batch, uiCamera, player);
+        achievementPopupRenderer.render(batch, uiCamera);
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
@@ -370,6 +372,7 @@ public class GameScreen implements Screen {
     @Override public void dispose() {
         if (mapRenderer != null) mapRenderer.dispose();
         if (hudRenderer != null) hudRenderer.dispose();
+        if (achievementPopupRenderer != null) achievementPopupRenderer.dispose();
         if (inventoryScreen != null) inventoryScreen.dispose();
     }
 

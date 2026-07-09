@@ -9,6 +9,7 @@ import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.data.SaveLoadManager;
 import HollowKnight.source.model.achievement.AchievementManager;
+import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
@@ -161,7 +162,6 @@ public class GameController {
         data.setPlayerX(player.getPosition().x);
         data.setPlayerY(player.getPosition().y);
         data.setFalseKnightDefeated(BossProgressManager.isDefeated(BossProgressManager.FALSE_KNIGHT));
-        data.setUnlockedAchievementNames(AchievementManager.getUnlockedNames());
         data.setSavedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
 
         return data;
@@ -176,7 +176,6 @@ public class GameController {
         playerController.updateLastSafePosition();
 
         BossProgressManager.setDefeated(BossProgressManager.FALSE_KNIGHT, data.isFalseKnightDefeated());
-        AchievementManager.loadUnlocked(data.getUnlockedAchievementNames());
     }
 
     public void saveToActiveSlot() {

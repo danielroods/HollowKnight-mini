@@ -1,5 +1,6 @@
 package HollowKnight.source.view.menus;
 
+import HollowKnight.source.controller.MenuController;
 import HollowKnight.source.controller.menus.StartMenuController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.data.SaveLoadManager;
@@ -7,8 +8,11 @@ import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.PlayerConstants;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -16,7 +20,11 @@ public class StartMenuScreen extends BaseMenuScreen {
     private static final int SLOT_COUNT = SaveLoadManager.SLOT_COUNT;
 
     private static final float BACKGROUND_WIDTH_SCALE = 2.00f;
-    private static final float BACKGROUND_HEIGHT_SCALE = 1.75f;
+    private static final float BACKGROUND_HEIGHT_SCALE = 1.8f;
+
+    private final float[] slotY = new float[SLOT_COUNT];
+    private int hoveredSlotIndex = -1;
+    private Label deleteHintLabel;
 
     @Override
     public void show() {
@@ -30,7 +38,7 @@ public class StartMenuScreen extends BaseMenuScreen {
         }
 
         TextButton backBtn = new TextButton("Back", Assets.getSkin());
-        StartMenuController.modifyComponents(slotButtons, backBtn);
+        StartMenuController.modifyComponents(slotButtons, backBtn, this);
 
         float slotWidth = 560f;
         float slotHeight = 70f;
@@ -40,6 +48,7 @@ public class StartMenuScreen extends BaseMenuScreen {
 
         for (int i = 0; i < SLOT_COUNT; i++) {
             float slotY = topY - i * spacing;
+            this.slotY[i] = slotY;
 
             if (slotBackgrounds[i] != null) {
                 float bgWidth = slotWidth * BACKGROUND_WIDTH_SCALE;
@@ -61,6 +70,47 @@ public class StartMenuScreen extends BaseMenuScreen {
         prepareButton(backBtn, 300f, 60f);
         backBtn.setPosition(Gdx.graphics.getWidth() / 2f - 150f, topY - SLOT_COUNT * spacing - 50f);
         stage.addActor(backBtn);
+
+        Label.LabelStyle hintStyle = new Label.LabelStyle();
+        hintStyle.font = Assets.getSkin().getFont("AchievementDescFont");
+        hintStyle.fontColor = new Color(1f, 0.2f, 0.2f, 1f);
+
+        deleteHintLabel = new Label("Press D to delete this save", hintStyle);
+        deleteHintLabel.setVisible(false);
+        stage.addActor(deleteHintLabel);
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        handleDeleteInput();
+        updateDeleteHint();
+    }
+
+    private void handleDeleteInput() {
+        if (hoveredSlotIndex < 0) return;
+        if (!Gdx.input.isKeyJustPressed(Input.Keys.D)) return;
+        if (!SaveLoadManager.exists(hoveredSlotIndex)) return;
+
+        SaveLoadManager.delete(hoveredSlotIndex);
+        MenuController.setMenuScreen(new StartMenuScreen());
+    }
+
+    private void updateDeleteHint() {
+        boolean show = hoveredSlotIndex >= 0 && SaveLoadManager.exists(hoveredSlotIndex);
+        deleteHintLabel.setVisible(show);
+
+        if (show) {
+            float centerX = Gdx.graphics.getWidth() / 2f;
+            deleteHintLabel.setPosition(centerX - 190f, slotY[hoveredSlotIndex] - 16f);
+        }
+    }
+    public void setHoveredSlot(int slotIndex) {
+        hoveredSlotIndex = slotIndex;
+    }
+
+    public int getHoveredSlot() {
+        return hoveredSlotIndex;
     }
 
     private Image buildSlotBackground(GameData data) {

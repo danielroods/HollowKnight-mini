@@ -11,8 +11,6 @@ public class GameData {
 
     private boolean falseKnightDefeated;
 
-    private String[] unlockedAchievementNames;
-
     private String savedAt;
 
     public GameData() {
@@ -35,9 +33,6 @@ public class GameData {
 
     public boolean isFalseKnightDefeated() { return falseKnightDefeated; }
     public void setFalseKnightDefeated(boolean falseKnightDefeated) { this.falseKnightDefeated = falseKnightDefeated; }
-
-    public String[] getUnlockedAchievementNames() { return unlockedAchievementNames; }
-    public void setUnlockedAchievementNames(String[] unlockedAchievementNames) { this.unlockedAchievementNames = unlockedAchievementNames; }
 
     public String getSavedAt() { return savedAt; }
     public void setSavedAt(String savedAt) { this.savedAt = savedAt; }
