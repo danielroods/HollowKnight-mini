@@ -15,6 +15,8 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         float panelWidth = 700;
         float x = (Gdx.graphics.getWidth() - panelWidth) / 2f;
         float y = 800;

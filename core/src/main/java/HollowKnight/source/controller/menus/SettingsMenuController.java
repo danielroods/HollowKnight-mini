@@ -3,7 +3,6 @@ package HollowKnight.source.controller.menus;
 import HollowKnight.source.controller.MenuController;
 import HollowKnight.source.data.GameSettings;
 import HollowKnight.source.controller.AudioController;
-import HollowKnight.source.view.menus.MainMenuScreen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -56,7 +55,7 @@ public class SettingsMenuController {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setMenuScreen(new MainMenuScreen());
+                MenuController.setMenuScreen(MenuController.settingsReturnScreen());
             }
         });
 

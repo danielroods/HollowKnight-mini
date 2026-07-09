@@ -24,7 +24,7 @@ public class MainMenuController {
         settingsBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MenuController.setMenuScreen(new SettingsMenuScreen());
+                MenuController.openSettings(new MainMenuScreen());
             }
         });
 

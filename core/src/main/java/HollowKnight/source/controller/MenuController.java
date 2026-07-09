@@ -6,6 +6,7 @@ import HollowKnight.source.view.menus.MenuBackground;
 import HollowKnight.source.view.menus.MenuParticleLayer;
 import HollowKnight.source.view.GameScreen;
 import HollowKnight.source.view.menus.BaseMenuScreen;
+import HollowKnight.source.view.menus.SettingsMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -17,6 +18,8 @@ public class MenuController {
     private static MenuBackground menuBackground;
     private static MenuParticleLayer menuParticleLayer;
 
+    private static BaseMenuScreen settingsReturnScreen;
+
     public static void setGame(Main game) {
         if (MenuController.game == null)
             MenuController.game = game;
@@ -26,11 +29,13 @@ public class MenuController {
     }
 
     public static void playMusic() {
-        Music menuBGM = Gdx.audio.newMusic(Gdx.files.internal("musics/MoogCity2.mp3"));
+        Music menuBGM = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/MoogCity2.mp3"));
         AudioController.getInstance().playMusic(menuBGM);
     }
 
     public static void setMenuScreen(BaseMenuScreen menuScreen) {
+        if (menuScreen == null) return;
+
         if (currentMenuScreen != null) {
             currentMenuScreen.dispose();
         }
@@ -45,6 +50,35 @@ public class MenuController {
             currentMenuScreen = null;
         }
         game.setScreen(gameScreen);
+    }
+
+    public static void resumeGameScreen() {
+        if (currentMenuScreen != null) {
+            currentMenuScreen.dispose();
+            currentMenuScreen = null;
+        }
+        if (gameScreen != null) {
+            game.setScreen(gameScreen);
+        }
+    }
+
+    public static void quitGameScreenToMenu(BaseMenuScreen destination) {
+        if (gameScreen != null) {
+            gameScreen.dispose();
+            gameScreen = null;
+        }
+        setMenuScreen(destination);
+    }
+
+    public static void openSettings(BaseMenuScreen returnTo) {
+        settingsReturnScreen = returnTo;
+        setMenuScreen(new SettingsMenuScreen());
+    }
+
+    public static BaseMenuScreen settingsReturnScreen() {
+        BaseMenuScreen target = settingsReturnScreen;
+        settingsReturnScreen = null;
+        return target;
     }
 
     public static GameScreen getGameScreen() { return gameScreen;}

@@ -13,6 +13,7 @@ public class SettingsMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
 
         Label volumeLabel = new Label("Volume", Assets.getSkin());
         Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, Assets.getSkin());

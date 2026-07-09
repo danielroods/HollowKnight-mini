@@ -12,6 +12,7 @@ import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
+import HollowKnight.source.view.menus.PauseMenuScreen;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.false_knight.FalseKnight;
@@ -81,6 +82,8 @@ public class GameController {
 
     public void update(float delta) {
 
+        if (handlePauseInput()) return;
+
         if (!player.isAlive()) {
             playerController.update(delta);
             if (crystalGuardianController != null) {
@@ -145,6 +148,14 @@ public class GameController {
 
         if (player.getPosition().y < -300f)
             respawnPlayer();
+    }
+
+    private boolean handlePauseInput() {
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            MenuController.setMenuScreen(new PauseMenuScreen());
+            return true;
+        }
+        return false;
     }
 
     private void handleSaveInput() {

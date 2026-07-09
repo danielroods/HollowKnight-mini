@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class MainMenuScreen extends BaseMenuScreen {
     @Override
     public void show() {
-        Image title = new Image(new Texture("menu/title.png"));
+        Gdx.input.setInputProcessor(stage);
 
+        Image title = new Image(new Texture("menu/title.png"));
         TextButton startGameBtn = new TextButton("Start Game", Assets.getSkin());
         TextButton settingsBtn = new TextButton("Settings", Assets.getSkin());
         TextButton guideBtn = new TextButton("Guide", Assets.getSkin());

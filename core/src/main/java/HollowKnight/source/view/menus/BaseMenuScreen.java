@@ -24,7 +24,6 @@ public abstract class BaseMenuScreen implements Screen {
         batch = Main.getGameInstance().getBatch();
         viewport = UIContext.getViewport();
         stage = new Stage(viewport, batch);
-        Gdx.input.setInputProcessor(stage);
 
         Pixmap cursorPixmap = new Pixmap(Gdx.files.internal("icons/Cursor.png"));
 

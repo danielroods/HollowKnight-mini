@@ -65,6 +65,8 @@ public class GuideMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         float centerX = Gdx.graphics.getWidth() / 2f;
 
         controlsTab = new TextButton("Controls", Assets.getSkin());
