@@ -5,6 +5,7 @@ import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -243,13 +244,26 @@ public class CrystalGuardianController {
             if (Intersector.overlaps(swordHitbox, guardian.getBounds())) {
                 playerController.gainSoul();
                 hitGuardians.add(guardian);
-                applyHit(guardian, player);
+                applyHit(guardian, player, playerController.getNailDamage());
             }
         }
     }
 
-    private void applyHit(CrystalGuardian guardian, Player player) {
-        guardian.setHealth(guardian.getHealth() - playerController.getNailDamage());
+    public void checkVengefulSpiritHit(VengefulSpirit spirit, Player player) {
+        for (CrystalGuardian guardian : guardianList) {
+            if (guardian.getState() == CrystalGuardianState.DEAD) continue;
+            if (guardian.isInvincible()) continue;
+            if (spirit.hasHit(guardian)) continue;
+
+            if (Intersector.overlaps(spirit.getBounds(), guardian.getBounds())) {
+                spirit.markHit(guardian);
+                applyHit(guardian, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    private void applyHit(CrystalGuardian guardian, Player player, int damage) {
+        guardian.setHealth(guardian.getHealth() - damage);
         guardian.setHurtTimer(CrystalGuardianConstants.HURT_COOLDOWN);
         guardian.setOnGround(false);
 

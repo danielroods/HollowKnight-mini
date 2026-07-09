@@ -13,11 +13,14 @@ import HollowKnight.source.model.player.AttackDirection;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
+import HollowKnight.source.model.spell.VengefulSpiritConstants;
 import com.badlogic.gdx.math.Rectangle;
 
 public class PlayerController {
     private static PlayerController instance;
     private final Player player;
+
+    private static boolean godMode = false;
 
     private PlayerController() {
         player = Player.getInstance();
@@ -28,6 +31,9 @@ public class PlayerController {
             instance = new PlayerController();
         return instance;
     }
+
+    public static boolean isGodMode() { return godMode; }
+    public static void toggleGodMode() { godMode = !godMode; }
 
     public void update(float delta) {
         if (!player.isAlive()) {
@@ -61,6 +67,11 @@ public class PlayerController {
         if (player.getWallJumpLockTimer() > 0) {
             player.setWallJumpLockTimer(player.getWallJumpLockTimer() - delta);
         }
+        if (player.getCastTimer() > 0) {
+            player.setCastTimer(player.getCastTimer() - delta);
+            if (player.getCastTimer() <= 0)
+                player.setCasting(false);
+        }
         if (player.isDashing()) {
             player.setVelocityY(0f);
         }
@@ -87,6 +98,9 @@ public class PlayerController {
         }
         else if (player.isAttacking()) {
             player.setState(PlayerState.ATTACK);
+        }
+        else if (player.isCasting()) {
+            player.setState(PlayerState.CAST);
         }
         else if (player.isFocusing()) {
             player.setState(PlayerState.FOCUS);
@@ -119,13 +133,13 @@ public class PlayerController {
     }
 
     public void moveLeft() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked() || player.isCasting()) return;
         player.setVelocityX(-PlayerConstants.SPEED);
         player.setFacingRight(false);
     }
 
     public void moveRight() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked() || player.isCasting()) return;
         player.setVelocityX(PlayerConstants.SPEED);
         player.setFacingRight(true);
     }
@@ -136,7 +150,7 @@ public class PlayerController {
     }
 
     public void jump() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting()) return;
 
         if (player.isWallSliding()) {
             wallJump();
@@ -168,7 +182,7 @@ public class PlayerController {
 
     public void dash() {
         if (!player.isAlive()) return;
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting()) return;
         if (player.getDashCountInAir() >= PlayerConstants.MAX_DASH_IN_AIR) return;
         if (player.getDashCooldownTimer() > 0) return;
 
@@ -213,6 +227,7 @@ public class PlayerController {
     }
 
     public void takeDamage(int amount) {
+        if (godMode) return;
         if (player.isInvincible() || !player.isAlive()) return;
         cancelFocus();
         player.setHealth(Math.max(0, player.getHealth() - amount));
@@ -222,7 +237,7 @@ public class PlayerController {
     }
 
     public void startFocus() {
-        if (!player.isOnGround() || player.isInvincible() || player.isAttacking() || player.isDashing())
+        if (!player.isOnGround() || player.isInvincible() || player.isAttacking() || player.isDashing() || player.isCasting())
             return;
         if (player.getHealAnimTimer() > 0)
             return;
@@ -272,12 +287,32 @@ public class PlayerController {
     }
 
     public void attack(AttackDirection dir) {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting()) return;
         if (player.isAttacking()) return;
 
         player.setAttacking(true);
         player.setAttackTimer(getAttackDuration());
         player.setAttackDirection(dir);
+    }
+
+    public boolean castVengefulSpirit() {
+        if (!player.isAlive()) return false;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting() || player.isAttacking()) return false;
+        if (player.getSoul() < PlayerConstants.SPELL_SOUL_COST) return false;
+
+        player.setSoul(player.getSoul() - PlayerConstants.SPELL_SOUL_COST);
+        player.setCasting(true);
+        player.setCastTimer(getCastLockDuration());
+        player.setVelocityX(0f);
+        return true;
+    }
+
+    public float getCastLockDuration() {
+        return PlayerConstants.CAST_LOCK_DURATION;
+    }
+
+    public int getSpellDamage() {
+        return VengefulSpiritConstants.DAMAGE;
     }
 
     public void checkSwordHits(MossflyController mossflyController,
@@ -369,4 +404,3 @@ public class PlayerController {
         player.addSoul(soulAmount);
     }
 }
-

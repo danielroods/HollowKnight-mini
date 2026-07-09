@@ -9,6 +9,7 @@ import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.controller.spell.VengefulSpiritController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.game_utils.CameraShake;
 import HollowKnight.source.model.asset.Assets;
@@ -24,6 +25,7 @@ import HollowKnight.source.view.enemies.MossflyRenderer;
 import HollowKnight.source.view.menus.InventoryScreen;
 import HollowKnight.source.view.npc.ZoteDialogueRenderer;
 import HollowKnight.source.view.npc.ZoteRenderer;
+import HollowKnight.source.view.spell.VengefulSpiritRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -68,11 +70,13 @@ public class GameScreen implements Screen {
     private FalseKnightRenderer falseKnightRenderer;
     private ZoteRenderer zoteRenderer;
     private ZoteDialogueRenderer zoteDialogueRenderer;
+    private VengefulSpiritRenderer vengefulSpiritRenderer;
 
     // for debug
     private ShapeRenderer shapeRenderer;
     private final int slotIndex;
     private final GameData dataToLoad;
+    private boolean initialized = false;
 
     public GameScreen(int slotIndex, GameData dataToLoad) {
         this.slotIndex = slotIndex;
@@ -81,6 +85,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        if (initialized) {
+            Gdx.input.setInputProcessor(null);
+            return;
+        }
+        initialized = true;
+
         batch = Main.getGameInstance().getBatch();
 
         worldCamera = new OrthographicCamera();
@@ -98,6 +108,7 @@ public class GameScreen implements Screen {
         gameController = GameController.getInstance();
         gameController.setPlayer(Player.getInstance());
         gameController.setPlayerController(PlayerController.getInstance());
+        gameController.setVengefulSpiritController(new VengefulSpiritController());
         gameController.setActiveSlotIndex(slotIndex);
 
         BossProgressManager.reset();
@@ -135,6 +146,7 @@ public class GameScreen implements Screen {
         falseKnightRenderer = new FalseKnightRenderer();
         zoteRenderer = new ZoteRenderer();
         zoteDialogueRenderer = new ZoteDialogueRenderer();
+        vengefulSpiritRenderer = new VengefulSpiritRenderer();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -181,6 +193,7 @@ public class GameScreen implements Screen {
                 renderMossfly();
                 renderHuskHornhead();
                 renderCrystalGuardian();
+                renderVengefulSpirit();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -200,6 +213,7 @@ public class GameScreen implements Screen {
                 renderMossfly();
                 renderHuskHornhead();
                 renderCrystalCrawler();
+                renderVengefulSpirit();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -220,6 +234,7 @@ public class GameScreen implements Screen {
                 renderCrystalGuardian();
                 renderCrystalCrawler();
                 renderZote();
+                renderVengefulSpirit();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -237,6 +252,7 @@ public class GameScreen implements Screen {
 
                 batch.begin();
                 renderFalseKnight();
+                renderVengefulSpirit();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -281,6 +297,13 @@ public class GameScreen implements Screen {
         ZoteController zoteController = gameController.getZoteController();
         if (zoteController != null) {
             zoteRenderer.render(batch, zoteController.getZoteList(), zoteController, player);
+        }
+    }
+
+    private void renderVengefulSpirit() {
+        VengefulSpiritController vengefulSpiritController = gameController.getVengefulSpiritController();
+        if (vengefulSpiritController != null) {
+            vengefulSpiritRenderer.render(batch, vengefulSpiritController.getProjectiles());
         }
     }
 

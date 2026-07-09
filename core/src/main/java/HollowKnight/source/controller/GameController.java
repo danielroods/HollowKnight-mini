@@ -6,6 +6,7 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
+import HollowKnight.source.controller.spell.VengefulSpiritController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.data.SaveLoadManager;
 import HollowKnight.source.model.achievement.AchievementManager;
@@ -54,6 +55,7 @@ public class GameController {
     private CrystalCrawlerController crystalCrawlerController;
     private FalseKnightController falseKnightController;
     private ZoteController zoteController;
+    private VengefulSpiritController vengefulSpiritController;
     private InventoryScreen inventoryScreen;
 
     private TiledMap currentMap;
@@ -99,6 +101,7 @@ public class GameController {
 
         handleSaveInput();
         handleInventoryMenuInput();
+        handleCheatInput();
 
         handleZoteInteractionInput();
         boolean zoteDialogueOpen = zoteController != null && zoteController.isDialogueOpen();
@@ -109,6 +112,7 @@ public class GameController {
             handleWallSlideInput();
             handleDashInput();
             handleAttackInput();
+            handleSpellInput();
             playerController.checkSwordHits(mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController, zoteController);
         }
         else {
@@ -146,6 +150,12 @@ public class GameController {
             zoteController.update(delta, player, logicLayer);
         }
 
+        if (vengefulSpiritController != null) {
+            vengefulSpiritController.update(delta, player, logicLayer,
+                mossflyController, huskHornheadController, crystalGuardianController,
+                crystalCrawlerController, falseKnightController, zoteController);
+        }
+
         if (player.getPosition().y < -300f)
             respawnPlayer();
     }
@@ -161,6 +171,27 @@ public class GameController {
     private void handleSaveInput() {
         if (Gdx.input.isKeyJustPressed(Keys.S)) {
             saveToActiveSlot();
+        }
+    }
+
+    private void handleCheatInput() {
+        boolean ctrl = Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Keys.CONTROL_RIGHT);
+        if (!ctrl) return;
+
+        if (Gdx.input.isKeyJustPressed(Keys.G)) {
+            PlayerController.toggleGodMode();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.R)) {
+            player.setSoul(PlayerConstants.MAX_SOUL);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.H)) {
+            player.setHealth(PlayerConstants.MAX_HEALTH);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.B) && transitionListener != null) {
+            transitionListener.onTransition(Maps.BOSS_ROOM.getIndex(), "spawn_from_" + Maps.CRYSTAL_PEAK.getId());
         }
     }
 
@@ -288,6 +319,15 @@ public class GameController {
         }
 
         playerController.attack(dir);
+    }
+
+    private void handleSpellInput() {
+        if (!Gdx.input.isKeyJustPressed(Keys.Z)) return;
+        if (vengefulSpiritController == null) return;
+
+        if (playerController.castVengefulSpirit()) {
+            vengefulSpiritController.spawn(player);
+        }
     }
 
     private void handleFocusInput(float delta) {
@@ -500,9 +540,9 @@ public class GameController {
     public void setPlayerController(PlayerController playerController) { this.playerController = playerController; }
     public void setCurrentMap(TiledMap map) { currentMap = map; }
     public void setCurrentMapIndex(int idx) { this.currentMapIndex = idx; }
-    public void setInventoryScreen(InventoryScreen inventoryScreen) {
-        this.inventoryScreen = inventoryScreen;
-    }
+    public void setInventoryScreen(InventoryScreen inventoryScreen) { this.inventoryScreen = inventoryScreen; }
+    public void setVengefulSpiritController(VengefulSpiritController vengefulSpiritController) { this.vengefulSpiritController = vengefulSpiritController; }
+
 
     public TiledMap getCurrentMap() { return currentMap; }
     public int getCurrentMapIndex() { return currentMapIndex; }
@@ -512,4 +552,5 @@ public class GameController {
     public CrystalCrawlerController getCrystalCrawlerController() { return crystalCrawlerController; }
     public FalseKnightController getFalseKnightController() { return falseKnightController; }
     public ZoteController getZoteController() { return zoteController; }
+    public VengefulSpiritController getVengefulSpiritController() { return vengefulSpiritController; }
 }

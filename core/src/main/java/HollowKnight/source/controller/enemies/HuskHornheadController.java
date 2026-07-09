@@ -5,6 +5,7 @@ import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -33,20 +34,6 @@ public class HuskHornheadController {
 
         for (HuskHornhead huskHornhead : huskList) {
             updateOne(delta, huskHornhead, player, logicLayer);
-        }
-    }
-
-    public void checkSwordHits(Rectangle swordHitbox, Player player) {
-        for (HuskHornhead huskHornhead : huskList) {
-            if (huskHornhead.getState() == HuskHornheadState.DEAD) continue;
-            if (huskHornhead.isInvincible()) continue;
-            if (hitHuskHornheads.contains(huskHornhead)) continue;
-
-            if (Intersector.overlaps(swordHitbox, huskHornhead.getBounds())) {
-                playerController.gainSoul();
-                hitHuskHornheads.add(huskHornhead);
-                applyHit(huskHornhead, player);
-            }
         }
     }
 
@@ -254,8 +241,35 @@ public class HuskHornheadController {
         }
     }
 
-    private void applyHit(HuskHornhead huskHornhead, Player player) {
-        huskHornhead.setHealth(huskHornhead.getHealth() - playerController.getNailDamage());
+    public void checkSwordHits(Rectangle swordHitbox, Player player) {
+        for (HuskHornhead huskHornhead : huskList) {
+            if (huskHornhead.getState() == HuskHornheadState.DEAD) continue;
+            if (huskHornhead.isInvincible()) continue;
+            if (hitHuskHornheads.contains(huskHornhead)) continue;
+
+            if (Intersector.overlaps(swordHitbox, huskHornhead.getBounds())) {
+                playerController.gainSoul();
+                hitHuskHornheads.add(huskHornhead);
+                applyHit(huskHornhead, player, playerController.getNailDamage());
+            }
+        }
+    }
+
+    public void checkVengefulSpiritHit(VengefulSpirit spirit, Player player) {
+        for (HuskHornhead huskHornhead : huskList) {
+            if (huskHornhead.getState() == HuskHornheadState.DEAD) continue;
+            if (huskHornhead.isInvincible()) continue;
+            if (spirit.hasHit(huskHornhead)) continue;
+
+            if (Intersector.overlaps(spirit.getBounds(), huskHornhead.getBounds())) {
+                spirit.markHit(huskHornhead);
+                applyHit(huskHornhead, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    private void applyHit(HuskHornhead huskHornhead, Player player, int damage) {
+        huskHornhead.setHealth(huskHornhead.getHealth() - damage);
         huskHornhead.setHurtTimer(HuskHornheadConstants.HURT_COOLDOWN);
         huskHornhead.setKnockbackTimer(HuskHornheadConstants.KNOCKBACK_DURATION);
         huskHornhead.setOnGround(false);

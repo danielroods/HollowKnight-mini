@@ -9,6 +9,7 @@ import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightConstants;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -422,7 +423,22 @@ public class FalseKnightController {
             if (Intersector.overlaps(swordHitbox, hurtbox)) {
                 playerController.gainSoul();
                 hitBosses.add(falseKnight);
-                applyHit(falseKnight);
+                applyHit(falseKnight, playerController.getNailDamage());
+            }
+        }
+    }
+
+    public void checkVengefulSpiritHit(VengefulSpirit spirit) {
+        for (FalseKnight falseKnight : falseKnightList) {
+            if (!isHittable(falseKnight.getState())) continue;
+            if (falseKnight.isInvincible()) continue;
+            if (spirit.hasHit(falseKnight)) continue;
+
+            Rectangle hurtbox = falseKnight.getState() == FalseKnightState.STUNNED ? buildInnerHitbox(falseKnight) : falseKnight.getBounds();
+
+            if (Intersector.overlaps(spirit.getBounds(), hurtbox)) {
+                spirit.markHit(falseKnight);
+                applyHit(falseKnight, playerController.getSpellDamage());
             }
         }
     }
@@ -431,8 +447,8 @@ public class FalseKnightController {
         return state != FalseKnightState.STUN_ENTER && state != FalseKnightState.STUN_RECOVER && state != FalseKnightState.DEAD;
     }
 
-    private void applyHit(FalseKnight falseKnight) {
-        falseKnight.setHealth(falseKnight.getHealth() - playerController.getNailDamage());
+    private void applyHit(FalseKnight falseKnight, int damage) {
+        falseKnight.setHealth(falseKnight.getHealth() - damage);
         falseKnight.setHurtTimer(FalseKnightConstants.HURT_COOLDOWN);
 
         if (falseKnight.getHealth() <= 0) {

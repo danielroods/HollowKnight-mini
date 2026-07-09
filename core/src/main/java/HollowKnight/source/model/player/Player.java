@@ -36,6 +36,8 @@ public class Player {
     private int dashCountInAir;
     private boolean isWallSliding;
     private float wallJumpLockTimer;
+    private boolean isCasting;
+    private float castTimer;
 
     private AttackDirection attackDirection = AttackDirection.RIGHT;
 
@@ -74,6 +76,8 @@ public class Player {
         dashCountInAir = 0;
         isWallSliding = false;
         wallJumpLockTimer = 0f;
+        isCasting = false;
+        castTimer = 0f;
     }
 
     public void setVelocityX(float velocityX) {
@@ -160,6 +164,12 @@ public class Player {
     public void setWallJumpLockTimer(float wallJumpLockTimer) {
         this.wallJumpLockTimer = wallJumpLockTimer;
     }
+    public void setCasting(boolean casting) {
+        isCasting = casting;
+    }
+    public void setCastTimer(float castTimer) {
+        this.castTimer = castTimer;
+    }
 
     public Vector2 getPosition() { return position; }
     public Vector2 getVelocity() { return velocity; }
@@ -190,4 +200,6 @@ public class Player {
     public boolean isWallSliding() { return isWallSliding; }
     public float getWallJumpLockTimer() { return wallJumpLockTimer; }
     public boolean isWallJumpLocked() { return wallJumpLockTimer > 0f; }
+    public boolean isCasting() { return isCasting; }
+    public float getCastTimer() { return castTimer; }
 }

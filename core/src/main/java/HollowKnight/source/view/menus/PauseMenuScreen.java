@@ -17,29 +17,30 @@ public class PauseMenuScreen extends BaseMenuScreen {
         titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
         titleStyle.fontColor = Color.WHITE;
 
-        Label title = new Label("Paused", titleStyle);
-        title.setFontScale(1.4f);
+        Label title = new Label("Pause Menu", titleStyle);
+        title.setFontScale(2.2f);
+        title.setColor(Color.VIOLET);
         title.pack();
-        title.setPosition(Gdx.graphics.getWidth() / 2f - title.getWidth() / 2f, 560f);
+        title.setPosition(Gdx.graphics.getWidth() / 2f - title.getWidth() / 2f, 830f);
 
         TextButton resumeBtn = new TextButton("Resume", Assets.getSkin());
         TextButton optionsBtn = new TextButton("Options", Assets.getSkin());
         TextButton cheatsBtn = new TextButton("Cheats", Assets.getSkin());
-        TextButton saveAndQuitBtn = new TextButton("Save and Quit to Main Menu", Assets.getSkin());
+        TextButton saveAndQuitBtn = new TextButton("Save and Quit", Assets.getSkin());
 
         PauseMenuController.modifyComponents(resumeBtn, optionsBtn, cheatsBtn, saveAndQuitBtn);
 
-        prepareButton(resumeBtn, 300f, 60f);
-        prepareButton(optionsBtn, 300f, 60f);
-        prepareButton(cheatsBtn, 300f, 60f);
-        prepareButton(saveAndQuitBtn, 460f, 60f);
+        prepareButton(resumeBtn, 300f, 70f);
+        prepareButton(optionsBtn, 300f, 70f);
+        prepareButton(cheatsBtn, 300f, 70f);
+        prepareButton(saveAndQuitBtn, 460f, 70f);
 
         float centerX = Gdx.graphics.getWidth() / 2f - 150f;
 
-        resumeBtn.setPosition(centerX, 440f);
-        optionsBtn.setPosition(centerX, 360f);
-        cheatsBtn.setPosition(centerX, 280f);
-        saveAndQuitBtn.setPosition(Gdx.graphics.getWidth() / 2f - 230f, 190f);
+        resumeBtn.setPosition(centerX, 630f);
+        optionsBtn.setPosition(centerX, 520f);
+        cheatsBtn.setPosition(centerX, 410f);
+        saveAndQuitBtn.setPosition(Gdx.graphics.getWidth() / 2f - 230f, 290f);
 
         stage.addActor(title);
         stage.addActor(resumeBtn);

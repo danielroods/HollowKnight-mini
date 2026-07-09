@@ -11,6 +11,7 @@ import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
 import HollowKnight.source.model.npc.zote.ZoteConstants;
+import HollowKnight.source.model.spell.VengefulSpiritConstants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -131,6 +132,9 @@ public class Assets {
     private static Sound[] zoteVoiceSfx;
     private static Sound zoteAngryVoiceSfx;
 
+    private static Texture vengefulSpiritSheet;
+    private static Animation<TextureRegion> vengefulSpiritAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -150,6 +154,7 @@ public class Assets {
         loadCrystalCrawlerAssets();
         loadFalseKnightAssets();
         loadZoteAssets();
+        loadVengefulSpiritAssets();
         loadMaps();
     }
 
@@ -202,6 +207,7 @@ public class Assets {
         playerAnimations.put(PlayerState.ATTACK, makeAnim(PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_FRAMES, attackSheet, AssetConstants.ATTACK_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.DASH, makeAnim(PlayerConstants.DASH_DURATION / AssetConstants.DASH_FRAMES, dashSheet, AssetConstants.DASH_FRAMES, Animation.PlayMode.NORMAL));
         playerAnimations.put(PlayerState.WALL_SLIDE, makeAnim(0.12f, wallSlideSheet, AssetConstants.WALL_SLIDE_FRAMES, Animation.PlayMode.LOOP));
+        playerAnimations.put(PlayerState.CAST, playerAnimations.get(PlayerState.FOCUS));
 
         float attackFrameDur = PlayerConstants.ATTACK_DUR / AssetConstants.ATTACK_EFFECT_FRAMES;
         attackHorizontalEffectAnim = makeAnim(attackFrameDur, attackHorizontalEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
@@ -303,6 +309,11 @@ public class Assets {
         zoteAngryVoiceSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/zote/Zote_angry.wav"));
     }
 
+    private static void loadVengefulSpiritAssets() {
+        vengefulSpiritSheet = new Texture(Gdx.files.internal("player/effects/VengefulSpirit.png"));
+        vengefulSpiritAnim = makeAnim(VengefulSpiritConstants.FRAME_DURATION, vengefulSpiritSheet, VengefulSpiritConstants.FRAME_COUNT, Animation.PlayMode.LOOP);
+    }
+
     private static void loadHUDAssets() {
         healthBarTextures = new Texture[5];
         for (int i = 0; i < 5; i++)
@@ -375,28 +386,51 @@ public class Assets {
             generator.dispose();
 
             Pixmap offPixmap = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
-            offPixmap.setColor(new Color(0.8f, 0.8f, 0.8f, 1f));
-            offPixmap.drawRectangle(0, 0, 32, 32);
-            offPixmap.setColor(new Color(0.08f, 0.08f, 0.08f, 0.85f));
-            offPixmap.fillRectangle(2, 2, 28, 28);
+            offPixmap.setColor(new Color(0.4f, 0.4f, 0.4f, 0.8f));
+            offPixmap.drawRectangle(2, 2, 28, 28);
+            offPixmap.setColor(new Color(0.7f, 0.7f, 0.7f, 1f));
+            offPixmap.drawRectangle(3, 3, 26, 26);
             Texture offTexture = new Texture(offPixmap);
             skin.add("hk-checkbox-off", new TextureRegion(offTexture));
 
             Pixmap onPixmap = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
-            onPixmap.setColor(new Color(0.8f, 0.8f, 0.8f, 1f));
-            onPixmap.drawRectangle(0, 0, 32, 32);
-            onPixmap.setColor(new Color(0.08f, 0.08f, 0.08f, 0.85f));
-            onPixmap.fillRectangle(2, 2, 28, 28);
+            onPixmap.setColor(new Color(0.4f, 0.4f, 0.4f, 0.8f));
+            onPixmap.drawRectangle(2, 2, 28, 28);
+            onPixmap.setColor(new Color(0.7f, 0.7f, 0.7f, 1f));
+            onPixmap.drawRectangle(3, 3, 26, 26);
             onPixmap.setColor(Color.WHITE);
-            onPixmap.drawLine(8, 8, 24, 24);
-            onPixmap.drawLine(8, 9, 23, 24);
-            onPixmap.drawLine(8, 24, 24, 8);
-            onPixmap.drawLine(8, 23, 23, 8);
+            onPixmap.fillRectangle(8, 8, 16, 16);
             Texture onTexture = new Texture(onPixmap);
             skin.add("hk-checkbox-on", new TextureRegion(onTexture));
 
+            Pixmap trackPix = new Pixmap(10, 4, Pixmap.Format.RGBA8888);
+            trackPix.setColor(new Color(0.5f, 0.5f, 0.5f, 0.6f));
+            trackPix.fillRectangle(0, 0, 10, 4);
+            Texture trackTexture = new Texture(trackPix);
+            skin.add("hk-slider-track", new TextureRegion(trackTexture));
+
+            Pixmap knobPix = new Pixmap(20, 32, Pixmap.Format.RGBA8888);
+            knobPix.setColor(Color.WHITE);
+            knobPix.fillTriangle(10, 0, 20, 16, 0, 16);
+            knobPix.fillTriangle(0, 16, 20, 16, 10, 32);
+            Texture knobTexture = new Texture(knobPix);
+            skin.add("hk-slider-knob", new TextureRegion(knobTexture));
+
             offPixmap.dispose();
             onPixmap.dispose();
+            trackPix.dispose();
+            knobPix.dispose();
+
+            com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle cbStyle = new com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle();
+            cbStyle.checkboxOff = skin.getDrawable("hk-checkbox-off");
+            cbStyle.checkboxOn = skin.getDrawable("hk-checkbox-on");
+            cbStyle.font = normalFont;
+            skin.add("hollow-style", cbStyle);
+
+            com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle sliderStyle = new com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle();
+            sliderStyle.background = skin.getDrawable("hk-slider-track");
+            sliderStyle.knob = skin.getDrawable("hk-slider-knob");
+            skin.add("hollow-style", sliderStyle);
 
             skin.load(Gdx.files.internal("ui/Hollow Knight skin.json"));
         }
@@ -465,6 +499,8 @@ public class Assets {
     public static Animation<TextureRegion> getZoteAttackAnim() { return zoteAttackAnim; }
     public static Sound[] getZoteVoiceSfx() { return zoteVoiceSfx; }
     public static Sound getZoteAngryVoiceSfx() { return zoteAngryVoiceSfx; }
+
+    public static Animation<TextureRegion> getVengefulSpiritAnim() { return vengefulSpiritAnim; }
 
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
@@ -538,6 +574,8 @@ public class Assets {
         }
         if (zoteAngryVoiceSfx != null)
             zoteAngryVoiceSfx.dispose();
+
+        disposeIfNotNull(vengefulSpiritSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();

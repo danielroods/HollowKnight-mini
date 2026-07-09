@@ -12,5 +12,6 @@ public enum PlayerState {
     HEAL,
     DASH,
     WALL_SLIDE,
+    CAST,
     DEAD
 }

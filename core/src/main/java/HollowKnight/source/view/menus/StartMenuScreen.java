@@ -43,7 +43,7 @@ public class StartMenuScreen extends BaseMenuScreen {
         StartMenuController.modifyComponents(slotButtons, backBtn, this);
 
         float slotWidth = 560f;
-        float slotHeight = 70f;
+        float slotHeight = 80f;
         float spacing = 140f;
         float topY = 730f;
         float centerX = Gdx.graphics.getWidth() / 2f - slotWidth / 2f;

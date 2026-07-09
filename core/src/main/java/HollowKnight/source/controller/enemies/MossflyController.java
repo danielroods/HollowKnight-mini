@@ -5,6 +5,7 @@ import HollowKnight.source.model.enemies.mossfly.MossflyState;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -165,13 +166,27 @@ public class MossflyController {
             if (Intersector.overlaps(swordHitbox, mossfly.getBounds())) {
                 playerController.gainSoul();
                 hitMossflies.add(mossfly);
-                applyHit(mossfly, player);
+                applyHit(mossfly, player, playerController.getNailDamage());
             }
         }
     }
 
-    private void applyHit(Mossfly mossfly, Player player) {
-        mossfly.setHealth(mossfly.getHealth() - playerController.getNailDamage());
+    public void checkVengefulSpiritHit(VengefulSpirit spirit, Player player) {
+        for (Mossfly mossfly : mossflyList) {
+            if (mossfly.getState() == MossflyState.HIDDEN) continue;
+            if (mossfly.getState() == MossflyState.DEAD) continue;
+            if (mossfly.isInvincible()) continue;
+            if (spirit.hasHit(mossfly)) continue;
+
+            if (Intersector.overlaps(spirit.getBounds(), mossfly.getBounds())) {
+                spirit.markHit(mossfly);
+                applyHit(mossfly, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    private void applyHit(Mossfly mossfly, Player player, int damage) {
+        mossfly.setHealth(mossfly.getHealth() - damage);
         mossfly.setHurtTimer(MossflyConstants.HURT_COOLDOWN);
 
         float playerY = player.getBounds().y + player.getBounds().height / 2f;

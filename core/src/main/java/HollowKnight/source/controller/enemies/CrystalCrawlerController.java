@@ -5,6 +5,7 @@ import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -33,20 +34,6 @@ public class CrystalCrawlerController {
 
         for (CrystalCrawler crawler : crawlerList) {
             updateOne(delta, crawler, player, logicLayer);
-        }
-    }
-
-    public void checkSwordHits(Rectangle swordHitbox, Player player) {
-        for (CrystalCrawler crawler : crawlerList) {
-            if (crawler.getState() == CrystalCrawlerState.DEAD) continue;
-            if (crawler.isInvincible()) continue;
-            if (hitCrawlers.contains(crawler)) continue;
-
-            if (Intersector.overlaps(swordHitbox, crawler.getBounds())) {
-                playerController.gainSoul();
-                hitCrawlers.add(crawler);
-                applyHit(crawler, player);
-            }
         }
     }
 
@@ -191,8 +178,35 @@ public class CrystalCrawlerController {
         }
     }
 
-    private void applyHit(CrystalCrawler crawler, Player player) {
-        crawler.setHealth(crawler.getHealth() - playerController.getNailDamage());
+    public void checkSwordHits(Rectangle swordHitbox, Player player) {
+        for (CrystalCrawler crawler : crawlerList) {
+            if (crawler.getState() == CrystalCrawlerState.DEAD) continue;
+            if (crawler.isInvincible()) continue;
+            if (hitCrawlers.contains(crawler)) continue;
+
+            if (Intersector.overlaps(swordHitbox, crawler.getBounds())) {
+                playerController.gainSoul();
+                hitCrawlers.add(crawler);
+                applyHit(crawler, player, playerController.getNailDamage());
+            }
+        }
+    }
+
+    public void checkVengefulSpiritHit(VengefulSpirit spirit, Player player) {
+        for (CrystalCrawler crawler : crawlerList) {
+            if (crawler.getState() == CrystalCrawlerState.DEAD) continue;
+            if (crawler.isInvincible()) continue;
+            if (spirit.hasHit(crawler)) continue;
+
+            if (Intersector.overlaps(spirit.getBounds(), crawler.getBounds())) {
+                spirit.markHit(crawler);
+                applyHit(crawler, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    private void applyHit(CrystalCrawler crawler, Player player, int damage) {
+        crawler.setHealth(crawler.getHealth() - damage);
         crawler.setHurtTimer(CrystalCrawlerConstants.HURT_COOLDOWN);
         crawler.setKnockbackTimer(CrystalCrawlerConstants.KNOCKBACK_DURATION);
         crawler.setOnGround(false);

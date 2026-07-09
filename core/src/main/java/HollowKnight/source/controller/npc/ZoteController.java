@@ -8,6 +8,7 @@ import HollowKnight.source.model.npc.zote.ZoteConstants;
 import HollowKnight.source.model.npc.zote.ZoteDialogueLines;
 import HollowKnight.source.model.npc.zote.ZoteState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -80,6 +81,18 @@ public class ZoteController {
             if (zote.getState() == ZoteState.TALKING || zote.getState() == ZoteState.ANGRY) continue;
             if (!Intersector.overlaps(swordHitbox, zote.getBounds())) continue;
 
+            playAngryVoiceSfx();
+            enterState(zote, ZoteState.ANGRY);
+        }
+    }
+
+    public void checkVengefulSpiritHit(VengefulSpirit spirit, Player player) {
+        for (Zote zote : zoteList) {
+            if (zote.getState() == ZoteState.TALKING || zote.getState() == ZoteState.ANGRY) continue;
+            if (spirit.hasHit(zote)) continue;
+            if (!Intersector.overlaps(spirit.getBounds(), zote.getBounds())) continue;
+
+            spirit.markHit(zote);
             playAngryVoiceSfx();
             enterState(zote, ZoteState.ANGRY);
         }
