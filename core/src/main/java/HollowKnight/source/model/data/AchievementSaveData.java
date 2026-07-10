@@ -1,4 +1,4 @@
-package HollowKnight.source.data;
+package HollowKnight.source.model.data;
 
 public class AchievementSaveData {
     private String[] unlockedAchievementNames;

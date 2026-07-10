@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.Disposable;
 public class AchievementPopupRenderer implements Disposable {
 
     private static final float SLIDE_IN_DUR = 0.35f;
-    private static final float HOLD_DUR = 3f;
-    private static final float FADE_OUT_DUR = 0.45f;
+    private static final float HOLD_DUR = 2.25f;
+    private static final float FADE_OUT_DUR = 0.4f;
     private static final float TOTAL_DUR = SLIDE_IN_DUR + HOLD_DUR + FADE_OUT_DUR;
 
     private static final float BANNER_W = 640f;

@@ -1,8 +1,8 @@
 package HollowKnight.source.controller.menus;
 
 import HollowKnight.source.controller.MenuController;
-import HollowKnight.source.data.GameData;
-import HollowKnight.source.data.SaveLoadManager;
+import HollowKnight.source.model.data.GameData;
+import HollowKnight.source.model.data.SaveLoadManager;
 import HollowKnight.source.view.menus.MainMenuScreen;
 import HollowKnight.source.view.menus.StartMenuScreen;
 import com.badlogic.gdx.scenes.scene2d.Actor;

@@ -1,4 +1,4 @@
-package HollowKnight.source.data;
+package HollowKnight.source.model.data;
 
 public class GameData {
     private int masksCount;
@@ -10,6 +10,10 @@ public class GameData {
     private float playerY;
 
     private boolean falseKnightDefeated;
+
+    private float totalPlayTimeSeconds;
+    private int enemiesDefeated;
+    private int totalDeaths;
 
     private String savedAt;
 
@@ -33,6 +37,15 @@ public class GameData {
 
     public boolean isFalseKnightDefeated() { return falseKnightDefeated; }
     public void setFalseKnightDefeated(boolean falseKnightDefeated) { this.falseKnightDefeated = falseKnightDefeated; }
+
+    public float getTotalPlayTimeSeconds() { return totalPlayTimeSeconds; }
+    public void setTotalPlayTimeSeconds(float totalPlayTimeSeconds) { this.totalPlayTimeSeconds = totalPlayTimeSeconds; }
+
+    public int getEnemiesDefeated() { return enemiesDefeated; }
+    public void setEnemiesDefeated(int enemiesDefeated) { this.enemiesDefeated = enemiesDefeated; }
+
+    public int getTotalDeaths() { return totalDeaths; }
+    public void setTotalDeaths(int totalDeaths) { this.totalDeaths = totalDeaths; }
 
     public String getSavedAt() { return savedAt; }
     public void setSavedAt(String savedAt) { this.savedAt = savedAt; }

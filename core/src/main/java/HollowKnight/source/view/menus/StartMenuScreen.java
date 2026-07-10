@@ -2,11 +2,10 @@ package HollowKnight.source.view.menus;
 
 import HollowKnight.source.controller.MenuController;
 import HollowKnight.source.controller.menus.StartMenuController;
-import HollowKnight.source.data.GameData;
-import HollowKnight.source.data.SaveLoadManager;
+import HollowKnight.source.model.data.GameData;
+import HollowKnight.source.model.data.SaveLoadManager;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.map.Maps;
-import HollowKnight.source.model.player.PlayerConstants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;

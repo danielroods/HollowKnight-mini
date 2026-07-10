@@ -1,7 +1,7 @@
 package HollowKnight.source.controller.npc;
 
 import HollowKnight.source.controller.PlayerController;
-import HollowKnight.source.data.GameSettings;
+import HollowKnight.source.model.data.GameSettingsData;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.npc.zote.Zote;
 import HollowKnight.source.model.npc.zote.ZoteConstants;
@@ -283,13 +283,13 @@ public class ZoteController {
         Sound[] sfx = Assets.getZoteVoiceSfx();
         if (sfx == null || sfx.length == 0) return;
         int idx = MathUtils.random(sfx.length - 1);
-        sfx[idx].play(GameSettings.getVolume());
+        sfx[idx].play(GameSettingsData.getVolume());
     }
 
     private void playAngryVoiceSfx() {
         Sound sfx = Assets.getZoteAngryVoiceSfx();
         if (sfx == null) return;
-        sfx.play(GameSettings.getVolume());
+        sfx.play(GameSettingsData.getVolume());
     }
 
     private boolean isPlayerInRange(Zote zote, Player player) {

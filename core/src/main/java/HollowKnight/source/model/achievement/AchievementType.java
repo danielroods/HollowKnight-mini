@@ -15,7 +15,7 @@ public enum AchievementType {
 
     SPEEDRUN(
         "Speedrun",
-        "Finish the game under 20 minutes",
+        "Finish the game under 5 minutes",
         "achievements/speedrun.png"
     ),
 

@@ -11,6 +11,7 @@ import HollowKnight.source.model.enemies.false_knight.FalseKnightState;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
+import HollowKnight.source.model.data.GameStats;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -471,12 +472,16 @@ public class FalseKnightController {
         if (falseKnight.getHealth() <= 0) {
             falseKnight.setShockwaveActive(false);
             enterState(falseKnight, FalseKnightState.DEAD);
+            GameStats.increaseDefeatedEnemies();
 
             BossProgressManager.markDefeated(BossProgressManager.FALSE_KNIGHT);
             AchievementManager.unlock(AchievementType.DEFEAT_FALSE_KNIGHT);
             AchievementManager.unlock(AchievementType.COMPLETION);
             if (playerController.getDamageTakenFromBoss() == 0) {
                 AchievementManager.unlock(AchievementType.NO_DAMAGE_FALSE_KNIGHT);
+            }
+            if (GameStats.getTotalPlayTimeSeconds() < 300f) {
+                AchievementManager.unlock(AchievementType.SPEEDRUN);
             }
         }
     }

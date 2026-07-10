@@ -8,10 +8,12 @@ import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.spell.HowlingWraithsController;
 import HollowKnight.source.controller.spell.VengefulSpiritController;
-import HollowKnight.source.data.GameData;
-import HollowKnight.source.data.SaveLoadManager;
+import HollowKnight.source.model.data.GameData;
+import HollowKnight.source.model.data.SaveLoadManager;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
+import HollowKnight.source.model.data.GameStats;
+import HollowKnight.source.view.menus.EndMenuScreen;
 import HollowKnight.source.view.menus.PauseMenuScreen;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
@@ -74,6 +76,10 @@ public class GameController {
         return instance;
     }
 
+    public static void resetInstance() {
+        instance = null;
+    }
+
     public interface MapTransitionListener {
         void onTransition(int targetMapIndex, String spawnPointName);
     }
@@ -85,6 +91,9 @@ public class GameController {
     public void update(float delta) {
 
         if (handlePauseInput()) return;
+
+        GameStats.tickPlayTime(delta);
+        checkVictoryCondition(delta);
 
         if (!player.isAlive()) {
             playerController.update(delta);
@@ -107,7 +116,7 @@ public class GameController {
         boolean zoteDialogueOpen = zoteController != null && zoteController.isDialogueOpen();
 
         handleFocusInput(delta);
-        if (PlayerController.isSpectatorMode()) {
+        if (playerController.isSpectatorMode()) {
             handleMovementInput();
         }
         else if (!player.isFocusing() && !zoteDialogueOpen) {
@@ -123,7 +132,7 @@ public class GameController {
         }
         playerController.update(delta);
 
-        if (!PlayerController.isSpectatorMode()) {
+        if (!playerController.isSpectatorMode()) {
             handleCollisions();
             handleSpikes();
         }
@@ -179,8 +188,34 @@ public class GameController {
         return false;
     }
 
+    private static final float VICTORY_TRANSITION_DELAY = 12f;
+    private float victoryTransitionTimer = -1f;
+    private boolean victoryHandled = false;
+
+    private void checkVictoryCondition(float delta) {
+        if (victoryHandled) return;
+
+        boolean falseKnightDefeated = BossProgressManager.isDefeated(BossProgressManager.FALSE_KNIGHT);
+
+        if (victoryTransitionTimer < 0f && falseKnightDefeated) {
+            BossProgressManager.reset();
+            victoryTransitionTimer = VICTORY_TRANSITION_DELAY;
+            return;
+        }
+
+        if (victoryTransitionTimer < 0f) return;
+
+        victoryTransitionTimer -= delta;
+        if (victoryTransitionTimer <= 0f) {
+            victoryTransitionTimer = -1f;
+            victoryHandled = true;
+            saveToActiveSlot();
+            MenuController.quitGameScreenToMenu(new EndMenuScreen());
+        }
+    }
+
     private void handleSaveInput() {
-        if (Gdx.input.isKeyJustPressed(Keys.S)) {
+        if ((Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Keys.S)) {
             saveToActiveSlot();
         }
     }
@@ -190,7 +225,7 @@ public class GameController {
         if (!ctrl) return;
 
         if (Gdx.input.isKeyJustPressed(Keys.D)) {
-            PlayerController.toggleGodMode();
+            playerController.toggleGodMode();
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.A)) {
@@ -198,15 +233,15 @@ public class GameController {
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.N)) {
-            PlayerController.toggleSpectatorMode();
+            playerController.toggleSpectatorMode();
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.I)) {
-            PlayerController.enterCharmMasterMode();
+            playerController.enterCharmMasterMode();
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.E)) {
-            PlayerController.toggleEmergencyHeal();
+            playerController.toggleEmergencyHeal();
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.L)) {
@@ -228,6 +263,9 @@ public class GameController {
         data.setPlayerX(player.getPosition().x);
         data.setPlayerY(player.getPosition().y);
         data.setFalseKnightDefeated(BossProgressManager.isDefeated(BossProgressManager.FALSE_KNIGHT));
+        data.setTotalPlayTimeSeconds(GameStats.getTotalPlayTimeSeconds());
+        data.setEnemiesDefeated(GameStats.getEnemiesDefeated());
+        data.setTotalDeaths(GameStats.getTotalDeaths());
         data.setSavedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
 
         return data;
@@ -242,6 +280,9 @@ public class GameController {
         playerController.updateLastSafePosition();
 
         BossProgressManager.setDefeated(BossProgressManager.FALSE_KNIGHT, data.isFalseKnightDefeated());
+        GameStats.setTotalPlayTimeSeconds(data.getTotalPlayTimeSeconds());
+        GameStats.setEnemiesDefeated(data.getEnemiesDefeated());
+        GameStats.setTotalDeaths(data.getTotalDeaths());
     }
 
     public void saveToActiveSlot() {
@@ -313,7 +354,7 @@ public class GameController {
     private void handleMovementInput() {
         if (player.isKnockedBack()) return;
 
-        if (PlayerController.isSpectatorMode()) {
+        if (playerController.isSpectatorMode()) {
             boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
             boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
             boolean up = Gdx.input.isKeyPressed(Keys.UP);
@@ -541,6 +582,8 @@ public class GameController {
     }
 
     private void respawnPlayer() {
+        GameStats.increaseTotalDeath();
+
         Vector2 spawn = getSpawnPosition("game_start_spawn");
         player.setPosition(spawn.x, spawn.y);
         player.setVelocityX(0f);

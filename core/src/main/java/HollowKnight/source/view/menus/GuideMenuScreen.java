@@ -23,7 +23,7 @@ public class GuideMenuScreen extends BaseMenuScreen {
 
     private static final float PANEL_WIDTH = 700f;
     private static final float CONTENT_TOP_Y = 860f;
-    private static final float CONTROLS_SPACING = 58f;
+    private static final float CONTROLS_SPACING = 56f;
     private static final float ABILITIES_SPACING = 140f;
     private static final float ABILITIES_VIEWPORT_BOTTOM = 200f;
 
@@ -39,6 +39,7 @@ public class GuideMenuScreen extends BaseMenuScreen {
         {"Down + Z", "Howling Wraiths"},
         {"I", "Open / Close Inventory"},
         {"E", "Interact / Talk"},
+        {"Ctrl + S", "Save game"},
     };
 
     private static final String[][] CHEATS = {
@@ -121,7 +122,7 @@ public class GuideMenuScreen extends BaseMenuScreen {
         clearContent();
 
         float x = (Gdx.graphics.getWidth() - PANEL_WIDTH) / 2f;
-        float y = CONTENT_TOP_Y - 50f;
+        float y = CONTENT_TOP_Y - 40f;
 
         Label.LabelStyle keyStyle = new Label.LabelStyle();
         keyStyle.font = Assets.getSkin().getFont("HollowfontGlow");

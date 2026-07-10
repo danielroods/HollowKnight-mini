@@ -11,10 +11,11 @@ import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.controller.spell.HowlingWraithsController;
 import HollowKnight.source.controller.spell.VengefulSpiritController;
-import HollowKnight.source.data.GameData;
+import HollowKnight.source.model.data.GameData;
 import HollowKnight.source.game_utils.CameraShake;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
+import HollowKnight.source.model.data.GameStats;
 import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
@@ -80,6 +81,7 @@ public class GameScreen implements Screen {
     private final int slotIndex;
     private final GameData dataToLoad;
     private boolean initialized = false;
+    private boolean isDisposed = false;
 
     public GameScreen(int slotIndex, GameData dataToLoad) {
         this.slotIndex = slotIndex;
@@ -116,6 +118,7 @@ public class GameScreen implements Screen {
         gameController.setActiveSlotIndex(slotIndex);
 
         BossProgressManager.reset();
+        GameStats.reset();
 
         int startMapIndex = 0;
         if (dataToLoad != null) {
@@ -124,6 +127,8 @@ public class GameScreen implements Screen {
                 startMapIndex = targetMap.getIndex();
             }
         }
+
+        player = Player.getInstance();
 
         loadMap(startMapIndex);
 
@@ -134,9 +139,21 @@ public class GameScreen implements Screen {
             float targetY = dataToLoad.getPlayerY() + PlayerConstants.HEIGHT / 2f;
             worldCamera.position.set(targetX, targetY, 0f);
             worldCamera.update();
+        } else {
+            Vector2 spawn = GameController.getSpawnPosition("game_start_spawn");
+
+            player.setPosition(spawn.x, spawn.y);
+            player.setVelocityX(0f);
+            player.setVelocityY(0f);
+            player.restoreFullHealth();
+            player.setSoul(0);
+
+            float targetX = spawn.x + PlayerConstants.WIDTH / 2f;
+            float targetY = spawn.y + PlayerConstants.HEIGHT / 2f;
+            worldCamera.position.set(targetX, targetY, 0f);
+            worldCamera.update();
         }
 
-        player = Player.getInstance();
         playerRenderer = new PlayerRenderer(Assets.getPlayerAnimations());
         hudRenderer = new HUDRenderer();
         achievementPopupRenderer = new AchievementPopupRenderer();
@@ -160,6 +177,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (isDisposed) return;
+
         boolean paused = inventoryScreen.isOpen();
 
         if (!paused) {
@@ -168,6 +187,8 @@ public class GameScreen implements Screen {
             achievementPopupRenderer.update(delta);
             updateCamera(delta);
         }
+
+        if (isDisposed) return;
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -409,10 +430,16 @@ public class GameScreen implements Screen {
     }
 
     @Override public void dispose() {
-        if (mapRenderer != null) mapRenderer.dispose();
+        isDisposed = true;
+
+        if (mapRenderer != null) {
+            mapRenderer.dispose();
+            mapRenderer = null;
+        }
         if (hudRenderer != null) hudRenderer.dispose();
         if (achievementPopupRenderer != null) achievementPopupRenderer.dispose();
         if (inventoryScreen != null) inventoryScreen.dispose();
+        if (shapeRenderer != null) shapeRenderer.dispose();
     }
 
     @Override public void pause() {}

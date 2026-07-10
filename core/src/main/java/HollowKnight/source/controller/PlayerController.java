@@ -263,21 +263,18 @@ public class PlayerController {
         player.setVelocityY(0f);
     }
 
-    public static void toggleGodMode() {
+    public void toggleGodMode() {
         if (spectatorMode) return;
         godMode = !godMode;
     }
 
-    public static boolean isGodMode() {
+    public boolean isGodMode() {
         return godMode;
     }
 
-    public static void toggleSpectatorMode() {
+    public void toggleSpectatorMode() {
         spectatorMode = !spectatorMode;
-        if (spectatorMode)
-            godMode = true;
-        else
-            godMode = false;
+        godMode = spectatorMode;
 
         Player player = Player.getInstance();
         player.setVelocityX(0f);
@@ -297,11 +294,11 @@ public class PlayerController {
         }
     }
 
-    public static boolean isSpectatorMode() {
+    public boolean isSpectatorMode() {
         return spectatorMode;
     }
 
-    public static void enterCharmMasterMode() {
+    public void enterCharmMasterMode() {
         charmMasterMode = true;
     }
 
@@ -309,7 +306,7 @@ public class PlayerController {
         return charmMasterMode;
     }
 
-    public static void toggleEmergencyHeal() {
+    public void toggleEmergencyHeal() {
         emergencyHeal = !emergencyHeal;
     }
 

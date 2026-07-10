@@ -1,4 +1,4 @@
-package HollowKnight.source.data;
+package HollowKnight.source.model.data;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

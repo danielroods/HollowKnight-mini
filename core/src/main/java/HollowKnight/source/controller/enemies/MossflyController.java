@@ -9,6 +9,7 @@ import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
+import HollowKnight.source.model.data.GameStats;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -218,6 +219,7 @@ public class MossflyController {
             }
             enterState(mossfly, MossflyState.DEAD);
             mossfly.setOnGround(false);
+            GameStats.increaseDefeatedEnemies();
         }
 
         mossfly.setKnockbackTimer(MossflyConstants.KNOCKBACK_DURATION);

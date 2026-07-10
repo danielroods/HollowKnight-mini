@@ -9,6 +9,7 @@ import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianState;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
+import HollowKnight.source.model.data.GameStats;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -291,6 +292,7 @@ public class CrystalGuardianController {
             }
             guardian.setLaserActive(false);
             enterState(guardian, CrystalGuardianState.DEAD);
+            GameStats.increaseDefeatedEnemies();
         }
         else {
             guardian.setKnockbackTimer(CrystalGuardianConstants.KNOCKBACK_DURATION);

@@ -9,6 +9,7 @@ import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadState;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
+import HollowKnight.source.model.data.GameStats;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -297,6 +298,7 @@ public class HuskHornheadController {
                 AchievementManager.unlock(AchievementType.TRUE_HUNTER);
             }
             enterState(huskHornhead, HuskHornheadState.DEAD);
+            GameStats.increaseDefeatedEnemies();
         }
 
         huskHornhead.setKnockbackTimer(HuskHornheadConstants.KNOCKBACK_DURATION);

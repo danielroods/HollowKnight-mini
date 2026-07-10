@@ -1,7 +1,7 @@
 package HollowKnight.source.model.achievement;
 
-import HollowKnight.source.data.AchievementSaveData;
-import HollowKnight.source.data.AchievementSaveManager;
+import HollowKnight.source.model.data.AchievementSaveData;
+import HollowKnight.source.model.data.AchievementSaveManager;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;

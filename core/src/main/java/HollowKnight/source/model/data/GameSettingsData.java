@@ -1,6 +1,6 @@
-package HollowKnight.source.data;
+package HollowKnight.source.model.data;
 
-public class GameSettings {
+public class GameSettingsData {
 
     private static float brightness = 0.9f;
     private static float volume = 0.7f;
@@ -11,7 +11,7 @@ public class GameSettings {
     }
 
     public static void setMuted(boolean muted) {
-        GameSettings.musicMuted = muted;
+        GameSettingsData.musicMuted = muted;
     }
 
     public static float getVolume() {
@@ -19,7 +19,7 @@ public class GameSettings {
     }
 
     public static void setVolume(float volume) {
-        GameSettings.volume = volume;
+        GameSettingsData.volume = volume;
     }
 
     public static float getBrightness() {
@@ -27,6 +27,6 @@ public class GameSettings {
     }
 
     public static void setBrightness(float brightness) {
-        GameSettings.brightness = brightness;
+        GameSettingsData.brightness = brightness;
     }
 }

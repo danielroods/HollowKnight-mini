@@ -1,7 +1,7 @@
 package HollowKnight.source.view.menus;
 
 import HollowKnight.source.controller.menus.SettingsMenuController;
-import HollowKnight.source.data.GameSettings;
+import HollowKnight.source.model.data.GameSettingsData;
 import HollowKnight.source.model.asset.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -19,15 +19,15 @@ public class SettingsMenuScreen extends BaseMenuScreen {
 
         Label volumeLabel = new Label("Volume", Assets.getSkin());
         Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, Assets.getSkin(), "hollow-style");
-        volumeSlider.setValue(GameSettings.getVolume());
+        volumeSlider.setValue(GameSettingsData.getVolume());
 
         Label muteLabel = new Label("Mute", Assets.getSkin());
         CheckBox muteCheckBox = new CheckBox("", Assets.getSkin(), "hollow-style");
-        muteCheckBox.setChecked(GameSettings.isMuted());
+        muteCheckBox.setChecked(GameSettingsData.isMuted());
 
         Label brightnessLabel = new Label("Brightness", Assets.getSkin());
         Slider brightnessSlider = new Slider(0.2f, 1f, 0.1f, false, Assets.getSkin(), "hollow-style");
-        brightnessSlider.setValue(GameSettings.getBrightness());
+        brightnessSlider.setValue(GameSettingsData.getBrightness());
 
         TextButton backBtn = new TextButton("Back", Assets.getSkin());
         prepareButton(backBtn, 300, 60);

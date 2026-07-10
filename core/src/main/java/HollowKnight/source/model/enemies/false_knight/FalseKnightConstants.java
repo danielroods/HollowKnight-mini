@@ -3,15 +3,15 @@ package HollowKnight.source.model.enemies.false_knight;
 public class FalseKnightConstants {
     public static final float WIDTH = 380f;
     public static final float HEIGHT = 290f;
-    public static final float RIGHT_BOUNDS_OFFSET_X = 95f;
-    public static final float LEFT_BOUNDS_OFFSET_X = 145f;
+    public static final float RIGHT_BOUNDS_OFFSET_X = 55f;
+    public static final float LEFT_BOUNDS_OFFSET_X = 105f;
     public static final float BOUNDS_OFFSET_Y = 15f;
     public static final float BOUNDS_W = 140f;
     public static final float BOUNDS_H = 135f;
     public static final float INNER_HITBOX_W = 65f;
     public static final float INNER_HITBOX_H = 55f;
 
-    public static final int MAX_HEALTH = 20;
+    public static final int MAX_HEALTH = 30;
     public static final int STUN_HP_THRESHOLD = MAX_HEALTH / 2;
     public static final float HURT_COOLDOWN = 0.45f;
     public static final float GRAVITY = -1450f;

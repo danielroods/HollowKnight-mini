@@ -1,7 +1,7 @@
 package HollowKnight.source.controller;
 
 import HollowKnight.source.Main;
-import HollowKnight.source.data.GameData;
+import HollowKnight.source.model.data.GameData;
 import HollowKnight.source.view.menus.MenuBackground;
 import HollowKnight.source.view.menus.MenuParticleLayer;
 import HollowKnight.source.view.GameScreen;
@@ -67,6 +67,9 @@ public class MenuController {
             gameScreen.dispose();
             gameScreen = null;
         }
+
+        GameController.resetInstance();
+
         setMenuScreen(destination);
     }
 
