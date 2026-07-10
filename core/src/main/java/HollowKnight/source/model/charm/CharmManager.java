@@ -1,5 +1,7 @@
 package HollowKnight.source.model.charm;
 
+import HollowKnight.source.controller.PlayerController;
+
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -24,7 +26,7 @@ public class CharmManager {
             return true;
         }
 
-        if (getUsedNotches() + 1 > CharmConstants.TOTAL_NOTCHES)
+        if (getUsedNotches() + 1 > getTotalNotches())
             return false;
 
         equippedCharms.add(charm);
@@ -39,6 +41,6 @@ public class CharmManager {
     }
 
     public static int getTotalNotches() {
-        return CharmConstants.TOTAL_NOTCHES;
+        return PlayerController.isCharmMasterMode() ? CharmConstants.CHARM_MASTER_MODE_NOTCHES : CharmConstants.TOTAL_NOTCHES;
     }
 }

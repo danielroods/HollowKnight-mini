@@ -29,4 +29,5 @@ public class PlayerConstants {
     public static final float WALL_JUMP_LOCK_DURATION = 0.19f;
     public static final int SPELL_SOUL_COST = MAX_SOUL / 3;
     public static final float CAST_LOCK_DURATION = 0.45f;
+    public static final float SPECTATOR_FLY_SPEED = 450f;
 }

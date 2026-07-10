@@ -21,6 +21,8 @@ public class PlayerController {
     private final Player player;
 
     private static boolean godMode = false;
+    private static boolean spectatorMode = false;
+    private static boolean charmMasterMode = false;
     private static boolean emergencyHeal = false;
 
     private PlayerController() {
@@ -34,6 +36,11 @@ public class PlayerController {
     }
 
     public void update(float delta) {
+        if (spectatorMode) {
+            updateSpectator(delta);
+            return;
+        }
+
         if (!player.isAlive()) {
             player.setVelocityX(0f);
             player.setVelocityY(0f);
@@ -224,8 +231,82 @@ public class PlayerController {
         }
     }
 
+    private void updateSpectator(float delta) {
+        float newX = player.getPosition().x + player.getVelocity().x * delta;
+        float newY = player.getPosition().y + player.getVelocity().y * delta;
+        player.setPosition(newX, newY);
+        player.getBounds().setPosition(player.getPosition().x + 85, player.getPosition().y);
+
+        player.setOnGround(false);
+
+        boolean moving = Math.abs(player.getVelocity().x) > 0f || Math.abs(player.getVelocity().y) > 0f;
+        player.setState(moving ? PlayerState.RUN : PlayerState.IDLE);
+    }
+
+    public void flyRight() {
+        player.setVelocityX(PlayerConstants.SPECTATOR_FLY_SPEED);
+    }
+
+    public void flyLeft() {
+        player.setVelocityX(-PlayerConstants.SPECTATOR_FLY_SPEED);
+    }
+
+    public void flyUp() {
+        player.setVelocityY(PlayerConstants.SPECTATOR_FLY_SPEED);
+    }
+
+    public void flyDown() {
+        player.setVelocityY(-PlayerConstants.SPECTATOR_FLY_SPEED);
+    }
+
+    public void stopVertical() {
+        player.setVelocityY(0f);
+    }
+
     public static void toggleGodMode() {
+        if (spectatorMode) return;
         godMode = !godMode;
+    }
+
+    public static boolean isGodMode() {
+        return godMode;
+    }
+
+    public static void toggleSpectatorMode() {
+        spectatorMode = !spectatorMode;
+        if (spectatorMode)
+            godMode = true;
+        else
+            godMode = false;
+
+        Player player = Player.getInstance();
+        player.setVelocityX(0f);
+        player.setVelocityY(0f);
+
+        if (spectatorMode) {
+            player.setDashing(false);
+            player.setDashTimer(0f);
+            player.setAttacking(false);
+            player.setAttackTimer(0f);
+            player.setCasting(false);
+            player.setCastTimer(0f);
+            player.setFocusing(false);
+            player.setFocusTimer(0f);
+            player.setKnockbackTimer(0f);
+            player.setWallSliding(false);
+        }
+    }
+
+    public static boolean isSpectatorMode() {
+        return spectatorMode;
+    }
+
+    public static void enterCharmMasterMode() {
+        charmMasterMode = true;
+    }
+
+    public static boolean isCharmMasterMode() {
+        return charmMasterMode;
     }
 
     public static void toggleEmergencyHeal() {
@@ -233,9 +314,16 @@ public class PlayerController {
     }
 
     public void takeDamage(int amount) {
+        if (godMode || spectatorMode) return;
         if (player.isInvincible() || !player.isAlive()) return;
         cancelFocus();
-        player.setHealth(Math.max(0, player.getHealth() - amount));
+
+        int newHealth = player.getHealth() - amount;
+        if (emergencyHeal && newHealth <= 0) {
+            newHealth = 1;
+        }
+
+        player.setHealth(Math.max(0, newHealth));
         player.setHurtTimer(PlayerConstants.HURT_COOLDOWN);
         if (player.isAlive())
             player.setState(PlayerState.HURT);
@@ -425,13 +513,6 @@ public class PlayerController {
     }
 
     public int getDamageTakenFromBoss() { return player.getDamageTakenFromBoss(); }
-
-    public boolean isGodMode() {
-        return godMode;
-    }
-    public boolean isEmergencyHeal() {
-        return emergencyHeal;
-    }
 
     public void gainSoul() {
         int soulAmount = PlayerConstants.SOUL_GAIN_PER_HIT;

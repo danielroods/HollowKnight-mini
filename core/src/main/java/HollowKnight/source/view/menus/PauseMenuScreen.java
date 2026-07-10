@@ -19,7 +19,6 @@ public class PauseMenuScreen extends BaseMenuScreen {
 
         Label title = new Label("Pause Menu", titleStyle);
         title.setFontScale(2.2f);
-        title.setColor(Color.VIOLET);
         title.pack();
         title.setPosition(Gdx.graphics.getWidth() / 2f - title.getWidth() / 2f, 830f);
 

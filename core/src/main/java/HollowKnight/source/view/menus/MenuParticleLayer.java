@@ -18,7 +18,7 @@ public class MenuParticleLayer {
     private float stateTimer = 0f;
     private float transitionTimer = 0f;
 
-    private final float TIME_BETWEEN_CHANGES = 10f;
+    private final float TIME_BETWEEN_CHANGES = 8f;
     private final float TRANSITION_DURATION = 2f;
     private boolean isTransitioning = false;
 

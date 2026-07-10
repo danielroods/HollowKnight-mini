@@ -10,8 +10,6 @@ import HollowKnight.source.controller.spell.HowlingWraithsController;
 import HollowKnight.source.controller.spell.VengefulSpiritController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.data.SaveLoadManager;
-import HollowKnight.source.model.achievement.AchievementManager;
-import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.view.menus.PauseMenuScreen;
@@ -102,14 +100,17 @@ public class GameController {
         }
 
         handleSaveInput();
-        handleInventoryMenuInput();
         handleCheatInput();
+        handleInventoryMenuInput();
 
         handleZoteInteractionInput();
         boolean zoteDialogueOpen = zoteController != null && zoteController.isDialogueOpen();
 
         handleFocusInput(delta);
-        if (!player.isFocusing() && !zoteDialogueOpen) {
+        if (PlayerController.isSpectatorMode()) {
+            handleMovementInput();
+        }
+        else if (!player.isFocusing() && !zoteDialogueOpen) {
             handleMovementInput();
             handleWallSlideInput();
             handleDashInput();
@@ -122,8 +123,10 @@ public class GameController {
         }
         playerController.update(delta);
 
-        handleCollisions();
-        handleSpikes();
+        if (!PlayerController.isSpectatorMode()) {
+            handleCollisions();
+            handleSpikes();
+        }
         handleDoors();
 
         MapLayer logicLayer = currentMap.getLayers().get("logic");
@@ -186,21 +189,34 @@ public class GameController {
         boolean ctrl = Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Keys.CONTROL_RIGHT);
         if (!ctrl) return;
 
-        if (Gdx.input.isKeyJustPressed(Keys.G)) {
+        if (Gdx.input.isKeyJustPressed(Keys.D)) {
             PlayerController.toggleGodMode();
         }
 
-        if (Gdx.input.isKeyJustPressed(Keys.R)) {
-            player.setSoul(PlayerConstants.MAX_SOUL);
+        if (Gdx.input.isKeyJustPressed(Keys.A)) {
+            teleportToBossArena();
         }
 
-        if (Gdx.input.isKeyJustPressed(Keys.H)) {
+        if (Gdx.input.isKeyJustPressed(Keys.N)) {
+            PlayerController.toggleSpectatorMode();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.I)) {
+            PlayerController.enterCharmMasterMode();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.E)) {
             PlayerController.toggleEmergencyHeal();
         }
 
-        if (Gdx.input.isKeyJustPressed(Keys.B) && transitionListener != null) {
-            transitionListener.onTransition(Maps.BOSS_ROOM.getIndex(), "spawn_from_" + Maps.CRYSTAL_PEAK.getId());
+        if (Gdx.input.isKeyJustPressed(Keys.L)) {
+            player.setSoul(PlayerConstants.MAX_SOUL);
         }
+    }
+
+    private void teleportToBossArena() {
+        if (transitionListener == null) return;
+        transitionListener.onTransition(Maps.BOSS_ROOM.getIndex(), "spawn_from_" + Maps.CRYSTAL_PEAK.getId());
     }
 
     public GameData captureGameData() {
@@ -297,19 +313,41 @@ public class GameController {
     private void handleMovementInput() {
         if (player.isKnockedBack()) return;
 
-        boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
-        boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
-        boolean jump = Gdx.input.isKeyJustPressed(Keys.SPACE);
+        if (PlayerController.isSpectatorMode()) {
+            boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
+            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
+            boolean up = Gdx.input.isKeyPressed(Keys.UP);
+            boolean down = Gdx.input.isKeyPressed(Keys.DOWN);
 
-        if (left && !right)
-            playerController.moveLeft();
-        else if (right && !left)
-            playerController.moveRight();
-        else
-            playerController.stopHorizontal();
+            if (left && !right)
+                playerController.flyLeft();
+            else if (right && !left)
+                playerController.flyRight();
+            else
+                playerController.stopHorizontal();
 
-        if (jump)
-            playerController.jump();
+            if (up && !down)
+                playerController.flyUp();
+            else if (down && !up)
+                playerController.flyDown();
+            else
+                playerController.stopVertical();
+        }
+        else {
+            boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
+            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
+
+            if (left && !right)
+                playerController.moveLeft();
+            else if (right && !left)
+                playerController.moveRight();
+            else
+                playerController.stopHorizontal();
+
+            boolean jump = Gdx.input.isKeyJustPressed(Keys.SPACE);
+            if (jump)
+                playerController.jump();
+        }
     }
 
     private void handleAttackInput() {
@@ -331,6 +369,7 @@ public class GameController {
 
     private void handleSpellInput() {
         if (!Gdx.input.isKeyJustPressed(Keys.Z)) return;
+        if (vengefulSpiritController == null || howlingWraithsController == null) return;
 
         if (Gdx.input.isKeyPressed(Keys.DOWN)) {
             if (howlingWraithsController != null && playerController.castHowlingWraiths()) {

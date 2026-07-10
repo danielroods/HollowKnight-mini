@@ -19,7 +19,7 @@ public class GuideMenuController {
         MenuHoverController.addHoverEffect(backBtn);
     }
 
-    public static void modifyTabs(TextButton controlsTab, TextButton abilitiesTab, GuideMenuScreen screen) {
+    public static void modifyTabs(TextButton controlsTab, TextButton abilitiesTab, TextButton cheatsTab, GuideMenuScreen screen) {
         controlsTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -34,7 +34,15 @@ public class GuideMenuController {
             }
         });
 
+        cheatsTab.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.showCheats();
+            }
+        });
+
         MenuHoverController.addHoverEffect(controlsTab);
         MenuHoverController.addHoverEffect(abilitiesTab);
+        MenuHoverController.addHoverEffect(cheatsTab);
     }
 }

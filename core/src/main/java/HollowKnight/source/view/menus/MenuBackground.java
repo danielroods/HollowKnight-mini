@@ -16,7 +16,7 @@ public class MenuBackground {
     private boolean isTransitioning = false;
     private float transitionTimer = 0f;
 
-    private static final float SWITCH_TIME = 10f;
+    private static final float SWITCH_TIME = 8f;
     private static final float TRANSITION_DURATION = 2f;
 
     public MenuBackground() {
