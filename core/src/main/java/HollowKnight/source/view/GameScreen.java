@@ -9,6 +9,7 @@ import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.controller.PlayerController;
+import HollowKnight.source.controller.spell.HowlingWraithsController;
 import HollowKnight.source.controller.spell.VengefulSpiritController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.game_utils.CameraShake;
@@ -25,6 +26,7 @@ import HollowKnight.source.view.enemies.MossflyRenderer;
 import HollowKnight.source.view.menus.InventoryScreen;
 import HollowKnight.source.view.npc.ZoteDialogueRenderer;
 import HollowKnight.source.view.npc.ZoteRenderer;
+import HollowKnight.source.view.spell.HowlingWraithsRenderer;
 import HollowKnight.source.view.spell.VengefulSpiritRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -71,6 +73,7 @@ public class GameScreen implements Screen {
     private ZoteRenderer zoteRenderer;
     private ZoteDialogueRenderer zoteDialogueRenderer;
     private VengefulSpiritRenderer vengefulSpiritRenderer;
+    private HowlingWraithsRenderer howlingWraithsRenderer;
 
     // for debug
     private ShapeRenderer shapeRenderer;
@@ -109,6 +112,7 @@ public class GameScreen implements Screen {
         gameController.setPlayer(Player.getInstance());
         gameController.setPlayerController(PlayerController.getInstance());
         gameController.setVengefulSpiritController(new VengefulSpiritController());
+        gameController.setHowlingWraithsController(new HowlingWraithsController());
         gameController.setActiveSlotIndex(slotIndex);
 
         BossProgressManager.reset();
@@ -147,6 +151,7 @@ public class GameScreen implements Screen {
         zoteRenderer = new ZoteRenderer();
         zoteDialogueRenderer = new ZoteDialogueRenderer();
         vengefulSpiritRenderer = new VengefulSpiritRenderer();
+        howlingWraithsRenderer = new HowlingWraithsRenderer();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -194,6 +199,7 @@ public class GameScreen implements Screen {
                 renderHuskHornhead();
                 renderCrystalGuardian();
                 renderVengefulSpirit();
+                renderHowlingWraiths();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -214,6 +220,7 @@ public class GameScreen implements Screen {
                 renderHuskHornhead();
                 renderCrystalCrawler();
                 renderVengefulSpirit();
+                renderHowlingWraiths();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -235,6 +242,7 @@ public class GameScreen implements Screen {
                 renderCrystalCrawler();
                 renderZote();
                 renderVengefulSpirit();
+                renderHowlingWraiths();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -253,6 +261,7 @@ public class GameScreen implements Screen {
                 batch.begin();
                 renderFalseKnight();
                 renderVengefulSpirit();
+                renderHowlingWraiths();
                 playerRenderer.render(batch, player, delta);
                 batch.end();
 
@@ -304,6 +313,13 @@ public class GameScreen implements Screen {
         VengefulSpiritController vengefulSpiritController = gameController.getVengefulSpiritController();
         if (vengefulSpiritController != null) {
             vengefulSpiritRenderer.render(batch, vengefulSpiritController.getProjectiles());
+        }
+    }
+
+    private void renderHowlingWraiths() {
+        HowlingWraithsController howlingWraithsController = gameController.getHowlingWraithsController();
+        if (howlingWraithsController != null) {
+            howlingWraithsRenderer.render(batch, howlingWraithsController.getActiveEffects());
         }
     }
 

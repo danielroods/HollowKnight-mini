@@ -7,6 +7,7 @@ import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -260,6 +261,16 @@ public class CrystalGuardianController {
 
             if (Intersector.overlaps(spirit.getBounds(), guardian.getBounds())) {
                 spirit.markHit(guardian);
+                applyHit(guardian, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    public void checkHowlingWraithsHit(HowlingWraiths effect, Player player) {
+        for (CrystalGuardian guardian : guardianList) {
+            if (guardian.getState() == CrystalGuardianState.DEAD) continue;
+
+            if (Intersector.overlaps(effect.getBounds(), guardian.getBounds())) {
                 applyHit(guardian, player, playerController.getSpellDamage());
             }
         }

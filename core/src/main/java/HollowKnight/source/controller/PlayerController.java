@@ -305,9 +305,27 @@ public class PlayerController {
     }
 
     public boolean castVengefulSpirit() {
-        if (!player.isAlive()) return false;
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting() || player.isAttacking()) return false;
-        if (player.getSoul() < PlayerConstants.SPELL_SOUL_COST) return false;
+        if (!player.isAlive())
+            return false;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting() || player.isAttacking())
+            return false;
+        if (player.getSoul() < PlayerConstants.SPELL_SOUL_COST)
+            return false;
+
+        player.setSoul(player.getSoul() - PlayerConstants.SPELL_SOUL_COST);
+        player.setCasting(true);
+        player.setCastTimer(getCastLockDuration());
+        player.setVelocityX(0f);
+        return true;
+    }
+
+    public boolean castHowlingWraiths() {
+        if (!player.isAlive())
+            return false;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting() || player.isAttacking())
+            return false;
+        if (player.getSoul() < PlayerConstants.SPELL_SOUL_COST)
+            return false;
 
         player.setSoul(player.getSoul() - PlayerConstants.SPELL_SOUL_COST);
         player.setCasting(true);

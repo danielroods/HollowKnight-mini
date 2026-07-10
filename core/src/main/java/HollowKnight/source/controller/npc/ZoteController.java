@@ -8,6 +8,7 @@ import HollowKnight.source.model.npc.zote.ZoteConstants;
 import HollowKnight.source.model.npc.zote.ZoteDialogueLines;
 import HollowKnight.source.model.npc.zote.ZoteState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapLayer;
@@ -93,6 +94,16 @@ public class ZoteController {
             if (!Intersector.overlaps(spirit.getBounds(), zote.getBounds())) continue;
 
             spirit.markHit(zote);
+            playAngryVoiceSfx();
+            enterState(zote, ZoteState.ANGRY);
+        }
+    }
+
+    public void checkHowlingWraithsHit(HowlingWraiths effect, Player player) {
+        for (Zote zote : zoteList) {
+            if (zote.getState() == ZoteState.TALKING || zote.getState() == ZoteState.ANGRY) continue;
+            if (!Intersector.overlaps(effect.getBounds(), zote.getBounds())) continue;
+
             playAngryVoiceSfx();
             enterState(zote, ZoteState.ANGRY);
         }

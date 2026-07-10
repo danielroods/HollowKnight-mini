@@ -9,6 +9,7 @@ import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightConstants;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -442,6 +443,18 @@ public class FalseKnightController {
 
             if (Intersector.overlaps(spirit.getBounds(), hurtbox)) {
                 spirit.markHit(falseKnight);
+                applyHit(falseKnight, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    public void checkHowlingWraithsHit(HowlingWraiths effect) {
+        for (FalseKnight falseKnight : falseKnightList) {
+            if (!isHittable(falseKnight.getState())) continue;
+
+            Rectangle hurtbox = falseKnight.getState() == FalseKnightState.STUNNED ? buildInnerHitbox(falseKnight) : falseKnight.getBounds();
+
+            if (Intersector.overlaps(effect.getBounds(), hurtbox)) {
                 applyHit(falseKnight, playerController.getSpellDamage());
             }
         }

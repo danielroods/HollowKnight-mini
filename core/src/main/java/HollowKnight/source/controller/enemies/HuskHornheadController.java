@@ -7,6 +7,7 @@ import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -266,6 +267,16 @@ public class HuskHornheadController {
 
             if (Intersector.overlaps(spirit.getBounds(), huskHornhead.getBounds())) {
                 spirit.markHit(huskHornhead);
+                applyHit(huskHornhead, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    public void checkHowlingWraithsHit(HowlingWraiths effect, Player player) {
+        for (HuskHornhead huskHornhead : huskList) {
+            if (huskHornhead.getState() == HuskHornheadState.DEAD) continue;
+
+            if (Intersector.overlaps(effect.getBounds(), huskHornhead.getBounds())) {
                 applyHit(huskHornhead, player, playerController.getSpellDamage());
             }
         }

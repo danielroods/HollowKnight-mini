@@ -7,6 +7,7 @@ import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerState;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -203,6 +204,16 @@ public class CrystalCrawlerController {
 
             if (Intersector.overlaps(spirit.getBounds(), crawler.getBounds())) {
                 spirit.markHit(crawler);
+                applyHit(crawler, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    public void checkHowlingWraithsHit(HowlingWraiths effect, Player player) {
+        for (CrystalCrawler crawler : crawlerList) {
+            if (crawler.getState() == CrystalCrawlerState.DEAD) continue;
+
+            if (Intersector.overlaps(effect.getBounds(), crawler.getBounds())) {
                 applyHit(crawler, player, playerController.getSpellDamage());
             }
         }

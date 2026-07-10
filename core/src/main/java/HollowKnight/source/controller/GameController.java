@@ -6,6 +6,7 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
+import HollowKnight.source.controller.spell.HowlingWraithsController;
 import HollowKnight.source.controller.spell.VengefulSpiritController;
 import HollowKnight.source.data.GameData;
 import HollowKnight.source.data.SaveLoadManager;
@@ -56,6 +57,7 @@ public class GameController {
     private FalseKnightController falseKnightController;
     private ZoteController zoteController;
     private VengefulSpiritController vengefulSpiritController;
+    private HowlingWraithsController howlingWraithsController;
     private InventoryScreen inventoryScreen;
 
     private TiledMap currentMap;
@@ -152,6 +154,12 @@ public class GameController {
 
         if (vengefulSpiritController != null) {
             vengefulSpiritController.update(delta, player, logicLayer,
+                mossflyController, huskHornheadController, crystalGuardianController,
+                crystalCrawlerController, falseKnightController, zoteController);
+        }
+
+        if (howlingWraithsController != null) {
+            howlingWraithsController.update(delta, player,
                 mossflyController, huskHornheadController, crystalGuardianController,
                 crystalCrawlerController, falseKnightController, zoteController);
         }
@@ -323,10 +331,16 @@ public class GameController {
 
     private void handleSpellInput() {
         if (!Gdx.input.isKeyJustPressed(Keys.Z)) return;
-        if (vengefulSpiritController == null) return;
 
-        if (playerController.castVengefulSpirit()) {
-            vengefulSpiritController.spawn(player);
+        if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+            if (howlingWraithsController != null && playerController.castHowlingWraiths()) {
+                howlingWraithsController.spawn(player);
+            }
+        }
+        else {
+            if (vengefulSpiritController != null && playerController.castVengefulSpirit()) {
+                vengefulSpiritController.spawn(player);
+            }
         }
     }
 
@@ -543,7 +557,7 @@ public class GameController {
     public void setCurrentMapIndex(int idx) { this.currentMapIndex = idx; }
     public void setInventoryScreen(InventoryScreen inventoryScreen) { this.inventoryScreen = inventoryScreen; }
     public void setVengefulSpiritController(VengefulSpiritController vengefulSpiritController) { this.vengefulSpiritController = vengefulSpiritController; }
-
+    public void setHowlingWraithsController(HowlingWraithsController howlingWraithsController) { this.howlingWraithsController = howlingWraithsController; }
 
     public TiledMap getCurrentMap() { return currentMap; }
     public int getCurrentMapIndex() { return currentMapIndex; }
@@ -554,4 +568,5 @@ public class GameController {
     public FalseKnightController getFalseKnightController() { return falseKnightController; }
     public ZoteController getZoteController() { return zoteController; }
     public VengefulSpiritController getVengefulSpiritController() { return vengefulSpiritController; }
+    public HowlingWraithsController getHowlingWraithsController() { return howlingWraithsController; }
 }

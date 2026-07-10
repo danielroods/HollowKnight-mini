@@ -7,6 +7,7 @@ import HollowKnight.source.model.enemies.mossfly.MossflyState;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
 import HollowKnight.source.model.player.Player;
+import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.VengefulSpirit;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -183,6 +184,17 @@ public class MossflyController {
 
             if (Intersector.overlaps(spirit.getBounds(), mossfly.getBounds())) {
                 spirit.markHit(mossfly);
+                applyHit(mossfly, player, playerController.getSpellDamage());
+            }
+        }
+    }
+
+    public void checkHowlingWraithsHit(HowlingWraiths effect, Player player) {
+        for (Mossfly mossfly : mossflyList) {
+            if (mossfly.getState() == MossflyState.HIDDEN) continue;
+            if (mossfly.getState() == MossflyState.DEAD) continue;
+
+            if (Intersector.overlaps(effect.getBounds(), mossfly.getBounds())) {
                 applyHit(mossfly, player, playerController.getSpellDamage());
             }
         }

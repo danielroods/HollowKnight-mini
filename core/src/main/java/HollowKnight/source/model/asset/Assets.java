@@ -11,6 +11,7 @@ import HollowKnight.source.model.map.Maps;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
 import HollowKnight.source.model.npc.zote.ZoteConstants;
+import HollowKnight.source.model.spell.HowlingWraithsConstants;
 import HollowKnight.source.model.spell.VengefulSpiritConstants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -135,6 +136,9 @@ public class Assets {
     private static Texture vengefulSpiritSheet;
     private static Animation<TextureRegion> vengefulSpiritAnim;
 
+    private static Texture howlingWraithsSheet;
+    private static Animation<TextureRegion> howlingWraithsAnim;
+
     private static TiledMap[] maps;
 
     public static void load() {
@@ -155,6 +159,7 @@ public class Assets {
         loadFalseKnightAssets();
         loadZoteAssets();
         loadVengefulSpiritAssets();
+        loadHowlingWraithsAssets();
         loadMaps();
     }
 
@@ -312,6 +317,11 @@ public class Assets {
     private static void loadVengefulSpiritAssets() {
         vengefulSpiritSheet = new Texture(Gdx.files.internal("player/effects/VengefulSpirit.png"));
         vengefulSpiritAnim = makeAnim(VengefulSpiritConstants.FRAME_DURATION, vengefulSpiritSheet, VengefulSpiritConstants.FRAME_COUNT, Animation.PlayMode.LOOP);
+    }
+    
+    private static void loadHowlingWraithsAssets() {
+        howlingWraithsSheet = new Texture(Gdx.files.internal("player/effects/HowlingWraiths.png"));
+        howlingWraithsAnim = makeAnim(HowlingWraithsConstants.FRAME_DURATION, howlingWraithsSheet, HowlingWraithsConstants.FRAME_COUNT, Animation.PlayMode.NORMAL);
     }
 
     private static void loadHUDAssets() {
@@ -501,6 +511,7 @@ public class Assets {
     public static Sound getZoteAngryVoiceSfx() { return zoteAngryVoiceSfx; }
 
     public static Animation<TextureRegion> getVengefulSpiritAnim() { return vengefulSpiritAnim; }
+    public static Animation<TextureRegion> getHowlingWraithsAnim() { return howlingWraithsAnim; }
 
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
@@ -576,6 +587,7 @@ public class Assets {
             zoteAngryVoiceSfx.dispose();
 
         disposeIfNotNull(vengefulSpiritSheet);
+        disposeIfNotNull(howlingWraithsSheet);
 
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();
