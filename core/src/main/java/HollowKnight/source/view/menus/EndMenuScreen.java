@@ -26,7 +26,7 @@ public class EndMenuScreen extends BaseMenuScreen {
 
         Label title = new Label("Journey's End", titleStyle);
         title.setFontScale(2.4f);
-        title.setColor(Color.GREEN);
+        title.setColor(Color.OLIVE);
         title.setPosition(centerX - title.getPrefWidth() / 2f, y);
         stage.addActor(title);
         y -= 195f;

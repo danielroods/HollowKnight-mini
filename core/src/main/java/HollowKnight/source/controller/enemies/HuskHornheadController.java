@@ -3,6 +3,8 @@ package HollowKnight.source.controller.enemies;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.data.GameSettingsData;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornhead;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadConstants;
 import HollowKnight.source.model.enemies.husk_hornhead.HuskHornheadState;
@@ -288,6 +290,10 @@ public class HuskHornheadController {
         huskHornhead.setHurtTimer(HuskHornheadConstants.HURT_COOLDOWN);
         huskHornhead.setKnockbackTimer(HuskHornheadConstants.KNOCKBACK_DURATION);
         huskHornhead.setOnGround(false);
+
+        if (Assets.getHuskHornheadDamagedSfx() != null) {
+            Assets.getHuskHornheadDamagedSfx() .play(GameSettingsData.getVolume());
+        }
 
         float knockBackDirectionX = player.isFacingRight() ? 1f : -1f;
 

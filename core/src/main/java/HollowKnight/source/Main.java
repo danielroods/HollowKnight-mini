@@ -26,7 +26,6 @@ public class Main extends Game {
         Assets.load();
         MenuController.setGame(this);
         MenuController.setMenuScreen(new MainMenuScreen());
-        //MenuController.playMusic();
         BrightnessRenderer.init();
     }
 

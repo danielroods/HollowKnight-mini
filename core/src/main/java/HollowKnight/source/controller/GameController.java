@@ -582,13 +582,19 @@ public class GameController {
     }
 
     private void respawnPlayer() {
-        GameStats.increaseTotalDeath();
-
-        Vector2 spawn = getSpawnPosition("game_start_spawn");
-        player.setPosition(spawn.x, spawn.y);
+        player.restoreFullHealth();
+        player.setSoul(0);
         player.setVelocityX(0f);
         player.setVelocityY(0f);
-        player.restoreFullHealth();
+
+        if (currentMapIndex == Maps.GREENPATH_ROOM_1.getIndex()) {
+            Vector2 spawn = getSpawnPosition("game_start_spawn");
+            player.setPosition(spawn.x, spawn.y);
+        }
+        else if (transitionListener != null) {
+            transitionListener.onTransition(Maps.GREENPATH_ROOM_1.getIndex(), "game_start_spawn");
+        }
+
         playerController.updateLastSafePosition();
     }
 

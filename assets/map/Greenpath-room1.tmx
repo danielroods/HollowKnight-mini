@@ -1569,7 +1569,7 @@
 </data>
  </layer>
  <objectgroup id="12" name="logic">
-  <object id="1" name="game_start_spawn" x="278.666" y="1042.5">
+  <object id="1" name="game_start_spawn" x="409.166" y="1048.75">
    <point/>
   </object>
   <object id="2" name="spawn_from_greenpath_room2" x="2322" y="189.667">

@@ -19,8 +19,8 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
 
         float panelWidth = 700;
         float x = (Gdx.graphics.getWidth() - panelWidth) / 2f;
-        float y = 800;
-        float spacing = 115;
+        float y = 760;
+        float spacing = 122;
 
         Label.LabelStyle titleStyle = new Label.LabelStyle();
         titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
@@ -29,6 +29,11 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
         Label.LabelStyle descStyle = new Label.LabelStyle();
         descStyle.font = Assets.getSkin().getFont("AchievementDescFont");
         descStyle.fontColor = Color.WHITE;
+
+        Label menuTitle = new Label("Achievements", titleStyle);
+        menuTitle.setFontScale(2.2f);
+        menuTitle.setColor(Color.WHITE);
+        menuTitle.setPosition(x + 20f , y + 170f);
 
         for (AchievementType achievement : AchievementType.values()) {
 
@@ -76,11 +81,9 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
 
         prepareButton(backBtn, 300, 60);
 
-        backBtn.setPosition(
-            Gdx.graphics.getWidth() / 2f - 150,
-            120
-        );
+        backBtn.setPosition(Gdx.graphics.getWidth() / 2f - 150, 120);
 
+        stage.addActor(menuTitle);
         stage.addActor(backBtn);
     }
 }

@@ -10,9 +10,9 @@ public class PlayerConstants {
     public static final float HITBOX_ACTIVE_END = ATTACK_DUR * 0.85f;
     public static final float HITBOX_ACTIVE_START = ATTACK_DUR * 0.20f;
     public static final float HURT_COOLDOWN = 1.5f;
-    public static final int MAX_HEALTH = 6;
+    public static final int MAX_HEALTH = 5;
     public static final int MAX_SOUL = 99;
-    public static final int SOUL_GAIN_PER_HIT = 5;
+    public static final int SOUL_GAIN_PER_HIT = 7;
     public static final int SOUL_HEAL_COST = 33;
     public static final float FOCUS_DURATION = 1.75f;
     public static final float HEAL_ANIM_DUR = 0.80f;

@@ -31,7 +31,6 @@ public class AudioController {
             if (progress >= 1.0f) {
                 if (currentMusic != null) {
                     currentMusic.stop();
-                    currentMusic.dispose();
                 }
                 currentMusic = nextMusic;
                 currentMusic.setVolume(maxVolume);
@@ -49,24 +48,29 @@ public class AudioController {
     }
 
     public void playMusic(Music newMusic) {
-        if (currentMusic == newMusic || newMusic == null) {
-            return;
-        }
+        if (newMusic == null) return;
+        if (newMusic == currentMusic) return;
+        if (isFading && newMusic == nextMusic) return;
 
         if (currentMusic == null) {
             currentMusic = newMusic;
             currentMusic.setVolume(maxVolume);
             currentMusic.setLooping(true);
             currentMusic.play();
-        } else {
-            nextMusic = newMusic;
-            nextMusic.setVolume(0f);
-            nextMusic.setLooping(true);
-            nextMusic.play();
-
-            isFading = true;
-            fadeTimer = 0f;
+            return;
         }
+
+        if (isFading && nextMusic != null) {
+            nextMusic.stop();
+        }
+
+        nextMusic = newMusic;
+        nextMusic.setVolume(0f);
+        nextMusic.setLooping(true);
+        nextMusic.play();
+
+        isFading = true;
+        fadeTimer = 0f;
     }
 
     public void setFadeDuration(float duration) {

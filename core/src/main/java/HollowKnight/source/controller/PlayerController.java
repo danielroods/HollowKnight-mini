@@ -6,6 +6,8 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
+import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.charm.CharmConstants;
 import HollowKnight.source.model.charm.CharmManager;
 import HollowKnight.source.model.charm.CharmType;
@@ -138,13 +140,13 @@ public class PlayerController {
     }
 
     public void moveLeft() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked() || player.isCasting()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
         player.setVelocityX(-PlayerConstants.SPEED);
         player.setFacingRight(false);
     }
 
     public void moveRight() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked() || player.isCasting()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isWallJumpLocked()) return;
         player.setVelocityX(PlayerConstants.SPEED);
         player.setFacingRight(true);
     }
@@ -155,7 +157,7 @@ public class PlayerController {
     }
 
     public void jump() {
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
 
         if (player.isWallSliding()) {
             wallJump();
@@ -187,9 +189,13 @@ public class PlayerController {
 
     public void dash() {
         if (!player.isAlive()) return;
-        if (player.isFocusing() || player.isKnockedBack() || player.isDashing() || player.isCasting()) return;
+        if (player.isFocusing() || player.isKnockedBack() || player.isDashing()) return;
         if (player.getDashCountInAir() >= PlayerConstants.MAX_DASH_IN_AIR) return;
         if (player.getDashCooldownTimer() > 0) return;
+
+        if (Assets.getDashSfx() != null) {
+            Assets.getDashSfx().play(GameSettingsData.getVolume());
+        }
 
         float dir = player.isFacingRight() ? 1f : -1f;
 
@@ -324,6 +330,10 @@ public class PlayerController {
         player.setHurtTimer(PlayerConstants.HURT_COOLDOWN);
         if (player.isAlive())
             player.setState(PlayerState.HURT);
+
+        if (Assets.getPlayerDamagedSfx() != null) {
+            Assets.getPlayerDamagedSfx().play(GameSettingsData.getVolume());
+        }
     }
 
     public void addDamageTakenFromBoss(int damage) {
@@ -342,6 +352,10 @@ public class PlayerController {
         player.setFocusing(true);
         player.setFocusTimer(0f);
         player.setVelocityX(0f);
+
+        if (Assets.getFocusSfx() != null) {
+            Assets.getFocusSfx().play(GameSettingsData.getVolume());
+        }
     }
 
     public void updateFocus(float delta) {
@@ -387,6 +401,10 @@ public class PlayerController {
         player.setAttacking(true);
         player.setAttackTimer(getAttackDuration());
         player.setAttackDirection(dir);
+
+        if (Assets.getPlayerAttackSfx() != null) {
+            Assets.getPlayerAttackSfx().play(GameSettingsData.getVolume());
+        }
     }
 
     public boolean castVengefulSpirit() {
@@ -516,5 +534,9 @@ public class PlayerController {
         if (CharmManager.isEquipped(CharmType.SOUL_CATCHER))
             soulAmount += CharmConstants.SOUL_CATCHER_BONUS_SOUL;
         player.addSoul(soulAmount);
+
+        if (Assets.getSoulGainSfx() != null) {
+            Assets.getSoulGainSfx().play(GameSettingsData.getVolume());
+        }
     }
 }

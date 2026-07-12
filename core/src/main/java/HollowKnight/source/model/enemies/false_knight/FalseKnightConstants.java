@@ -3,10 +3,10 @@ package HollowKnight.source.model.enemies.false_knight;
 public class FalseKnightConstants {
     public static final float WIDTH = 380f;
     public static final float HEIGHT = 290f;
-    public static final float RIGHT_BOUNDS_OFFSET_X = 55f;
-    public static final float LEFT_BOUNDS_OFFSET_X = 105f;
+    public static final float RIGHT_BOUNDS_OFFSET_X = 140f;
+    public static final float LEFT_BOUNDS_OFFSET_X = 140f;
     public static final float BOUNDS_OFFSET_Y = 15f;
-    public static final float BOUNDS_W = 140f;
+    public static final float BOUNDS_W = 100f;
     public static final float BOUNDS_H = 135f;
     public static final float INNER_HITBOX_W = 65f;
     public static final float INNER_HITBOX_H = 55f;
@@ -20,15 +20,15 @@ public class FalseKnightConstants {
     public static final float DECISION_DELAY_PHASE1 = 0.50f;
     public static final float DECISION_DELAY_PHASE2 = 0.35f;
 
-    public static final float CLOSE_RANGE = 140f;
-    public static final float FAR_RANGE = 650f;
+    public static final float CLOSE_RANGE = 120f;
+    public static final float FAR_RANGE = 300f;
 
     public static final int MACE_SLAM_DAMAGE = 1;
     public static final float MACE_SLAM_HITBOX_W = 110f;
     public static final float MACE_SLAM_HITBOX_H = 120f;
     private static final float MACE_SLAM_TRIGGER_FRACTION = 0.99f;
 
-    public static final float RUN_SPEED = 330f;
+    public static final float RUN_SPEED = 375f;
     public static final float RUN_MAX_DURATION = 3f;
 
     public static final float OFFENSIVE_JUMP_VX = 300f;
@@ -45,13 +45,13 @@ public class FalseKnightConstants {
     public static final float SHOCKWAVE_HEIGHT = 125f;
     public static final int SHOCKWAVE_SLAM_DAMAGE = 2;
 
-    public static final float DEFENSIVE_JUMP_BASE_WEIGHT = 2f;
+    public static final float DEFENSIVE_JUMP_BASE_WEIGHT = 0f;
     public static final float DEFENSIVE_JUMP_CLOSE_WEIGHT = 20f;
     public static final float OFFENSIVE_JUMP_BASE_WEIGHT = 20f;
-    public static final float OFFENSIVE_JUMP_RANGE_WEIGHT = 10f;
+    public static final float OFFENSIVE_JUMP_RANGE_WEIGHT = 35f;
     public static final float MACE_SLAM_CLOSE_WEIGHT = 90f;
     public static final float MACE_SLAM_FAR_WEIGHT = 0f;
-    public static final float CHARGE_RUN_FAR_WEIGHT = 95f;
+    public static final float CHARGE_RUN_FAR_WEIGHT = 65f;
     public static final float CHARGE_RUN_CLOSE_WEIGHT = 0f;
     public static final float SHOCKWAVE_SLAM_WEIGHT = 40f;
 

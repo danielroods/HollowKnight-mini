@@ -3,6 +3,8 @@ package HollowKnight.source.controller.enemies;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.data.GameSettingsData;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawler;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerConstants;
 import HollowKnight.source.model.enemies.crystal_crawler.CrystalCrawlerState;
@@ -225,6 +227,10 @@ public class CrystalCrawlerController {
         crawler.setHurtTimer(CrystalCrawlerConstants.HURT_COOLDOWN);
         crawler.setKnockbackTimer(CrystalCrawlerConstants.KNOCKBACK_DURATION);
         crawler.setOnGround(false);
+
+        if (Assets.getCrystalCrawlerDamagedSfx() != null) {
+            Assets.getCrystalCrawlerDamagedSfx().play(GameSettingsData.getVolume());
+        }
 
         float knockBackDirectionX = player.isFacingRight() ? 1f : -1f;
 

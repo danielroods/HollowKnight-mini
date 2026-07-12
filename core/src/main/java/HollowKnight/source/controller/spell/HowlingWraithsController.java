@@ -6,6 +6,8 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
+import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.data.GameSettingsData;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.HowlingWraithsConstants;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class HowlingWraithsController {
     private final List<HowlingWraiths> activeEffects = new ArrayList<>();
+    private boolean isFirstTick = true;
 
     public void spawn(Player player) {
         activeEffects.add(new HowlingWraiths(player));
@@ -29,9 +32,15 @@ public class HowlingWraithsController {
                        FalseKnightController falseKnightController,
                        ZoteController zoteController) {
 
-        Iterator<HowlingWraiths> it = activeEffects.iterator();
-        while (it.hasNext()) {
-            HowlingWraiths effect = it.next();
+        Iterator<HowlingWraiths> iterator = activeEffects.iterator();
+        while (iterator.hasNext()) {
+            if (isFirstTick) {
+                if (Assets.getHowlingWraithsSfx() != null) {
+                    Assets.getHowlingWraithsSfx().play(GameSettingsData.getVolume());
+                }
+                isFirstTick = false;
+            }
+            HowlingWraiths effect = iterator.next();
 
             effect.followPlayer(player);
             effect.setLifeTimer(effect.getLifeTimer() + delta);
@@ -39,7 +48,7 @@ public class HowlingWraithsController {
             int expectedTicks = Math.min(HowlingWraithsConstants.TICK_COUNT, (int) (effect.getLifeTimer() / HowlingWraithsConstants.TICK_DURATION) + 1);
 
             while (effect.getTicksFired() < expectedTicks) {
-                dispatchTick(effect, player, mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController, zoteController);
+                applyTick(effect, player, mossflyController, huskHornheadController, crystalGuardianController, crystalCrawlerController, falseKnightController, zoteController);
                 effect.setTicksFired(effect.getTicksFired() + 1);
             }
 
@@ -48,18 +57,19 @@ public class HowlingWraithsController {
             }
 
             if (effect.isExpired()) {
-                it.remove();
+                iterator.remove();
+                isFirstTick = true;
             }
         }
     }
 
-    private void dispatchTick(HowlingWraiths effect, Player player,
-                              MossflyController mossflyController,
-                              HuskHornheadController huskHornheadController,
-                              CrystalGuardianController crystalGuardianController,
-                              CrystalCrawlerController crystalCrawlerController,
-                              FalseKnightController falseKnightController,
-                              ZoteController zoteController) {
+    private void applyTick(HowlingWraiths effect, Player player,
+                           MossflyController mossflyController,
+                           HuskHornheadController huskHornheadController,
+                           CrystalGuardianController crystalGuardianController,
+                           CrystalCrawlerController crystalCrawlerController,
+                           FalseKnightController falseKnightController,
+                           ZoteController zoteController) {
         if (mossflyController != null)
             mossflyController.checkHowlingWraithsHit(effect, player);
 

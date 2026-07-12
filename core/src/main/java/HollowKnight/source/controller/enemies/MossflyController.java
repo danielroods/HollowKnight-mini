@@ -3,6 +3,8 @@ package HollowKnight.source.controller.enemies;
 import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.mossfly.MossflyState;
 import HollowKnight.source.model.enemies.mossfly.Mossfly;
 import HollowKnight.source.model.enemies.mossfly.MossflyConstants;
@@ -204,6 +206,10 @@ public class MossflyController {
     private void applyHit(Mossfly mossfly, Player player, int damage) {
         mossfly.setHealth(mossfly.getHealth() - damage);
         mossfly.setHurtTimer(MossflyConstants.HURT_COOLDOWN);
+
+        if (Assets.getMossflyDamagedSfx() != null) {
+            Assets.getMossflyDamagedSfx().play(GameSettingsData.getVolume());
+        }
 
         float playerY = player.getBounds().y + player.getBounds().height / 2f;
         float enemyY = mossfly.getBounds().y + mossfly.getBounds().height / 2f;

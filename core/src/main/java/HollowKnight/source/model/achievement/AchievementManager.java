@@ -41,9 +41,7 @@ public class AchievementManager {
             try {
                 unlockedAchievements.add(AchievementType.valueOf(name));
             }
-            catch (IllegalArgumentException ignored) {
-                // Achievement no longer exists under this name - skip it :)
-            }
+            catch (IllegalArgumentException ignored) {}
         }
     }
 

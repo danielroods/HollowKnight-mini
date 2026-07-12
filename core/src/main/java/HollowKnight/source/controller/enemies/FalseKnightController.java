@@ -4,6 +4,8 @@ import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.game_utils.CameraShake;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
+import HollowKnight.source.model.asset.Assets;
+import HollowKnight.source.model.data.GameSettingsData;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.model.enemies.false_knight.FalseKnight;
 import HollowKnight.source.model.enemies.false_knight.FalseKnightConstants;
@@ -285,6 +287,9 @@ public class FalseKnightController {
         }
 
         if (falseKnight.getStateTimer() >= FalseKnightConstants.ATTACK_ANIM_DUR) {
+            if (Assets.getFalseKnightLandingSfx() != null) {
+                Assets.getFalseKnightLandingSfx().play(GameSettingsData.getVolume());
+            }
             enterState(falseKnight, FalseKnightState.MACE_SLAM_RECOVER);
         }
     }
@@ -349,6 +354,10 @@ public class FalseKnightController {
 
     private void onLanding(FalseKnight falseKnight, Player player) {
         boolean isShockwaveSlam = falseKnight.getState() == FalseKnightState.SHOCKWAVE_SLAM;
+
+        if (Assets.getFalseKnightLandingSfx() != null) {
+            Assets.getFalseKnightLandingSfx().play(GameSettingsData.getVolume());
+        }
 
         CameraShake.trigger(
             isShockwaveSlam ? FalseKnightConstants.SHAKE_DURATION_HEAVY : FalseKnightConstants.SHAKE_DURATION_LAND,
@@ -468,6 +477,10 @@ public class FalseKnightController {
     private void applyHit(FalseKnight falseKnight, int damage) {
         falseKnight.setHealth(falseKnight.getHealth() - damage);
         falseKnight.setHurtTimer(FalseKnightConstants.HURT_COOLDOWN);
+
+        if (Assets.getFalseKnightDamagedSfx() != null) {
+            Assets.getFalseKnightDamagedSfx().play(GameSettingsData.getVolume());
+        }
 
         if (falseKnight.getHealth() <= 0) {
             falseKnight.setShockwaveActive(false);

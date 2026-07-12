@@ -1,5 +1,5 @@
 {
-    "activeFile": "Greenpath-room1.tmx",
+    "activeFile": "CrystalPeak.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -191,11 +191,11 @@
             "expandedObjectLayers": [
                 18
             ],
-            "scale": 0.5,
+            "scale": 1,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1677,
-                "y": 1631
+                "x": 2403,
+                "y": 1381.5
             }
         },
         "CrystalPeak.tmx#floor": {
@@ -206,11 +206,11 @@
             "expandedObjectLayers": [
                 12
             ],
-            "scale": 1.5,
+            "scale": 4,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 640.3333333333333,
-                "y": 946.9999999999999
+                "x": 345.25,
+                "y": 971.875
             }
         },
         "Greenpath-room2.tmx": {
@@ -220,8 +220,8 @@
             "scale": 1.5,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 791,
-                "y": 467.66666666666663
+                "x": 696,
+                "y": 408.33333333333326
             }
         },
         "Slug_Shrine_0003_a.tsx": {
@@ -494,14 +494,15 @@
     "map.width": 300,
     "openFiles": [
         "CrystalPeak.tmx",
+        "Greenpath-room2.tmx",
         "Greenpath-room1.tmx"
     ],
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "CrystalPeak.tmx",
         "Greenpath-room1.tmx",
         "Greenpath-room2.tmx",
+        "CrystalPeak.tmx",
         "BossRoom.tmx",
         "background_boss_room.tsx",
         "background_crystal_peak3.tsx",

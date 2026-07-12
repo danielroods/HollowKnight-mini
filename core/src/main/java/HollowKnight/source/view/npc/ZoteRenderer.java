@@ -59,7 +59,11 @@ public class ZoteRenderer {
 
     private void renderPrompt(SpriteBatch batch, Zote zote) {
         BitmapFont font = Assets.getSkin().getFont("HollowfontGlow");
+
+        float previousScaleX = font.getData().scaleX;
+        float previousScaleY = font.getData().scaleY;
         font.getData().setScale(0.45f);
+
         layout.setText(font, "Press E to Talk");
 
         float x = zote.getPosition().x + ZoteConstants.WIDTH / 2f - layout.width / 2f;
@@ -67,5 +71,7 @@ public class ZoteRenderer {
 
         font.setColor(Color.WHITE);
         font.draw(batch, layout, x, y);
+
+        font.getData().setScale(previousScaleX, previousScaleY);
     }
 }

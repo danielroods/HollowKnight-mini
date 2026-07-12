@@ -1,6 +1,7 @@
 package HollowKnight.source.view;
 
 import HollowKnight.source.Main;
+import HollowKnight.source.controller.AudioController;
 import HollowKnight.source.controller.GameController;
 import HollowKnight.source.controller.enemies.CrystalCrawlerController;
 import HollowKnight.source.controller.enemies.CrystalGuardianController;
@@ -369,6 +370,8 @@ public class GameScreen implements Screen {
         mapPixelW = ref.getWidth() * ref.getTileWidth();
         mapPixelH = ref.getHeight() * ref.getTileHeight();
 
+        AudioController.getInstance().playMusic(Assets.getMusicForMap(Maps.fromIndex(index)));
+
         gameController.loadEnemiesBySpawnPoints();
     }
 
@@ -399,10 +402,10 @@ public class GameScreen implements Screen {
         worldCamera.position.y = (mapPixelH <= worldViewport.getWorldHeight()) ? mapPixelH / 2f : MathUtils.clamp(worldCamera.position.y, halfH, mapPixelH - halfH);
 
         if (player.isFocusing()) {
-            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.7f, delta);
+            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.65f, delta);
         }
         else {
-            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 1f, 4f * delta);
+            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.95f, 4f * delta);
         }
 
         Vector2 shakeOffset = CameraShake.update(delta);

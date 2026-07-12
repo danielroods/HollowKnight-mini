@@ -1,15 +1,12 @@
 package HollowKnight.source.controller;
 
 import HollowKnight.source.Main;
+import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.data.GameData;
-import HollowKnight.source.view.menus.MenuBackground;
-import HollowKnight.source.view.menus.MenuParticleLayer;
+import HollowKnight.source.view.menus.*;
 import HollowKnight.source.view.GameScreen;
-import HollowKnight.source.view.menus.BaseMenuScreen;
-import HollowKnight.source.view.menus.SettingsMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 
 public class MenuController {
     private static Game game = Main.getGameInstance();
@@ -28,11 +25,6 @@ public class MenuController {
         menuParticleLayer = new MenuParticleLayer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    public static void playMusic() {
-        Music menuBGM = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/MoogCity2.mp3"));
-        AudioController.getInstance().playMusic(menuBGM);
-    }
-
     public static void setMenuScreen(BaseMenuScreen menuScreen) {
         if (menuScreen == null) return;
 
@@ -41,6 +33,21 @@ public class MenuController {
         }
         currentMenuScreen = menuScreen;
         game.setScreen(menuScreen);
+
+        if (menuScreen instanceof EndMenuScreen) {
+            AudioController.getInstance().playMusic(Assets.getEndMenuMusic());
+        }
+        else if (!isInGameMenuScreen(menuScreen)) {
+            AudioController.getInstance().playMusic(Assets.getMenuMusic());
+        }
+    }
+
+    private static boolean isInGameMenuScreen(BaseMenuScreen menuScreen) {
+        if (menuScreen instanceof PauseMenuScreen)
+            return true;
+        if (menuScreen instanceof CheatsMenuScreen)
+            return true;
+        return menuScreen instanceof SettingsMenuScreen && settingsReturnScreen instanceof PauseMenuScreen;
     }
 
     public static void setGameScreen(int slotIndex, GameData dataToLoad) {

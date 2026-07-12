@@ -14,6 +14,7 @@ import HollowKnight.source.model.npc.zote.ZoteConstants;
 import HollowKnight.source.model.spell.HowlingWraithsConstants;
 import HollowKnight.source.model.spell.VengefulSpiritConstants;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -44,6 +45,19 @@ public class Assets {
     private static Texture dashEffectSheet;
     private static Texture wallSlideSheet;
 
+    private static Sound playerAttackSfx;
+    private static Sound playerDamagedSfx;
+    private static Sound soulGainSfx;
+    private static Sound focusSfx;
+    private static Sound dashSfx;
+    private static Sound howlingWraithsSfx;
+
+    private static Music menuMusic;
+    private static Music greenpathMusic;
+    private static Music crystalPeakMusic;
+    private static Music bossRoomMusic;
+    private static Music endMenuMusic;
+
     private static Texture[] healthBarTextures;
     private static Texture filledHealthTex;
     private static Texture emptyHealthTex;
@@ -68,6 +82,8 @@ public class Assets {
     private static Animation<TextureRegion> mossflyFlyAnim;
     private static Animation<TextureRegion> mossflyDeathAnim;
 
+    private static Sound mossflyDamagedSfx;
+
     private static Texture huskHornheadWalkSheet;
     private static Texture huskHornheadIdleSheet;
     private static Texture huskHornheadChargeSheet;
@@ -77,6 +93,8 @@ public class Assets {
     private static Animation<TextureRegion> huskHornheadIdleAnim;
     private static Animation<TextureRegion> huskHornheadChargeAnim;
     private static Animation<TextureRegion> huskHornheadDeathAnim;
+
+    private static Sound huskHornheadDamagedSfx;
 
     private static Texture crystalGuardianIdleSheet;
     private static Texture crystalGuardianRunSheet;
@@ -92,11 +110,15 @@ public class Assets {
     private static Animation<TextureRegion> crystalGuardianDeathAnim;
     private static Animation<TextureRegion> crystalLaserAnim;
 
+    private static Sound crystalGuardianDamagedSfx;
+
     private static Texture crystalCrawlerWalkSheet;
     private static Texture crystalCrawlerDeathSheet;
 
     private static Animation<TextureRegion> crystalCrawlerWalkAnim;
     private static Animation<TextureRegion> crystalCrawlerDeathAnim;
+
+    private static Sound crystalCrawlerDamagedSfx;
 
     private static Texture falseKnightIdleSheet;
     private static Texture falseKnightRunSheet;
@@ -121,6 +143,9 @@ public class Assets {
     private static Animation<TextureRegion> falseKnightStunnedAnim;
     private static Animation<TextureRegion> falseKnightStunRecoverAnim;
     private static Animation<TextureRegion> falseKnightShockwaveAnim;
+
+    private static Sound falseKnightDamagedSfx;
+    private static Sound falseKnightLandingSfx;
 
     private static Texture zoteIdleSheet;
     private static Texture zoteTalkSheet;
@@ -160,6 +185,7 @@ public class Assets {
         loadZoteAssets();
         loadVengefulSpiritAssets();
         loadHowlingWraithsAssets();
+        loadMusicAssets();
         loadMaps();
     }
 
@@ -219,6 +245,13 @@ public class Assets {
         attackUpEffectAnim = makeAnim(attackFrameDur, attackUpEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
         attackDownEffectAnim = makeAnim(attackFrameDur, attackDownEffectSheet, AssetConstants.ATTACK_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
         dashEffectAnim = makeAnim(PlayerConstants.DASH_DURATION / AssetConstants.DASH_EFFECT_FRAMES, dashEffectSheet, AssetConstants.DASH_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+
+        playerAttackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/player/Attack.wav"));
+        playerDamagedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/player/Damaged.wav"));
+        soulGainSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/player/SoulGain.wav"));
+        focusSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/player/Focus.wav"));
+        dashSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/player/Dash.wav"));
+        howlingWraithsSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/player/HowlingWraiths.wav"));
     }
 
     private static void loadMossflyAssets() {
@@ -231,6 +264,8 @@ public class Assets {
         mossflyAppearAnim = makeAnim(MossflyConstants.APPEAR_FRAME_DUR, mossflyAppearSheet, MossflyConstants.APPEAR_FRAMES, Animation.PlayMode.NORMAL);
         mossflyFlyAnim = makeAnim(MossflyConstants.FLY_FRAME_DUR, mossflyFlySheet, MossflyConstants.FLY_FRAMES, Animation.PlayMode.LOOP);
         mossflyDeathAnim = makeAnim(MossflyConstants.DEATH_FRAME_DUR, mossflyDeathSheet, MossflyConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+
+        mossflyDamagedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/enemies/Mossfly_Damaged.wav"));
     }
 
     private static void loadHuskHornheadAssets() {
@@ -243,6 +278,8 @@ public class Assets {
         huskHornheadIdleAnim = makeAnim(HuskHornheadConstants.IDLE_FRAME_DUR, huskHornheadIdleSheet, HuskHornheadConstants.IDLE_FRAMES, Animation.PlayMode.LOOP);
         huskHornheadChargeAnim = makeAnim(HuskHornheadConstants.CHARGE_FRAME_DUR, huskHornheadChargeSheet, HuskHornheadConstants.CHARGE_FRAMES, Animation.PlayMode.LOOP);
         huskHornheadDeathAnim = makeAnim(HuskHornheadConstants.DEATH_FRAME_DUR, huskHornheadDeathSheet, HuskHornheadConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+
+        huskHornheadDamagedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/enemies/HuskHornhead_Damaged.wav"));
     }
 
     private static void loadCrystalGuardianAssets() {
@@ -259,6 +296,8 @@ public class Assets {
         crystalGuardianEvadeAnim = makeAnim(CrystalGuardianConstants.EVADE_FRAME_DUR, crystalGuardianEvadeSheet, CrystalGuardianConstants.EVADE_FRAMES, Animation.PlayMode.NORMAL);
         crystalGuardianDeathAnim = makeAnim(CrystalGuardianConstants.DEATH_FRAME_DUR, crystalGuardianDeathSheet, CrystalGuardianConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
         crystalLaserAnim = makeAnim(CrystalGuardianConstants.LASER_EFFECT_FRAME_DUR, crystalLaserSheet, CrystalGuardianConstants.LASER_EFFECT_FRAMES, Animation.PlayMode.NORMAL);
+
+        crystalGuardianDamagedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/enemies/CrystalGuardian_Damaged.wav"));
     }
 
     private static void loadCrystalCrawlerAssets() {
@@ -267,6 +306,8 @@ public class Assets {
 
         crystalCrawlerWalkAnim = makeAnim(CrystalCrawlerConstants.WALK_FRAME_DUR, crystalCrawlerWalkSheet, CrystalCrawlerConstants.WALK_FRAMES, Animation.PlayMode.LOOP);
         crystalCrawlerDeathAnim = makeAnim(CrystalCrawlerConstants.DEATH_FRAME_DUR, crystalCrawlerDeathSheet, CrystalCrawlerConstants.DEATH_FRAMES, Animation.PlayMode.NORMAL);
+
+        crystalCrawlerDamagedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/enemies/CrystalCrawler_Damaged.wav"));
     }
 
     private static void loadFalseKnightAssets() {
@@ -293,6 +334,9 @@ public class Assets {
         falseKnightStunnedAnim = makeAnim(FalseKnightConstants.STUNNED_FRAME_DUR, falseKnightStunnedSheet, FalseKnightConstants.STUNNED_FRAMES, Animation.PlayMode.LOOP);
         falseKnightStunRecoverAnim = makeAnim(FalseKnightConstants.STUN_RECOVER_FRAME_DUR, falseKnightStunRecoverSheet, FalseKnightConstants.STUN_RECOVER_FRAMES, Animation.PlayMode.NORMAL);
         falseKnightShockwaveAnim = makeAnim(FalseKnightConstants.SHOCKWAVE_EFFECT_FRAME_DUR, falseKnightShockwaveSheet, FalseKnightConstants.SHOCKWAVE_EFFECT_FRAMES, Animation.PlayMode.LOOP);
+
+        falseKnightDamagedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/enemies/FalseKnight_Damaged.wav"));
+        falseKnightLandingSfx = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/enemies/FalseKnight_Landing.wav"));
     }
 
     private static void loadZoteAssets() {
@@ -318,10 +362,18 @@ public class Assets {
         vengefulSpiritSheet = new Texture(Gdx.files.internal("player/effects/VengefulSpirit.png"));
         vengefulSpiritAnim = makeAnim(VengefulSpiritConstants.FRAME_DURATION, vengefulSpiritSheet, VengefulSpiritConstants.FRAME_COUNT, Animation.PlayMode.LOOP);
     }
-    
+
     private static void loadHowlingWraithsAssets() {
         howlingWraithsSheet = new Texture(Gdx.files.internal("player/effects/HowlingWraiths.png"));
         howlingWraithsAnim = makeAnim(HowlingWraithsConstants.FRAME_DURATION, howlingWraithsSheet, HowlingWraithsConstants.FRAME_COUNT, Animation.PlayMode.NORMAL);
+    }
+
+    private static void loadMusicAssets() {
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/Aria Math.mp3"));
+        greenpathMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/Greenpath.mp3"));
+        crystalPeakMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/Crystal Peak.mp3"));
+        bossRoomMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/Boss Room.mp3"));
+        endMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/musics/Game End.mp3"));
     }
 
     private static void loadHUDAssets() {
@@ -513,6 +565,38 @@ public class Assets {
     public static Animation<TextureRegion> getVengefulSpiritAnim() { return vengefulSpiritAnim; }
     public static Animation<TextureRegion> getHowlingWraithsAnim() { return howlingWraithsAnim; }
 
+    public static Sound getPlayerAttackSfx() { return playerAttackSfx; }
+    public static Sound getPlayerDamagedSfx() { return playerDamagedSfx; }
+    public static Sound getSoulGainSfx() { return soulGainSfx; }
+    public static Sound getFocusSfx() { return focusSfx; }
+    public static Sound getDashSfx() { return dashSfx; }
+    public static Sound getHowlingWraithsSfx() { return howlingWraithsSfx; }
+
+    public static Sound getMossflyDamagedSfx() { return mossflyDamagedSfx; }
+    public static Sound getHuskHornheadDamagedSfx() { return huskHornheadDamagedSfx; }
+    public static Sound getCrystalGuardianDamagedSfx() { return crystalGuardianDamagedSfx; }
+    public static Sound getCrystalCrawlerDamagedSfx() { return crystalCrawlerDamagedSfx; }
+    public static Sound getFalseKnightDamagedSfx() { return falseKnightDamagedSfx; }
+    public static Sound getFalseKnightLandingSfx() { return falseKnightLandingSfx; }
+
+    public static Music getMenuMusic() { return menuMusic; }
+    public static Music getEndMenuMusic() { return endMenuMusic; }
+
+    public static Music getMusicForMap(Maps map) {
+        if (map == null) return null;
+        switch (map) {
+            case GREENPATH_ROOM_1:
+            case GREENPATH_ROOM_2:
+                return greenpathMusic;
+            case CRYSTAL_PEAK:
+                return crystalPeakMusic;
+            case BOSS_ROOM:
+                return bossRoomMusic;
+            default:
+                return null;
+        }
+    }
+
     public static void dispose() {
         if (lockIcon != null) lockIcon.dispose();
         disposeIfNotNull(whitePixel);
@@ -589,13 +673,42 @@ public class Assets {
         disposeIfNotNull(vengefulSpiritSheet);
         disposeIfNotNull(howlingWraithsSheet);
 
+        disposeIfNotNull(playerAttackSfx);
+        disposeIfNotNull(playerDamagedSfx);
+        disposeIfNotNull(soulGainSfx);
+        disposeIfNotNull(focusSfx);
+        disposeIfNotNull(dashSfx);
+        disposeIfNotNull(howlingWraithsSfx);
+
+        disposeIfNotNull(mossflyDamagedSfx);
+        disposeIfNotNull(huskHornheadDamagedSfx);
+        disposeIfNotNull(crystalGuardianDamagedSfx);
+        disposeIfNotNull(crystalCrawlerDamagedSfx);
+        disposeIfNotNull(falseKnightDamagedSfx);
+        disposeIfNotNull(falseKnightLandingSfx);
+
+
+        disposeIfNotNull(menuMusic);
+        disposeIfNotNull(greenpathMusic);
+        disposeIfNotNull(crystalPeakMusic);
+        disposeIfNotNull(bossRoomMusic);
+        disposeIfNotNull(endMenuMusic);
+
         if (maps != null)
             for (TiledMap m : maps) if (m != null) m.dispose();
 
         if (skin != null) skin.dispose();
     }
 
-    private static void disposeIfNotNull(Texture t) {
-        if (t != null) t.dispose();
+    private static void disposeIfNotNull(Texture texture) {
+        if (texture != null) texture.dispose();
+    }
+
+    private static void disposeIfNotNull(Sound sound) {
+        if (sound != null) sound.dispose();
+    }
+
+    private static void disposeIfNotNull(Music music) {
+        if (music != null) music.dispose();
     }
 }
