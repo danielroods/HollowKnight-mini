@@ -4,7 +4,7 @@ import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.model.achievement.AchievementManager;
 import HollowKnight.source.model.achievement.AchievementType;
 import HollowKnight.source.model.asset.Assets;
-import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.data.SettingsData;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardian;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianConstants;
 import HollowKnight.source.model.enemies.crystal_guardian.CrystalGuardianState;
@@ -285,7 +285,7 @@ public class CrystalGuardianController {
         guardian.setOnGround(false);
 
         if (Assets.getCrystalGuardianDamagedSfx() != null) {
-            Assets.getCrystalGuardianDamagedSfx().play(GameSettingsData.getVolume());
+            Assets.getCrystalGuardianDamagedSfx().play(SettingsData.getSfxVolume());
         }
 
         float knockBackDirectionX = player.isFacingRight() ? 1f : -1f;

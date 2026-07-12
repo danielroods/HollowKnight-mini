@@ -1,4 +1,4 @@
-package HollowKnight.source.game_utils;
+package HollowKnight.source.model.util;
 
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;

@@ -9,12 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class EndMenuScreen extends BaseMenuScreen {
-
-    private static final float PANEL_WIDTH = 560f;
-
     @Override
     public void show() {
-        stage.clear();
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         float centerX = Gdx.graphics.getWidth() / 2f;
@@ -24,7 +21,7 @@ public class EndMenuScreen extends BaseMenuScreen {
         titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
         titleStyle.fontColor = Color.WHITE;
 
-        Label title = new Label("Journey's End", titleStyle);
+        Label title = new Label("JOURNEY'S END", titleStyle);
         title.setFontScale(2.4f);
         title.setColor(Color.OLIVE);
         title.setPosition(centerX - title.getPrefWidth() / 2f, y);

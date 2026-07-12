@@ -14,7 +14,7 @@ public class PlayerConstants {
     public static final int MAX_SOUL = 99;
     public static final int SOUL_GAIN_PER_HIT = 7;
     public static final int SOUL_HEAL_COST = 33;
-    public static final float FOCUS_DURATION = 1.75f;
+    public static final float FOCUS_DURATION = 2f;
     public static final float HEAL_ANIM_DUR = 0.80f;
     public static final float DEATH_ANIM_DUR = 1.2f;
     public static final float KNOCKBACK_DURATION = 0.40f;

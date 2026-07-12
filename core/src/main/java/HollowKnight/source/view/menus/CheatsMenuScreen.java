@@ -20,6 +20,7 @@ public class CheatsMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         float centerX = Gdx.graphics.getWidth() / 2f;
@@ -28,10 +29,10 @@ public class CheatsMenuScreen extends BaseMenuScreen {
         titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
         titleStyle.fontColor = Color.FIREBRICK;
 
-        Label title = new Label("Cheat Codes", titleStyle);
+        Label title = new Label("CHEAT CODES", titleStyle);
         title.setFontScale(2.2f);
         title.pack();
-        title.setPosition(centerX - title.getWidth() / 2f, 860f);
+        title.setPosition((centerX - title.getWidth() / 2f) + 30f, 860f);
         stage.addActor(title);
 
         Label.LabelStyle keyStyle = new Label.LabelStyle();

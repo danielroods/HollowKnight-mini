@@ -1,6 +1,6 @@
 package HollowKnight.source.view;
 
-import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.data.SettingsData;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,7 +22,7 @@ public class BrightnessRenderer {
 
     public static void render(SpriteBatch batch, float width, float height) {
 
-        float darkness = 1f - GameSettingsData.getBrightness();
+        float darkness = 1f - SettingsData.getBrightness();
 
         if (darkness <= 0)
             return;

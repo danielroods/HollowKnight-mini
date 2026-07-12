@@ -3,7 +3,7 @@ package HollowKnight.source.view.menus;
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.MenuController;
 import HollowKnight.source.view.BrightnessRenderer;
-import HollowKnight.source.game_utils.UIContext;
+import HollowKnight.source.model.util.UIContext;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,21 +15,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class BaseMenuScreen implements Screen {
-    private static Game game = Main.getGameInstance();
-    private SpriteBatch batch;
+    private static final Game game = Main.getGameInstance();
+    private final SpriteBatch batch;
     protected Viewport viewport;
     protected Stage stage;
+
+    private static com.badlogic.gdx.graphics.Cursor customCursor;
 
     public BaseMenuScreen() {
         batch = Main.getGameInstance().getBatch();
         viewport = UIContext.getViewport();
         stage = new Stage(viewport, batch);
+    }
 
-        Pixmap cursorPixmap = new Pixmap(Gdx.files.internal("icons/Cursor.png"));
+    protected void setupCursor() {
+        Gdx.input.setCursorCatched(false);
 
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(cursorPixmap, 0, 0));
+        if (customCursor == null) {
+            Pixmap cursorPixmap = new Pixmap(Gdx.files.internal("icons/Cursor.png"));
+            customCursor = Gdx.graphics.newCursor(cursorPixmap, 0, 0);
+            cursorPixmap.dispose();
+        }
 
-        cursorPixmap.dispose();
+        Gdx.graphics.setCursor(customCursor);
     }
 
     public static void prepareButton(TextButton button, float width, float height) {

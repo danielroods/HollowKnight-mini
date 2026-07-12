@@ -1,5 +1,5 @@
 {
-    "activeFile": "CrystalPeak.tmx",
+    "activeFile": "BossRoom.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -22,11 +22,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.75,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 616.6666666666667,
-                "y": 381.99999999999994
+                "x": 595,
+                "y": 656.75
             }
         },
         "C:/Users/Danial/OneDrive/Desktop/New folder/hollowknightlanati/assets/maps/MapOne/BG_far_0012_aCOT.tsx": {
@@ -191,11 +191,11 @@
             "expandedObjectLayers": [
                 18
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 2403,
-                "y": 1381.5
+                "x": 2523,
+                "y": 1385.25
             }
         },
         "CrystalPeak.tmx#floor": {
@@ -207,10 +207,10 @@
                 12
             ],
             "scale": 4,
-            "selectedLayer": 10,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 345.25,
-                "y": 971.875
+                "x": 1200,
+                "y": 600.125
             }
         },
         "Greenpath-room2.tmx": {
@@ -495,14 +495,15 @@
     "openFiles": [
         "CrystalPeak.tmx",
         "Greenpath-room2.tmx",
-        "Greenpath-room1.tmx"
+        "Greenpath-room1.tmx",
+        "BossRoom.tmx"
     ],
     "project": "greenpath_room1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "Greenpath-room1.tmx",
-        "Greenpath-room2.tmx",
         "CrystalPeak.tmx",
+        "Greenpath-room2.tmx",
+        "Greenpath-room1.tmx",
         "BossRoom.tmx",
         "background_boss_room.tsx",
         "background_crystal_peak3.tsx",

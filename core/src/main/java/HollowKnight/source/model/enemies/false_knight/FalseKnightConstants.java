@@ -12,13 +12,13 @@ public class FalseKnightConstants {
     public static final float INNER_HITBOX_H = 55f;
 
     public static final int MAX_HEALTH = 30;
-    public static final int STUN_HP_THRESHOLD = MAX_HEALTH / 2;
+    public static final int STUN_HP_THRESHOLD = 13;
     public static final float HURT_COOLDOWN = 0.45f;
     public static final float GRAVITY = -1450f;
-    public static final float SPEED_MULTIPLIER_PHASE2 = 1.35f;
+    public static final float SPEED_MULTIPLIER_PHASE2 = 1.2f;
     public static final float ANIM_SPEED_MULTIPLIER_PHASE2 = 1.25f;
-    public static final float DECISION_DELAY_PHASE1 = 0.50f;
-    public static final float DECISION_DELAY_PHASE2 = 0.35f;
+    public static final float DECISION_DELAY_PHASE1 = 0.55f;
+    public static final float DECISION_DELAY_PHASE2 = 0.4f;
 
     public static final float CLOSE_RANGE = 120f;
     public static final float FAR_RANGE = 300f;
@@ -47,7 +47,7 @@ public class FalseKnightConstants {
 
     public static final float DEFENSIVE_JUMP_BASE_WEIGHT = 0f;
     public static final float DEFENSIVE_JUMP_CLOSE_WEIGHT = 20f;
-    public static final float OFFENSIVE_JUMP_BASE_WEIGHT = 20f;
+    public static final float OFFENSIVE_JUMP_BASE_WEIGHT = 30f;
     public static final float OFFENSIVE_JUMP_RANGE_WEIGHT = 35f;
     public static final float MACE_SLAM_CLOSE_WEIGHT = 90f;
     public static final float MACE_SLAM_FAR_WEIGHT = 0f;

@@ -13,7 +13,7 @@ import HollowKnight.source.controller.PlayerController;
 import HollowKnight.source.controller.spell.HowlingWraithsController;
 import HollowKnight.source.controller.spell.VengefulSpiritController;
 import HollowKnight.source.model.data.GameData;
-import HollowKnight.source.game_utils.CameraShake;
+import HollowKnight.source.model.util.CameraShake;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.enemies.false_knight.BossProgressManager;
 import HollowKnight.source.model.data.GameStats;
@@ -32,10 +32,10 @@ import HollowKnight.source.view.spell.HowlingWraithsRenderer;
 import HollowKnight.source.view.spell.VengefulSpiritRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -45,8 +45,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen implements Screen {
 
-    private static final float WORLD_W = 1280f;
-    private static final float WORLD_H = 720f;
+    private static final float WORLD_W = 1024f;
+    private static final float WORLD_H = 576f;
+    private static final float UI_W = 1280f;
+    private static final float UI_H = 720f;
     private static final float CAM_LERP = 0.02f;
 
     private GameController gameController;
@@ -77,8 +79,6 @@ public class GameScreen implements Screen {
     private VengefulSpiritRenderer vengefulSpiritRenderer;
     private HowlingWraithsRenderer howlingWraithsRenderer;
 
-    // for debug
-    private ShapeRenderer shapeRenderer;
     private final int slotIndex;
     private final GameData dataToLoad;
     private boolean initialized = false;
@@ -91,6 +91,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setCursorCatched(true);
+
         if (initialized) {
             Gdx.input.setInputProcessor(null);
             return;
@@ -100,7 +102,7 @@ public class GameScreen implements Screen {
         batch = Main.getGameInstance().getBatch();
 
         worldCamera = new OrthographicCamera();
-        worldCamera.zoom = 0.95f;
+        worldCamera.zoom = 1f;
         worldViewport = new FitViewport(WORLD_W, WORLD_H, worldCamera);
 
         bgCamera = new OrthographicCamera();
@@ -108,7 +110,7 @@ public class GameScreen implements Screen {
         bgCamera.viewportHeight = WORLD_H;
 
         uiCamera = new OrthographicCamera();
-        uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
+        uiCamera.setToOrtho(false, UI_W, UI_H);
         uiCamera.update();
 
         gameController = GameController.getInstance();
@@ -170,8 +172,6 @@ public class GameScreen implements Screen {
         zoteDialogueRenderer = new ZoteDialogueRenderer();
         vengefulSpiritRenderer = new VengefulSpiritRenderer();
         howlingWraithsRenderer = new HowlingWraithsRenderer();
-
-        shapeRenderer = new ShapeRenderer();
 
         gameController.setTransitionListener((targetIndex, spawnName) -> switchMap(targetIndex, spawnName));
     }
@@ -394,19 +394,20 @@ public class GameScreen implements Screen {
 
         worldCamera.position.lerp(new Vector3(targetX, targetY, 0f), CAM_LERP);
 
-        float halfW = worldViewport.getWorldWidth() / 2f;
-        float halfH = worldViewport.getWorldHeight() / 2f;
-
-        worldCamera.position.x = (mapPixelW <= worldViewport.getWorldWidth()) ? mapPixelW / 2f : MathUtils.clamp(worldCamera.position.x, halfW, mapPixelW - halfW);
-
-        worldCamera.position.y = (mapPixelH <= worldViewport.getWorldHeight()) ? mapPixelH / 2f : MathUtils.clamp(worldCamera.position.y, halfH, mapPixelH - halfH);
-
         if (player.isFocusing()) {
-            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.65f, delta);
+            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.75f, delta);
         }
         else {
-            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.95f, 4f * delta);
+            worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, 0.98f, 4f * delta);
         }
+
+        float currentVisibleWidth = worldViewport.getWorldWidth() * worldCamera.zoom;
+        float currentVisibleHeight = worldViewport.getWorldHeight() * worldCamera.zoom;
+        float halfW = currentVisibleWidth / 2f;
+        float halfH = currentVisibleHeight / 2f;
+
+        worldCamera.position.x = (mapPixelW <= currentVisibleWidth) ? mapPixelW / 2f : MathUtils.clamp(worldCamera.position.x, halfW, mapPixelW - halfW);
+        worldCamera.position.y = (mapPixelH <= currentVisibleHeight) ? mapPixelH / 2f : MathUtils.clamp(worldCamera.position.y, halfH, mapPixelH - halfH);
 
         Vector2 shakeOffset = CameraShake.update(delta);
         worldCamera.position.add(shakeOffset.x, shakeOffset.y, 0f);
@@ -426,13 +427,23 @@ public class GameScreen implements Screen {
 
     @Override public void resize(int width, int height) {
         worldViewport.update(width, height);
-        uiCamera.setToOrtho(false, WORLD_W, WORLD_H);
+        uiCamera.setToOrtho(false, UI_W, UI_H);
         uiCamera.update();
         if (inventoryScreen != null)
             inventoryScreen.resize(width, height);
     }
 
-    @Override public void dispose() {
+    @Override
+    public void hide() {
+        Gdx.input.setCursorCatched(false);
+    }
+
+    @Override
+    public void dispose() {
+        Gdx.input.setCursorCatched(false);
+
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+
         isDisposed = true;
 
         if (mapRenderer != null) {
@@ -442,10 +453,8 @@ public class GameScreen implements Screen {
         if (hudRenderer != null) hudRenderer.dispose();
         if (achievementPopupRenderer != null) achievementPopupRenderer.dispose();
         if (inventoryScreen != null) inventoryScreen.dispose();
-        if (shapeRenderer != null) shapeRenderer.dispose();
     }
 
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {}
 }

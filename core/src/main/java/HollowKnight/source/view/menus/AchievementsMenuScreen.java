@@ -15,6 +15,7 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         float panelWidth = 700;
@@ -30,7 +31,7 @@ public class AchievementsMenuScreen extends BaseMenuScreen {
         descStyle.font = Assets.getSkin().getFont("AchievementDescFont");
         descStyle.fontColor = Color.WHITE;
 
-        Label menuTitle = new Label("Achievements", titleStyle);
+        Label menuTitle = new Label("ACHIEVEMENTS", titleStyle);
         menuTitle.setFontScale(2.2f);
         menuTitle.setColor(Color.WHITE);
         menuTitle.setPosition(x + 20f , y + 170f);

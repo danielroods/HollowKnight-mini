@@ -1,5 +1,6 @@
 package HollowKnight.source.controller;
 
+import HollowKnight.source.model.data.SettingsData;
 import com.badlogic.gdx.audio.Music;
 
 public class AudioController {
@@ -51,6 +52,9 @@ public class AudioController {
         if (newMusic == null) return;
         if (newMusic == currentMusic) return;
         if (isFading && newMusic == nextMusic) return;
+
+        this.maxVolume = SettingsData.getMusicVolume();
+        if (SettingsData.isMuted()) this.maxVolume = 0f;
 
         if (currentMusic == null) {
             currentMusic = newMusic;

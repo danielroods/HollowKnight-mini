@@ -6,7 +6,8 @@ import HollowKnight.source.controller.enemies.FalseKnightController;
 import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
-import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.data.GameStats;
+import HollowKnight.source.model.data.SettingsData;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.charm.CharmConstants;
 import HollowKnight.source.model.charm.CharmManager;
@@ -16,6 +17,7 @@ import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.player.PlayerConstants;
 import HollowKnight.source.model.player.PlayerState;
 import HollowKnight.source.model.spell.VengefulSpiritConstants;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 public class PlayerController {
@@ -194,7 +196,7 @@ public class PlayerController {
         if (player.getDashCooldownTimer() > 0) return;
 
         if (Assets.getDashSfx() != null) {
-            Assets.getDashSfx().play(GameSettingsData.getVolume());
+            Assets.getDashSfx().play(SettingsData.getSfxVolume());
         }
 
         float dir = player.isFacingRight() ? 1f : -1f;
@@ -331,8 +333,11 @@ public class PlayerController {
         if (player.isAlive())
             player.setState(PlayerState.HURT);
 
+        if (player.getHealth() <= 0) {
+            GameStats.increaseTotalDeath();
+        }
         if (Assets.getPlayerDamagedSfx() != null) {
-            Assets.getPlayerDamagedSfx().play(GameSettingsData.getVolume());
+            Assets.getPlayerDamagedSfx().play(SettingsData.getSfxVolume());
         }
     }
 
@@ -354,7 +359,7 @@ public class PlayerController {
         player.setVelocityX(0f);
 
         if (Assets.getFocusSfx() != null) {
-            Assets.getFocusSfx().play(GameSettingsData.getVolume());
+            Assets.getFocusSfx().play(SettingsData.getSfxVolume());
         }
     }
 
@@ -403,7 +408,7 @@ public class PlayerController {
         player.setAttackDirection(dir);
 
         if (Assets.getPlayerAttackSfx() != null) {
-            Assets.getPlayerAttackSfx().play(GameSettingsData.getVolume());
+            Assets.getPlayerAttackSfx().play(SettingsData.getSfxVolume());
         }
     }
 
@@ -536,7 +541,7 @@ public class PlayerController {
         player.addSoul(soulAmount);
 
         if (Assets.getSoulGainSfx() != null) {
-            Assets.getSoulGainSfx().play(GameSettingsData.getVolume());
+            Assets.getSoulGainSfx().play(SettingsData.getSfxVolume());
         }
     }
 }

@@ -1,33 +1,123 @@
-# HollowKnight
+# Hollow Knight mini
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+A 2D action-platformer game developed in **Java** using the **libGDX** framework.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+This project was developed as the **Advanced Programming (AP) Graphics Course Project** at **Aryamehr University of Technology (Sharif University of Technology)**.
 
-## Platforms
+---
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+## Architecture
 
-## Gradle
+The project follows the **Model-View-Controller (MVC)** architectural pattern to separate game logic, rendering, and user interactions.
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+---
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+## Features
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+* 2D player movement
+* Melee combat system
+* Enemy AI
+* Boss battle
+* Multiple maps
+* Health & Soul HUD
+* Achievement system
+* Main menu and settings
+* Sound effects and background music
+* Animated characters and enemies
+* Tile-based levels designed with Tiled
+
+---
+
+## Technologies
+
+* Java
+* libGDX
+* LWJGL3
+* Gradle
+* Tiled Map Editor
+
+---
+
+## Project Structure
+
+The project is organized using the MVC architecture.
+
+```text
+HollowKnight
+├── assets/
+│   ├── audio/
+│   ├── enemies/
+│   ├── hud/
+│   ├── map/
+│   ├── player/
+│   ├── ui/
+│   └── ...
+│
+├── core/
+│   ├── controller/
+│   ├── model/
+│   ├── view/
+│   ├── utils/
+│   ├── Main.java
+│   └── ...
+│
+├── lwjgl3/
+│   └── DesktopLauncher.java
+│
+├── gradle/
+├── build.gradle
+└── settings.gradle
+```
+
+> The complete project directory contains nearly **2,800 files**, including source code, assets, maps, animations, audio files, and Gradle configuration.
+
+---
+
+## Getting Started
+
+### Requirements
+
+* Java 17+
+* Gradle (or the included Gradle Wrapper)
+
+### Run
+
+```bash
+./gradlew lwjgl3:run
+```
+
+Windows:
+
+```bash
+gradlew.bat lwjgl3:run
+```
+
+### Build
+
+```bash
+./gradlew lwjgl3:jar
+```
+
+The runnable JAR will be generated inside:
+
+```text
+lwjgl3/build/libs/
+```
+
+---
+
+## Screenshots
+
+Gameplay screenshots and GIFs will be added soon.
+
+---
+
+## Course Information
+
+**Course:** Advanced Programming (Graphics Project)
+
+**University:** Aryamehr University of Technology (Sharif University of Technology)
+
+**Framework:** libGDX
+
+**Language:** Java

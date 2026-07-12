@@ -1,7 +1,7 @@
 package HollowKnight.source.controller.menus;
 
 import HollowKnight.source.controller.MenuController;
-import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.data.SettingsData;
 import HollowKnight.source.controller.AudioController;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class SettingsMenuController {
 
     public static void modifyComponents(Slider volumeSlider,
+                                        Slider sfxVolumeSlider,
                                         CheckBox muteCheckBox,
                                         Slider brightnessSlider,
                                         TextButton backBtn) {
@@ -24,7 +25,7 @@ public class SettingsMenuController {
 
                 float volume = volumeSlider.getValue();
 
-                GameSettingsData.setVolume(volume);
+                SettingsData.setMusicVolume(volume);
 
                 if (!muteCheckBox.isChecked()) {
                     AudioController.getInstance().setMaxVolume(volume);
@@ -32,15 +33,23 @@ public class SettingsMenuController {
             }
         });
 
+        sfxVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SettingsData.setSfxVolume(sfxVolumeSlider.getValue());
+            }
+        });
+
         muteCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameSettingsData.setMuted(muteCheckBox.isChecked());
+                SettingsData.setMuted(muteCheckBox.isChecked());
 
                 if (muteCheckBox.isChecked()) {
                     AudioController.getInstance().setMaxVolume(0f);
-                } else {
-                    AudioController.getInstance().setMaxVolume(GameSettingsData.getVolume());
+                }
+                else {
+                    AudioController.getInstance().setMaxVolume(SettingsData.getMusicVolume());
                 }
             }
         });
@@ -48,7 +57,7 @@ public class SettingsMenuController {
         brightnessSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameSettingsData.setBrightness(brightnessSlider.getValue());
+                SettingsData.setBrightness(brightnessSlider.getValue());
             }
         });
 

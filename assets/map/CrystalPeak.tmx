@@ -5039,7 +5039,7 @@
   <object id="78" name="crystal_crawler_spawn" x="1429.5" y="1644.5">
    <point/>
   </object>
-  <object id="79" name="crystal_crawler_spawn" x="2637" y="1420">
+  <object id="79" name="crystal_crawler_spawn" x="2661" y="1419">
    <point/>
   </object>
   <object id="80" name="crystal_crawler_spawn" x="2618" y="1093">
@@ -5048,7 +5048,7 @@
   <object id="82" name="crystal_guardian_spawn" x="1398" y="2107">
    <point/>
   </object>
-  <object id="83" name="crystal_guardian_spawn" x="2851.33" y="1417">
+  <object id="83" name="crystal_guardian_spawn" x="2629.33" y="1416.5">
    <point/>
   </object>
   <object id="84" name="crystal_guardian_spawn" x="4671" y="2177">

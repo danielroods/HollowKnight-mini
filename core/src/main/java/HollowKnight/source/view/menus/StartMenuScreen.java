@@ -27,6 +27,7 @@ public class StartMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         TextButton[] slotButtons = new TextButton[SLOT_COUNT];

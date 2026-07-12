@@ -15,7 +15,7 @@ public class CrystalGuardianConstants {
     public static final float KNOCKBACK_SPEED_Y = 140f;
     public static final float KNOCKBACK_DURATION = 0.35f;
     public static final float GRAVITY = -850f;
-    public static final float DETECTION_W = 480f;
+    public static final float DETECTION_W = 400f;
     public static final float DETECTION_H = 30f;
     public static final float CHASE_SPEED = 150f;
     public static final float ENRAGE_DURATION = 2.5f;

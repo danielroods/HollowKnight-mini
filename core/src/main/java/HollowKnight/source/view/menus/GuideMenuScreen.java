@@ -79,6 +79,7 @@ public class GuideMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         float centerX = Gdx.graphics.getWidth() / 2f;

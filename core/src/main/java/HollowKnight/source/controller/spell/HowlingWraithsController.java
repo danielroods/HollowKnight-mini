@@ -7,7 +7,7 @@ import HollowKnight.source.controller.enemies.HuskHornheadController;
 import HollowKnight.source.controller.enemies.MossflyController;
 import HollowKnight.source.controller.npc.ZoteController;
 import HollowKnight.source.model.asset.Assets;
-import HollowKnight.source.model.data.GameSettingsData;
+import HollowKnight.source.model.data.SettingsData;
 import HollowKnight.source.model.player.Player;
 import HollowKnight.source.model.spell.HowlingWraiths;
 import HollowKnight.source.model.spell.HowlingWraithsConstants;
@@ -36,7 +36,7 @@ public class HowlingWraithsController {
         while (iterator.hasNext()) {
             if (isFirstTick) {
                 if (Assets.getHowlingWraithsSfx() != null) {
-                    Assets.getHowlingWraithsSfx().play(GameSettingsData.getVolume());
+                    Assets.getHowlingWraithsSfx().play(SettingsData.getSfxVolume());
                 }
                 isFirstTick = false;
             }

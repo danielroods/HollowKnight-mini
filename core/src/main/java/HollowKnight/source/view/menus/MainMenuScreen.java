@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class MainMenuScreen extends BaseMenuScreen {
     @Override
     public void show() {
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         Image title = new Image(new Texture("menu/title.png"));

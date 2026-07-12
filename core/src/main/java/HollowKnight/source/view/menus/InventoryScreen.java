@@ -2,12 +2,14 @@ package HollowKnight.source.view.menus;
 
 import HollowKnight.source.Main;
 import HollowKnight.source.controller.menus.InventoryController;
-import HollowKnight.source.game_utils.UIContext;
+import HollowKnight.source.model.util.UIContext;
 import HollowKnight.source.model.asset.Assets;
 import HollowKnight.source.model.charm.CharmManager;
 import HollowKnight.source.model.charm.CharmType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -26,6 +28,7 @@ public class InventoryScreen {
     private final Stage stage;
 
     private boolean open;
+    private static Cursor inventoryCursor;
 
     public InventoryScreen() {
         batch = Main.getGameInstance().getBatch();
@@ -40,16 +43,28 @@ public class InventoryScreen {
     public void open() {
         open = true;
         build();
+        Gdx.input.setCursorCatched(false);
+        setupInventoryCursor();
         Gdx.input.setInputProcessor(stage);
     }
 
     public void close() {
         open = false;
         Gdx.input.setInputProcessor(null);
+        Gdx.input.setCursorCatched(true);
     }
 
     public void refresh() {
         build();
+    }
+
+    private void setupInventoryCursor() {
+        if (inventoryCursor == null) {
+            Pixmap cursorPixmap = new Pixmap(Gdx.files.internal("icons/Cursor.png"));
+            inventoryCursor = Gdx.graphics.newCursor(cursorPixmap, 0, 0);
+            cursorPixmap.dispose();
+        }
+        Gdx.graphics.setCursor(inventoryCursor);
     }
 
     private void build() {

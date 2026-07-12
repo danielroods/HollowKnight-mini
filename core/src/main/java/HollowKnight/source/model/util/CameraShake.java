@@ -1,4 +1,4 @@
-package HollowKnight.source.game_utils;
+package HollowKnight.source.model.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;

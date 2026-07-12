@@ -11,13 +11,14 @@ public class PauseMenuScreen extends BaseMenuScreen {
 
     @Override
     public void show() {
+        setupCursor();
         Gdx.input.setInputProcessor(stage);
 
         Label.LabelStyle titleStyle = new Label.LabelStyle();
         titleStyle.font = Assets.getSkin().getFont("HollowfontGlow");
         titleStyle.fontColor = Color.WHITE;
 
-        Label title = new Label("Pause Menu", titleStyle);
+        Label title = new Label("GAME PAUSED", titleStyle);
         title.setFontScale(2.2f);
         title.pack();
         title.setPosition(Gdx.graphics.getWidth() / 2f - title.getWidth() / 2f, 830f);
