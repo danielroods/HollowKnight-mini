@@ -355,10 +355,10 @@ public class GameController {
         if (player.isKnockedBack()) return;
 
         if (playerController.isSpectatorMode()) {
-            boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
-            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
-            boolean up = Gdx.input.isKeyPressed(Keys.UP);
-            boolean down = Gdx.input.isKeyPressed(Keys.DOWN);
+            boolean left = Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.H);
+            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.K);
+            boolean up = Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.U);
+            boolean down = Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.J);
 
             if (left && !right)
                 playerController.flyLeft();
@@ -375,8 +375,8 @@ public class GameController {
                 playerController.stopVertical();
         }
         else {
-            boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
-            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
+            boolean left = Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.H);
+            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.K);
 
             if (left && !right)
                 playerController.moveLeft();
@@ -395,10 +395,10 @@ public class GameController {
         if (!Gdx.input.isKeyJustPressed(Keys.X)) return;
 
         AttackDirection dir;
-        if (Gdx.input.isKeyPressed(Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.U)) {
             dir = AttackDirection.UP;
         }
-        else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+        else if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.J)) {
             dir = AttackDirection.DOWN;
         }
         else {
@@ -412,7 +412,7 @@ public class GameController {
         if (!Gdx.input.isKeyJustPressed(Keys.Z)) return;
         if (vengefulSpiritController == null || howlingWraithsController == null) return;
 
-        if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.J)) {
             if (howlingWraithsController != null && playerController.castHowlingWraiths()) {
                 howlingWraithsController.spawn(player);
             }
@@ -451,8 +451,8 @@ public class GameController {
     private void handleWallSlideInput() {
         if (player.isKnockedBack()) return;
 
-        boolean left = Gdx.input.isKeyPressed(Keys.LEFT);
-        boolean right = Gdx.input.isKeyPressed(Keys.RIGHT);
+        boolean left = Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.H);
+        boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.K);
 
         boolean touchingWallLeft = isTouchingWall(false);
         boolean touchingWallRight = isTouchingWall(true);
